@@ -1,0 +1,6 @@
+AllCops:
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - 'bin/**/*'
+require: rubocop-rspec
