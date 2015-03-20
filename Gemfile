@@ -6,7 +6,6 @@ gemspec
 group :tools do
   gem 'rubocop'
   gem 'rubocop-rspec'
-  gem 'json'
 
   gem 'guard'
   gem 'guard-rspec'
@@ -17,4 +16,6 @@ group :tools do
   gem 'yard-tomdoc'
 
   gem 'byebug'
+
+  gem 'simplecov', require: false
 end
