@@ -1,17 +1,8 @@
-module Asana
-  # Internal: Authentication strategies for the Asana API.
-  module Authentication
-    # Internal: Represents an API token authentication mechanism.
-    class TokenAuthentication
-      def initialize(token)
-        @token = token
-      end
+require_relative 'authentication/oauth2'
+require_relative 'authentication/token_authentication'
 
-      # Public: Configures a Faraday connection builder injecting its token as
-      # basic auth.
-      def configure(builder)
-        builder.basic_auth(@token, '')
-      end
-    end
+module Asana
+  # Public: Authentication strategies for the Asana API.
+  module Authentication
   end
 end

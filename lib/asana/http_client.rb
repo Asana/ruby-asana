@@ -28,14 +28,10 @@ module Asana
     def initialize(authentication:,
                    adapter: Faraday.default_adapter,
                    user_agent: USER_AGENT, &config)
-      @connection = Faraday.new do |builder|
-        authentication.configure(builder)
-        builder.headers[:user_agent] = user_agent
-        configure_format(builder)
-        add_middleware(builder)
-        config.call(builder) if config
-        use_adapter(builder, adapter)
-      end
+      @authentication = authentication
+      @adapter        = adapter
+      @user_agent     = user_agent
+      @config         = config
     end
 
     # Public: Performs a GET request against the API.
@@ -46,12 +42,28 @@ module Asana
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
     def get(resource_uri, params: {})
-      handling_errors do
-        Response.new(@connection.get(BASE_URI + resource_uri, params))
-      end
+      perform_request(:get, resource_uri, params)
     end
 
     private
+
+    def connection
+      Faraday.new do |builder|
+        @authentication.configure(builder)
+        builder.headers[:user_agent] = @user_agent
+        configure_format(builder)
+        add_middleware(builder)
+        @config.call(builder) if @config
+        use_adapter(builder, @adapter)
+      end
+    end
+
+    def perform_request(method, resource_uri, body)
+      handling_errors do
+        url = BASE_URI + resource_uri
+        Response.new(connection.public_send(method, url, body))
+      end
+    end
 
     def configure_format(builder)
       builder.request :multi_json
