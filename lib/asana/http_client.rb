@@ -25,12 +25,10 @@ module Asana
     # user_agent     - [String] The user agent. Defaults to "ruby-asana vX.Y.Z".
     # config         - [Proc] An optional block that yields the Faraday builder
     #                  object for customization.
-    def initialize(authentication:,
-                   adapter: Faraday.default_adapter,
-                   user_agent: USER_AGENT, &config)
+    def initialize(authentication:, adapter: nil, user_agent: nil, &config)
       @authentication = authentication
-      @adapter        = adapter
-      @user_agent     = user_agent
+      @adapter        = adapter || Faraday.default_adapter
+      @user_agent     = user_agent || USER_AGENT
       @config         = config
     end
 

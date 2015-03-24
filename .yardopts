@@ -1,5 +1,4 @@
 --title "Asana API Ruby Client"
---no-private
 --readme README.md
 --plugin tomdoc
 lib
