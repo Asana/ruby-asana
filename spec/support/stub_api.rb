@@ -59,8 +59,15 @@ class StubAPI
   #     response.body   = { "data" => ... }
   #   }
   #
-  def on(method, resource_uri)
-    @stubs.send(method, BASE_URI + resource_uri) do |env|
+  #   api.on(:put, "/users/me", { 'name' => 'John' }) { |response|
+  #     ...
+  #   }
+  #
+  def on(method, resource_uri, body = nil)
+    args = [BASE_URI + resource_uri].tap do |as|
+      as.push MultiJson.dump(body) if [:post, :put, :patch].include?(method)
+    end
+    @stubs.send(method, *args) do |env|
       Response.new(env).tap { |response| yield response }.to_rack
     end
   end

@@ -62,26 +62,35 @@ module Asana
         @data
       end
 
-      # Public: Decides whether the resource is refreshable or not, depending on
-      # if it has a path to fetch itself from.
+      # Public: Updates the resource with new data, and returns an updated
+      # version as it comes from the API.
       #
-      # Returns true if it's refreshable, false otherwise.
-      def refreshable?
-        self.class.base_uri && respond_to?(:id)
+      # data - [Hash] the delta to update the resource with.
+      #
+      # Returns the updated resource, or false if it doesn't have an URI.
+      #
+      # Raises StandardError if it can't understand the response body.
+      def update(data)
+        return false unless uri
+        body = client.put(uri, body: data).body
+        data = body.fetch('data') do
+          fail("Unexpected response body: #{body}")
+        end
+        refresh_with(data)
       end
 
       # Public: Refreshes the resource, fetching itself from the Asana API.
       #
-      # Returns the refreshed resource, or self if it doesn't have enough data
-      # to refresh.
+      # Returns the refreshed resource, or self if it doesn't have an URI.
       #
       # Raises StandardError if it can't understand the response body.
       def refresh
-        return self unless refreshable?
-        response = client.get(self.class.base_uri + "/#{id}")
-        self.class.new(client,
-                       response.body['data'] ||
-                         fail("Unexpected response body: #{response.body}"))
+        return self unless uri
+        body = client.get(uri).body
+        data = body.fetch('data') do
+          fail("Unexpected response body: #{body}")
+        end
+        refresh_with(data)
       end
 
       # Public: Compares to another resource for equality, based on its data and
@@ -90,6 +99,14 @@ module Asana
       # other - [Asana::Resources::Resource] the other resource.
       def ==(other)
         self.class == other.class && to_h == other.to_h
+      end
+
+      # Public: The URI representing that resource.
+      #
+      # Returns the [String] URI if it has one, nil otherwise.
+      def uri
+        self.class.base_uri + "/#{id}" if self.class.base_uri &&
+                                          respond_to?(:id)
       end
 
       # Public:
@@ -102,6 +119,13 @@ module Asana
       private
 
       attr_reader :client
+
+      # Internal: Returns a new instance of the same class with different data.
+      #
+      # data - [Hash] the new data to use.
+      def refresh_with(data)
+        self.class.new(client, data)
+      end
 
       # Internal: Caches a property and a value by defining a reader method for
       # it.

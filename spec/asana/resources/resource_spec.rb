@@ -1,26 +1,25 @@
 require 'support/stub_api'
+require 'support/resources_helper'
 
 RSpec.describe Asana::Resources::Resource do
   let(:api) { StubAPI.new }
-
-  def klass(name, parent, &body)
-    Class.new(parent) do
-      define_singleton_method(:==) { |other| self.name == other.name }
-      define_singleton_method(:name) { name }
-      define_singleton_method(:to_s) { name }
-      define_singleton_method(:inspect) { name }
-      instance_eval(&body)
-    end
+  let(:authentication) do
+    Asana::Authentication::TokenAuthentication.new('token')
+  end
+  let(:client) do
+    Asana::HttpClient.new(authentication: authentication, adapter: api.adapter)
   end
 
+  include ResourcesHelper
+
   let!(:treasure_class) do
-    klass('Asana::Resources::Treasure', described_class) do
+    defresource 'Treasure'  do
       path '/treasures'
     end
   end
 
   let!(:unicorn_class) do
-    klass('Asana::Resources::Unicorn', described_class) do
+    defresource 'Unicorn' do
       path '/unicorns'
       contains_one :horn
       contains_one :unicorn, as: :mother
@@ -28,14 +27,6 @@ RSpec.describe Asana::Resources::Resource do
       contains_many :unicorns, as: :friends
       contains_many :favorite_foods
     end
-  end
-
-  let(:authentication) do
-    Asana::Authentication::TokenAuthentication.new('token')
-  end
-
-  let(:client) do
-    Asana::HttpClient.new(authentication: authentication, adapter: api.adapter)
   end
 
   it 'auto-vivifies plain properties of the resource' do
@@ -67,6 +58,18 @@ RSpec.describe Asana::Resources::Resource do
         response.body = { 'malformed' => 'body' }
       end
       expect { unicorn.refresh }.to raise_error(/Unexpected/)
+    end
+  end
+
+  describe '#update' do
+    it 'updates a resource with new data' do
+      unicorn = unicorn_class.new(client, 'id' => 10, 'name' => 'John')
+      api.on(:put, '/unicorns/10', 'name' => 'Paul') do |response|
+        response.body = { 'data' => { 'id' => 10, 'name' => 'Paul' } }
+      end
+      updated_unicorn = unicorn.update('name' => 'Paul')
+      expect(updated_unicorn).to_not eq(unicorn)
+      expect(updated_unicorn.name).to eq('Paul')
     end
   end
 

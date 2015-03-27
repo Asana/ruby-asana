@@ -43,6 +43,18 @@ module Asana
       perform_request(:get, resource_uri, params)
     end
 
+    # Public: Performs a PUT request against the API.
+    #
+    # resource_uri - [String] the resource URI relative to the base Asana API
+    #                URL, e.g "/users/me".
+    # body         - [Hash] the body to PUT.
+    #
+    # Returns an [Asana::HttpClient::Response] if everything went well.
+    # Raises [Asana::Errors::APIError] if anything went wrong.
+    def put(resource_uri, body: {})
+      perform_request(:put, resource_uri, body)
+    end
+
     private
 
     def connection
