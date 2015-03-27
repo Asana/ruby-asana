@@ -10,7 +10,7 @@ RSpec.describe Asana::Client do
         c.faraday_adapter api.adapter
       end
 
-      expect(client).to be_a(Asana::Client)
+      expect(client).to be_a(described_class)
     end
   end
 end

@@ -1,5 +1,6 @@
 require_relative 'authentication'
 require_relative 'client/configuration'
+require_relative 'resources'
 
 module Asana
   # Public: A client to interact with the Asana API. It exposes all the
