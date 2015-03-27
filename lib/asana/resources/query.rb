@@ -16,10 +16,11 @@ module Asana
       # http_client    - [Asana::HttpClient] an HTTP client to perform the
       #                  requests.
       # resource_class - [Class] A Resource class to wrap the responses in.
-      def initialize(http_client, resource_class)
-        @client         = http_client
-        @resource_class = resource_class
-        @base_uri       = resource_class.base_uri
+      def initialize(client:, resource:, scope: nil)
+        @client         = client
+        @resource_class = resource
+        @base_uri       = resource.base_uri
+        @scope          = scope || ''
       end
 
       # Public: Queries all elements scoped to the resource class.
@@ -67,7 +68,7 @@ module Asana
       #
       # Returns a [Hash] with the response body's data.
       def get(path = '')
-        @client.get(@base_uri + path).body['data']
+        @client.get(@scope + @base_uri + path).body['data']
       end
     end
   end

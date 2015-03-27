@@ -66,16 +66,20 @@ module Asana
 
     # Public: Represents /users in the Asana API.
     #
+    # scope - [String] the prefix URI to scope the query from.
+    #
     # Returns a Query scoped to users.
     def users
-      Resources::Query.new(@http_client, Resources::User)
+      Resources::Query.new(client: @http_client,
+                           resource: Resources::User)
     end
 
     # Public: Represents /workspaces in the Asana API.
     #
     # Returns a Query scoped to workspaces.
     def workspaces
-      Resources::Query.new(@http_client, Resources::Workspace)
+      Resources::Query.new(client: @http_client,
+                           resource: Resources::Workspace)
     end
   end
 end

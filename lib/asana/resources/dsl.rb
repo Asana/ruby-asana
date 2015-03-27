@@ -116,6 +116,53 @@ module Asana
       end
       # rubocop:enable Metrics/MethodLength
 
+      # Public: Declares a has_many relationship.
+      #
+      # Defines a reader method with the plural resource name (or the provided
+      # alias), that wraps the collection in a Collection class parameterized by
+      # the resources_name Resource subclass.
+      #
+      # resources_name - [Symbol] the collection name.
+      # as             - [Symbol] an alias for the collection name. Defaults to
+      #                  nil.
+      #
+      # Returns nothing.
+      #
+      # Examples
+      #
+      #   # /unicorns/10/friends
+      #
+      #   class Unicorn < Asana::Resources::Resource
+      #     has_many :unicorns, as: :friends
+      #   end
+      #
+      #   unicorn = Unicorn.new(client, { 'id' => 10 })
+      #   unicorn.friends
+      #   # fetches from /unicorns/10/friends
+      #   # => #<Asana::Resources::Collection<Unicorn>...>
+      #   unicorn.friends.first
+      #   # => #<Unicorn ...>
+      #
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Style/PredicateName
+      def has_many(resources_name, as: nil)
+        name = (as || resources_name).to_s
+        define_method(name) do
+          field = :"@#{name}"
+          if instance_variable_defined?(field)
+            instance_variable_get(field)
+          else
+            resource_class = Registry.lookup_many(resources_name)
+            query = Query.new(client: client,
+                              resource: resource_class,
+                              scope: uri)
+            instance_variable_set(field, query.all)
+          end
+        end
+      end
+      # rubocop:enable Style/PredicateName
+      # rubocop:enable Metrics/MethodLength
+
       # Internal: Parses the base URI to figure out the plural name of the
       # resource.
       #

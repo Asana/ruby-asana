@@ -53,7 +53,8 @@ client = Asana::Client.new do |c|
   c.configure_faraday { |conn| conn.use SomeFaradayMiddleware }
 end
 
-client.do_something
+client.workspaces.find(12).users
+# => #<Asana::Resources::Collection<User> ...>
 ```
 
 ### Authentication

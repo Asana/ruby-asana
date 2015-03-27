@@ -12,8 +12,15 @@ RSpec.describe Asana::Resources::Resource do
 
   include ResourcesHelper
 
+  let!(:world_class) do
+    defresource 'World' do
+      path '/worlds'
+      has_many :unicorns
+    end
+  end
+
   let!(:treasure_class) do
-    defresource 'Treasure'  do
+    defresource 'Treasure' do
       path '/treasures'
     end
   end
@@ -131,6 +138,28 @@ RSpec.describe Asana::Resources::Resource do
                .new(client,
                     described_class,
                     [described_class.new(client, 'id' => 22)]))
+    end
+  end
+
+  describe 'multiple related resources' do
+    let(:jimmy) { unicorn_class.new(client, 'id' => 22, 'name' => 'Jimmy') }
+    let(:world) { world_class.new(client, 'id' => 1) }
+
+    it 'expose reader method defaulting to empty collections' do
+      api.on(:get, '/worlds/1/unicorns') do |response|
+        response.body = { 'data' => [] }
+      end
+      expect(world.unicorns)
+        .to eq(Asana::Resources::Collection.new(client, unicorn_class, []))
+    end
+
+    it 'expose a reader method returning them' do
+      api.on(:get, '/worlds/1/unicorns') do |response|
+        response.body = { 'data' => [jimmy].map(&:to_h) }
+      end
+      expect(world.unicorns)
+        .to eq(Asana::Resources::Collection
+               .new(client, unicorn_class, [jimmy]))
     end
   end
 end

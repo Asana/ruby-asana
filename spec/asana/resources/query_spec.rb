@@ -8,12 +8,19 @@ RSpec.describe Asana::Resources::Query do
     Asana::HttpClient.new(authentication: auth, adapter: api.adapter)
   end
 
-  let(:query) { described_class.new(client, unicorn_class) }
+  let(:query) { described_class.new(client: client, resource: unicorn_class) }
 
   let(:john) { unicorn_class.new(client, 'id' => 1, 'name' => 'John') }
   let(:james) { unicorn_class.new(client, 'id' => 2, 'name' => 'James') }
 
   include ResourcesHelper
+
+  let!(:world_class) do
+    defresource 'World' do
+      path '/worlds'
+      has_many :unicorns
+    end
+  end
 
   let!(:unicorn_class) do
     defresource 'Unicorn' do
@@ -35,6 +42,23 @@ RSpec.describe Asana::Resources::Query do
       expect(query.all)
         .to eq(Asana::Resources::Collection
                .new(client, unicorn_class, [john, james]))
+    end
+  end
+
+  describe 'with a scope' do
+    let(:scope) { '/worlds/1' }
+    let(:query) do
+      described_class.new(client: client, resource: unicorn_class, scope: scope)
+    end
+
+    it 'performs any query scoped' do
+      api.on(:get, '/worlds/1/unicorns') do |response|
+        response.body = { 'data' => [john].map(&:to_h) }
+      end
+
+      expect(query.all)
+        .to eq(Asana::Resources::Collection
+               .new(client, unicorn_class, [john]))
     end
   end
 
