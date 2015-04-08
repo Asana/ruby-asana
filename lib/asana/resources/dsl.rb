@@ -122,6 +122,8 @@ module Asana
       # alias), that wraps the collection in a Collection class parameterized by
       # the resources_name Resource subclass.
       #
+      # The reader method will perform a network request to fetch the collection.
+      #
       # resources_name - [Symbol] the collection name.
       # as             - [Symbol] an alias for the collection name. Defaults to
       #                  nil.
