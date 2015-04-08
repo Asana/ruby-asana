@@ -53,8 +53,11 @@ client = Asana::Client.new do |c|
   c.configure_faraday { |conn| conn.use SomeFaradayMiddleware }
 end
 
-client.workspaces.find(12).users
-# => #<Asana::Resources::Collection<User> ...>
+workspace = client.workspaces.find(12)
+workspace.users
+# => #<Asana::Collection<User> ...>
+workspace.tags.create(name: 'foo')
+# => #<Asana::Tag id: ..., name: "foo">
 ```
 
 ### Authentication

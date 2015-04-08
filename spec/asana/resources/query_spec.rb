@@ -40,8 +40,7 @@ RSpec.describe Asana::Resources::Query do
       end
 
       expect(query.all)
-        .to eq(Asana::Resources::Collection
-               .new(client, unicorn_class, [john, james]))
+        .to eq(collection_of(unicorn_class, [john, james], client: client))
     end
   end
 
@@ -57,8 +56,7 @@ RSpec.describe Asana::Resources::Query do
       end
 
       expect(query.all)
-        .to eq(Asana::Resources::Collection
-               .new(client, unicorn_class, [john]))
+        .to eq(collection_of(unicorn_class, [john], client: client))
     end
   end
 
@@ -69,6 +67,24 @@ RSpec.describe Asana::Resources::Query do
       end
 
       expect(query.find('2')).to eq(james)
+    end
+  end
+
+  describe '#method_missing' do
+    context 'if Asana::Resources::Collection responds to the message' do
+      it 'receives it' do
+        api.on(:get, '/unicorns') do |response|
+          response.body = { 'data' => [james.to_h] }
+        end
+
+        expect(query.first).to eq(james)
+      end
+    end
+
+    context 'if Asana::Resources::Collection does not respond to the message' do
+      it 'raises a NoMethodError' do
+        expect { query.blah }.to raise_error(NoMethodError)
+      end
     end
   end
 end

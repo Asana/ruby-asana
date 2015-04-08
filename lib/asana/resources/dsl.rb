@@ -107,9 +107,10 @@ module Asana
             instance_variable_get(field)
           else
             resource_class = Registry.lookup_many(resources_name)
-            coll = Resources::Collection.new(client,
-                                             resource_class,
-                                             to_h.fetch(name, []))
+            coll = Resources::Collection.new(client: client,
+                                             resource_class: resource_class,
+                                             scope: uri,
+                                             elements: to_h.fetch(name, []))
             instance_variable_set(field, coll)
           end
         end
@@ -122,7 +123,8 @@ module Asana
       # alias), that wraps the collection in a Collection class parameterized by
       # the resources_name Resource subclass.
       #
-      # The reader method will perform a network request to fetch the collection.
+      # The reader method will perform a network request to fetch the
+      # collection.
       #
       # resources_name - [Symbol] the collection name.
       # as             - [Symbol] an alias for the collection name. Defaults to

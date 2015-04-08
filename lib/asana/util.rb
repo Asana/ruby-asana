@@ -3,21 +3,6 @@ module Asana
   module Util
     module_function
 
-    # Public: Returns the enclosing module of a module.
-    #
-    # mod - [Module] the module enclosed by another.
-    #
-    # Returns the enclosing module.
-    #
-    # Examples
-    #
-    #   Asana::Util.namespace(Asana::Util)
-    #   # => Asana
-    #
-    def namespace(mod)
-      ::Object.const_get(mod.name.split('::').tap(&:pop).join('::'))
-    end
-
     # Public: Underscores a CamelCase string.
     #
     # str - [#to_s] the string to underscore.

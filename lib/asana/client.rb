@@ -64,22 +64,36 @@ module Asana
                        &config[:faraday_config])
     end
 
-    # Public: Represents /users in the Asana API.
-    #
-    # scope - [String] the prefix URI to scope the query from.
-    #
-    # Returns a Query scoped to users.
-    def users
-      Resources::Query.new(client: @http_client,
-                           resource: Resources::User)
+    # Public: Performs a GET request against an arbitrary Asana URL. Allows for
+    # the user to interact with the API in ways that haven't been
+    # reflected/foreseen in this library.
+    def get(url, *args)
+      @http_client.get(url, *args)
     end
 
-    # Public: Represents /workspaces in the Asana API.
+    # Public: Performs a POST request against an arbitrary Asana URL. Allows for
+    # the user to interact with the API in ways that haven't been
+    # reflected/foreseen in this library.
+    def post(url, *args)
+      @http_client.post(url, *args)
+    end
+
+    # Public: Performs a PUT request against an arbitrary Asana URL. Allows for
+    # the user to interact with the API in ways that haven't been
+    # reflected/foreseen in this library.
+    def put(url, *args)
+      @http_client.put(url, *args)
+    end
+
+    # Public: Exposes queries for all top-evel endpoints.
     #
-    # Returns a Query scoped to workspaces.
-    def workspaces
-      Resources::Query.new(client: @http_client,
-                           resource: Resources::Workspace)
+    # E.g. #users will query /users and return a
+    # Asana::Resources::Collection<User>.
+    Resources::Registry.resources.each do |resource_class|
+      define_method(resource_class.plural_name) do
+        Resources::Query.new(client: @http_client,
+                             resource: resource_class)
+      end
     end
   end
 end

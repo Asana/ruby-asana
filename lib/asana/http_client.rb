@@ -55,6 +55,18 @@ module Asana
       perform_request(:put, resource_uri, body)
     end
 
+    # Public: Performs a POST request against the API.
+    #
+    # resource_uri - [String] the resource URI relative to the base Asana API
+    #                URL, e.g "/tags".
+    # body         - [Hash] the body to POST.
+    #
+    # Returns an [Asana::HttpClient::Response] if everything went well.
+    # Raises [Asana::Errors::APIError] if anything went wrong.
+    def post(resource_uri, body: {})
+      perform_request(:post, resource_uri, data: body)
+    end
+
     private
 
     def connection

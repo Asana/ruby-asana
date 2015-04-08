@@ -6,6 +6,7 @@ module Asana
     class Workspace < Resource
       path '/workspaces'
       has_many :users
+      has_many :tags
     end
   end
 end

@@ -17,4 +17,14 @@ module ResourcesHelper
       instance_eval(&body)
     end
   end
+
+  def collection_of(resource_name, elements, client:)
+    Asana::Resources::Collection.new(client: client,
+                                     resource_class: resource_name,
+                                     elements: elements)
+  end
+
+  def empty_collection_of(resource_name, client:)
+    collection_of(resource_name, [], client: client)
+  end
 end

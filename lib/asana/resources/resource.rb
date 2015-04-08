@@ -27,6 +27,20 @@ module Asana
 
       extend Resources::DSL
 
+      # Public: Posts a new resource to the API.
+      #
+      # client - [Asana::Client] the client to perform the request through.
+      # data   - [Hash] the data of the new resource.
+      #
+      # Returns an instance of the class as it comes from the API response.
+      def self.create(client:, data: {}, uri: nil)
+        body = client.post(uri || base_uri, body: data).body
+        data = body.fetch('data') do
+          fail("Unexpected response body: #{body}")
+        end
+        new(client, data)
+      end
+
       # Internal: Initializes a new resource.
       #
       # client - [Asana::HttpClient] a client to refresh itself and ask for
@@ -51,7 +65,7 @@ module Asana
       # Internal: Guard for the method_missing proxy. Checks if the resource
       # actually has a specific piece of data at all.
       #
-      # Returns true if the resource has th property, false otherwise.
+      # Returns true if the resource has the property, false otherwise.
       def respond_to_missing?(m, *)
         @data.key?(m.to_s)
       end
@@ -112,7 +126,11 @@ module Asana
       # Public:
       # Returns a String representation of the resource.
       def to_s
-        "#<#{self.class.name} #{to_h}>"
+        kind = self.class.name.split('::').last
+        data = to_h
+               .map { |field, _| "#{field}: #{public_send(field).inspect}" }
+               .join(', ')
+        "#<Asana::#{kind} #{data}>"
       end
       alias_method :inspect, :to_s
 
@@ -148,7 +166,9 @@ module Asana
       def wrapped(value)
         case value
         when Hash then Resource.new(client, value)
-        when Array then Collection.new(client, Resource, value)
+        when Array then Collection.new(client: client,
+                                       resource_class: Resource,
+                                       elements: value)
         else value
         end
       end

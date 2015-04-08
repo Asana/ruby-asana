@@ -109,35 +109,32 @@ RSpec.describe Asana::Resources::Resource do
     it 'expose methods defaulting to empty collections' do
       unicorn = unicorn_class.new(client)
       expect(unicorn.friends)
-        .to eq(Asana::Resources::Collection.new(client, unicorn_class, []))
+        .to eq(empty_collection_of(unicorn_class, client: client))
     end
 
     it 'wrap values in a generic Collection<Resource> object' do
       unicorn = unicorn_class.new(client,
                                   'favorite_foods' => [{ 'name' => 'bread' }])
       expect(unicorn.favorite_foods)
-        .to eq(Asana::Resources::Collection
-               .new(client,
-                    described_class,
-                    [described_class.new(client, 'name' => 'bread')]))
+        .to eq(collection_of(described_class,
+                             [described_class.new(client, 'name' => 'bread')],
+                             client: client))
     end
 
     it 'use a more specific subclass of Resource if available' do
       unicorn = unicorn_class.new(client, 'friends' => [{ 'id' => 22 }])
       expect(unicorn.friends)
-        .to eq(Asana::Resources::Collection
-               .new(client,
-                    unicorn_class,
-                    [unicorn_class.new(client, 'id' => 22)]))
+        .to eq(collection_of(unicorn_class,
+                             [unicorn_class.new(client, 'id' => 22)],
+                             client: client))
     end
 
     it 'are wrapped even when they are not declared in the DSL' do
       unicorn = unicorn_class.new(client, 'enemies' => [{ 'id' => 22 }])
       expect(unicorn.enemies)
-        .to eq(Asana::Resources::Collection
-               .new(client,
-                    described_class,
-                    [described_class.new(client, 'id' => 22)]))
+        .to eq(collection_of(described_class,
+                             [described_class.new(client, 'id' => 22)],
+                             client: client))
     end
   end
 
@@ -150,7 +147,7 @@ RSpec.describe Asana::Resources::Resource do
         response.body = { 'data' => [] }
       end
       expect(world.unicorns)
-        .to eq(Asana::Resources::Collection.new(client, unicorn_class, []))
+        .to eq(empty_collection_of(unicorn_class, client: client))
     end
 
     it 'expose a reader method returning them' do
@@ -158,8 +155,31 @@ RSpec.describe Asana::Resources::Resource do
         response.body = { 'data' => [jimmy].map(&:to_h) }
       end
       expect(world.unicorns)
-        .to eq(Asana::Resources::Collection
-               .new(client, unicorn_class, [jimmy]))
+        .to eq(collection_of(unicorn_class, [jimmy], client: client))
+    end
+  end
+
+  describe '.create' do
+    it 'posts a new resource to the API and returns a wrapped instance' do
+      api.on(:post, '/unicorns', data: { name: 'foo' }) do |response|
+        response.body = { data: { id: 1, name: 'foo' } }
+      end
+
+      expect(unicorn_class.create(client: client, data: { name: 'foo' }))
+        .to eq(unicorn_class.new(client, 'id' => 1, 'name' => 'foo'))
+    end
+
+    context 'when given a particular URL' do
+      it 'posts a new resource to the API in that scope' do
+        api.on(:post, '/worlds/1/unicorns', data: { name: 'foo' }) do |response|
+          response.body = { data: { id: 1, name: 'foo' } }
+        end
+
+        expect(unicorn_class.create(client: client,
+                                    data: { name: 'foo' },
+                                    uri: '/worlds/1/unicorns'))
+          .to eq(unicorn_class.new(client, 'id' => 1, 'name' => 'foo'))
+      end
     end
   end
 end
