@@ -2,7 +2,7 @@ require_relative 'resource'
 
 module Asana
   module Resources
-    # Public: An Asana user.
+    # Public: An Asana tag.
     class Tag < Resource
       path '/tags'
       contains_many :users, as: :followers
