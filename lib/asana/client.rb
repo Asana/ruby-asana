@@ -61,6 +61,7 @@ module Asana
         HttpClient.new(authentication: config.fetch(:authentication),
                        adapter:        config[:faraday_adapter],
                        user_agent:     config[:user_agent],
+                       debug_mode:     config[:debug_mode],
                        &config[:faraday_config])
     end
 
@@ -89,7 +90,7 @@ module Asana
     #
     # E.g. #users will query /users and return a
     # Asana::Resources::Collection<User>.
-    Resources::Registry.resources.each do |resource_class|
+    Resources::Registry.resources.select(&:top_level).each do |resource_class|
       define_method(resource_class.plural_name) do
         Resources::Query.new(client: @http_client,
                              resource: resource_class)

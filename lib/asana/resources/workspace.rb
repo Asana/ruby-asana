@@ -7,6 +7,7 @@ module Asana
       path '/workspaces'
       has_many :users
       has_many :tags
+      has_many :teams, scope: -> id { "/organizations/#{id}" }
     end
   end
 end

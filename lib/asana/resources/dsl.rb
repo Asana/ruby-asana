@@ -21,15 +21,18 @@ module Asana
     #
     module DSL
       # Internal: The base URI of the resource relativo to the API root.
-      attr_reader :base_uri
+      attr_reader :base_uri, :top_level
 
       # Public: Defines the base URI of the resource relative to the API root.
       #
-      # uri - [String] the relative path of the resource, e.g. '/users'
+      # uri       - [String] the relative path of the resource, e.g. '/users'
+      # top_level - [Boolean] Whether the resource can be listed at the top
+      #             level, e.g. '/users' can, but '/stories' cannot.
       #
       # Returns nothing.
-      def path(uri) # rubocop:disable Style/TrivialAccessors
-        @base_uri = uri
+      def path(uri, top_level: true) # rubocop:disable Style/TrivialAccessors
+        @base_uri  = uri
+        @top_level = top_level
       end
 
       # Public: Declares a contained object.
@@ -149,7 +152,7 @@ module Asana
       #
       # rubocop:disable Metrics/MethodLength
       # rubocop:disable Style/PredicateName
-      def has_many(resources_name, as: nil)
+      def has_many(resources_name, as: nil, scope: nil)
         name = (as || resources_name).to_s
         define_method(name) do
           field = :"@#{name}"
@@ -159,7 +162,7 @@ module Asana
             resource_class = Registry.lookup_many(resources_name)
             query = Query.new(client: client,
                               resource: resource_class,
-                              scope: uri)
+                              scope: scope && scope[id] || uri)
             instance_variable_set(field, query.all)
           end
         end

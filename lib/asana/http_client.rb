@@ -25,10 +25,15 @@ module Asana
     # user_agent     - [String] The user agent. Defaults to "ruby-asana vX.Y.Z".
     # config         - [Proc] An optional block that yields the Faraday builder
     #                  object for customization.
-    def initialize(authentication:, adapter: nil, user_agent: nil, &config)
+    def initialize(authentication:,
+                   adapter: nil,
+                   user_agent: nil,
+                   debug_mode: false,
+                   &config)
       @authentication = authentication
       @adapter        = adapter || Faraday.default_adapter
       @user_agent     = user_agent || USER_AGENT
+      @debug_mode     = debug_mode
       @config         = config
     end
 
@@ -83,6 +88,7 @@ module Asana
     def perform_request(method, resource_uri, body)
       handling_errors do
         url = BASE_URI + resource_uri
+        log_request(method, url, body) if @debug_mode
         Response.new(connection.public_send(method, url, body))
       end
     end
@@ -108,6 +114,13 @@ module Asana
 
     def handling_errors(&request)
       ErrorHandling.handle(&request)
+    end
+
+    def log_request(method, url, body)
+      STDERR.puts '[%s] %s %s (%s)'.format [self.class,
+                                            method.to_s.upcase,
+                                            url,
+                                            JSON.dump(body)]
     end
   end
 end

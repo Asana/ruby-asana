@@ -94,4 +94,11 @@ RSpec.describe Asana::Client::Configuration do
       expect(faraday_config).to be_a(Proc)
     end
   end
+
+  describe '#debug_mode' do
+    it 'configures the client to be more verbose' do
+      debug_mode = described_class.new.tap(&:debug_mode).to_h[:debug_mode]
+      expect(debug_mode).to eq(true)
+    end
+  end
 end

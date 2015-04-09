@@ -55,6 +55,14 @@ module Asana
         @configuration[:faraday_configuration] = config
       end
 
+      # Public: Configures the client in debug mode, which will print verbose
+      # information on STDERR.
+      #
+      # Returns nothing.
+      def debug_mode
+        @configuration[:debug_mode] = true
+      end
+
       # Public:
       # Returns the configuration [Hash].
       def to_h
