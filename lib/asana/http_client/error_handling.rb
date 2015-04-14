@@ -29,6 +29,7 @@ module Asana
       def handle(&request)
         request.call
       rescue Faraday::ClientError => e
+        raise e unless e.response
         case e.response[:status]
         when 400 then raise invalid_request(e.response)
         when 401 then raise not_authorized(e.response)

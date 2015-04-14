@@ -117,10 +117,11 @@ module Asana
     end
 
     def log_request(method, url, body)
-      STDERR.puts '[%s] %s %s (%s)'.format [self.class,
-                                            method.to_s.upcase,
-                                            url,
-                                            JSON.dump(body)]
+      STDERR.puts format('[%s] %s %s (%s)',
+                         self.class,
+                         method.to_s.upcase,
+                         url,
+                         JSON.dump(body))
     end
   end
 end

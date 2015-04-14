@@ -51,6 +51,24 @@ module Asana
   #   end
   #
   class Client
+    # Internal: Proxies Resource classes to implement a fluent API on the Client
+    # instances.
+    class ResourceProxy
+      def initialize(client:, resource:)
+        @client   = client
+        @resource = resource
+      end
+
+      def method_missing(m, *args, &block)
+        return super unless respond_to_missing?(m, *args)
+        @resource.public_send(m, *args, client: @client, &block)
+      end
+
+      def respond_to_missing?(m, *)
+        @resource.respond_to?(m)
+      end
+    end
+
     # Public: Initializes a new client.
     #
     # Yields a {Asana::Client::Configuration} object as a configuration
@@ -90,10 +108,10 @@ module Asana
     #
     # E.g. #users will query /users and return a
     # Asana::Resources::Collection<User>.
-    Resources::Registry.resources.select(&:top_level).each do |resource_class|
+    Resources::Registry.resources.each do |resource_class|
       define_method(resource_class.plural_name) do
-        Resources::Query.new(client: @http_client,
-                             resource: resource_class)
+        ResourceProxy.new(client: @http_client,
+                          resource: resource_class)
       end
     end
   end

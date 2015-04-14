@@ -14,17 +14,15 @@ module ResourcesHelper
       define_singleton_method(:name) { name }
       define_singleton_method(:to_s) { name }
       define_singleton_method(:inspect) { name }
-      instance_eval(&body)
+      instance_eval(&body) if body
     end
   end
 
-  def collection_of(resource_name, elements, client:)
-    Asana::Resources::Collection.new(client: client,
-                                     resource_class: resource_name,
-                                     elements: elements)
+  def collection_of(elements)
+    Asana::Resources::Collection.new(elements, client: nil)
   end
 
-  def empty_collection_of(resource_name, client:)
-    collection_of(resource_name, [], client: client)
+  def empty_collection
+    collection_of([], client: nil)
   end
 end
