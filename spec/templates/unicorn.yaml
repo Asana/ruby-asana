@@ -1,0 +1,110 @@
+---
+name: unicorn
+comment: |
+  A _unicorn_ is a fantastic animal.
+
+properties:
+
+  - name: id
+    type: Id
+
+  - name: name
+    type: String
+
+actions:
+
+  - name: create
+    method: POST
+    path: "/unicorns"
+    params:
+      - name: world
+        type: Id
+        required: true
+        comment: The world to create the unicorn in.
+    comment: |
+      Creates a new unicorn in a world.
+
+      Returns the full record of the newly created unicorn.
+
+  - name: createInWorld
+    method: POST
+    path: "/worlds/%d/unicorns"
+    params:
+      - name: world
+        type: Id
+        required: true
+        comment: The world to create the unicorn in.
+    comment: |
+      Creates a new unicorn in a world.
+
+      Returns the full record of the newly created unicorn.
+
+  - name: findById
+    method: GET
+    path: "/unicorns/%d"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to get.
+    comment: |
+      Returns the complete unicorn record for a single unicorn.
+
+  - name: update
+    method: PUT
+    path: "/unicorns/%d"
+    params:
+      - name: tag
+        type: Id
+        required: true
+        comment: The tag to update.
+    comment: |
+      Updates the properties of a tag. Only the fields provided in the `data`
+      block will be updated; any unspecified fields will remain unchanged.
+
+      When using this method, it is best to specify only those fields you wish
+      to change, or else you may overwrite changes made by another user since
+      you last retrieved the task.
+
+      Returns the complete updated tag record.
+
+  - name: delete
+    method: DELETE
+    path: "/unicorns/%d"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to delete.
+    comment: |
+      A specific, existing unicorn can be deleted by making a DELETE request
+      on the URL for that unicorn.
+
+      Returns an empty data record.
+
+  - name: findAll
+    method: GET
+    path: "/unicorns"
+    collection: true
+    comment: |
+      Returns the compact unicorn records for some filtered set of unicorns.
+      Use one or more of the parameters provided to filter the unicorns returned.
+    params:
+      - name: world
+        type: Id
+        comment: The world to filter unicorns on.
+      - name: breed
+        type: Id
+        comment: The breed to filter unicorns on.
+
+  - name: findByWorld
+    method: GET
+    path: "/worlds/%d/unicorns"
+    params:
+      - name: world
+        type: Id
+        required: true
+        comment: The world to find unicorns in.
+    collection: true
+    comment: |
+      Returns the compact unicorn records for all unicorns in the world.

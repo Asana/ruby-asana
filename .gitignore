@@ -9,3 +9,5 @@
 /tmp/
 /bin/
 test.rb
+/node_modules/
+/spec/templates/unicorn.rb

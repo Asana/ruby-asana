@@ -3,4 +3,14 @@ AllCops:
     - '**/Rakefile'
   Exclude:
     - 'bin/**/*'
+    - 'lib/asana/resources/attachment.rb'
+    - 'lib/asana/resources/event.rb'
+    - 'lib/asana/resources/project.rb'
+    - 'lib/asana/resources/story.rb'
+    - 'lib/asana/resources/tag.rb'
+    - 'lib/asana/resources/task.rb'
+    - 'lib/asana/resources/team.rb'
+    - 'lib/asana/resources/user.rb'
+    - 'lib/asana/resources/workspace.rb'
+    - 'spec/templates/unicorn.rb'
 require: rubocop-rspec

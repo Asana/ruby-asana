@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "inflect": "^0.3.0",
+    "js-yaml": "^3.2.5",
+    "lodash": "^2.4.1"
+  }
+}

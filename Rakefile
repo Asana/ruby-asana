@@ -11,4 +11,9 @@ YARD::Rake::YardocTask.new do |t|
   t.stats_options = ['--list-undoc']
 end
 
-task default: [:spec, :rubocop, :yard]
+desc "Generates a test resource from a YAML using the resource template."
+task :codegen do
+  `node spec/support/codegen.js`
+end
+
+task default: [:codegen, :spec, :rubocop, :yard]
