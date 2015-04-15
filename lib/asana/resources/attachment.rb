@@ -29,7 +29,7 @@ module Asana
         # task - [Id] Globally unique identifier for the task.
         def find_by_task(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/attachments")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/attachments")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact records for all attachments on the task.
@@ -47,5 +47,3 @@ module Asana
     end
   end
 end
-
-

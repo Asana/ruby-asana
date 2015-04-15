@@ -33,7 +33,7 @@ module Asana
         # task - [Id] Globally unique identifier for the task.
         def find_by_task(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/stories")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/stories")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -55,5 +55,3 @@ module Asana
     end
   end
 end
-
-

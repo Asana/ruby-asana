@@ -45,7 +45,7 @@ module Asana
         # workspace - [Id] The workspace in which to get users.
         def find_by_workspace(client, workspace:)
 
-          Collection.new(body(client.get("/workspaces/#{workspace}/users")), client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/users")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
@@ -54,12 +54,10 @@ module Asana
         # workspace - [Id] The workspace or organization to filter users on.
         def find_all(client, workspace: nil)
           params = { workspace: workspace }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/users", params: params)), client: client)
+          Collection.new(body(client.get("/users", params: params)).map { |data| new(data, client: client) }, client: client)
         end
       end
 
     end
   end
 end
-
-

@@ -31,7 +31,7 @@ module Asana
         # organization - [Id] Globally unique identifier for the workspace or organization.
         def find_by_organization(client, organization:)
 
-          Collection.new(body(client.get("/organizations/#{organization}/teams")), client: client)
+          Collection.new(body(client.get("/organizations/#{organization}/teams")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact records for all users that are members of the team.
@@ -39,12 +39,10 @@ module Asana
         # team - [Id] Globally unique identifier for the team.
         def users(client, team:)
 
-          Collection.new(body(client.get("/teams/#{team}/users")), client: client)
+          Collection.new(body(client.get("/teams/#{team}/users")).map { |data| Resource.new(data, client: client) }, client: client)
         end
       end
 
     end
   end
 end
-
-
