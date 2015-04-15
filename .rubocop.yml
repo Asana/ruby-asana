@@ -13,4 +13,5 @@ AllCops:
     - 'lib/asana/resources/user.rb'
     - 'lib/asana/resources/workspace.rb'
     - 'spec/templates/unicorn.rb'
+    - 'spec/templates/world.rb'
 require: rubocop-rspec
