@@ -44,29 +44,6 @@ module Asana
 
           Collection.new(body(client.get("/workspaces")).map { |data| new(data, client: client) }, client: client)
         end
-
-        # Retrieves objects in the workspace based on an auto-completion/typeahead
-        # search algorithm. This feature is meant to provide results quickly, so do
-        # not rely on this API to provide extremely accurate search results. The
-        # result set is limited to a single page of results with a maximum size,
-        # so you won't be able to fetch large numbers of results.
-        #
-        # workspace - [Id] The workspace to fetch objects from.
-        # type - [Enum] The type of values the typeahead should return.
-        # Note that unlike in the names of endpoints, the types listed here are
-        # in singular form (e.g. `task`). Using multiple types is not yet supported.
-        #
-        # query - [String] The string that will be used to search for relevant objects. If an
-        # empty string is passed in, the API will currently return an empty
-        # result set.
-        #
-        # count - [Number] The number of results to return. The default is `20` if this
-        # parameter is omitted, with a minimum of `1` and a maximum of `100`.
-        # If there are fewer results found than requested, all will be returned.
-        def typeahead(client, workspace:, type:, query: nil, count: nil)
-          params = { type: type, query: query, count: count }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/workspaces/#{workspace}/typeahead", params: params)).map { |data| Resource.new(data, client: client) }, client: client)
-        end
       end
 
       # Update properties on a workspace. Returns the complete, updated workspace record.
@@ -74,6 +51,27 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(**data)
         refresh_with(body(client.put("/workspaces/#{id}", body: data)))
+      end
+
+      # Retrieves objects in the workspace based on an auto-completion/typeahead
+      # search algorithm. This feature is meant to provide results quickly, so do
+      # not rely on this API to provide extremely accurate search results. The
+      # result set is limited to a single page of results with a maximum size,
+      # so you won't be able to fetch large numbers of results.
+      #
+      # type - [Enum] The type of values the typeahead should return.
+      # Note that unlike in the names of endpoints, the types listed here are
+      # in singular form (e.g. `task`). Using multiple types is not yet supported.
+      #
+      # query - [String] The string that will be used to search for relevant objects. If an
+      # empty string is passed in, the API will currently return an empty
+      # result set.
+      #
+      # count - [Number] The number of results to return. The default is `20` if this
+      # parameter is omitted, with a minimum of `1` and a maximum of `100`.
+      # If there are fewer results found than requested, all will be returned.
+      def typeahead(type:, query: nil, count: nil)
+        Collection.new(body(client.get("/workspaces/#{id}/typeahead")).map { |data| Resource.new(data, client: client) }, client: client)
       end
 
     end
