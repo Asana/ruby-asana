@@ -150,6 +150,30 @@ RSpec.describe Asana::Resources::Unicorn do
     end
   end
 
+  describe '#add_paw' do
+    it 'adds an existing paw to a unicorn' do
+      paw_data = { id: 9, size: 4 }
+      api.on(:post, '/unicorns/1/paws', data: { paw: 9 }) do |response|
+        response.body = { data: paw_data }
+      end
+
+      john = described_class.new(john_data, client: client)
+      paw = john.add_paw(paw: 9)
+      expect(paw.size).to eq(4)
+    end
+  end
+
+  describe '#add_friends' do
+    it 'adds existing friends to a unicorn' do
+      api.on(:post, '/unicorns/1/friends', data: { friends: [2] }) do |response|
+        response.body = { data: john_data }
+      end
+
+      john = described_class.new(john_data, client: client)
+      expect(john.add_friends(friends: [2])).to be_john
+    end
+  end
+
   describe '#delete' do
     it 'deletes a unicorn' do
       api.on(:delete, '/unicorns/1') do |response|

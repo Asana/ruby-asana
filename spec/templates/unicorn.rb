@@ -24,7 +24,7 @@ module Asana
         # world - [Id] The world to create the unicorn in.
         def create(client, world:, **data)
           with_params = data.merge(world: world).reject { |_,v| v.nil? }
-          new(body(client.post("/unicorns", body: with_params)), client: client)
+          new(body(client.post("/unicorns", body: with_params), client: client)
         end
 
         # Creates a new unicorn in a world.
@@ -35,7 +35,7 @@ module Asana
         # world - [Id] The world to create the unicorn in.
         def create_in_world(client, world:, **data)
 
-          new(body(client.post("/worlds/#{world}/unicorns", body: data)), client: client)
+          new(body(client.post("/worlds/#{world}/unicorns", body: data), client: client)
         end
 
         # Returns the complete unicorn record for a single unicorn.
@@ -43,7 +43,7 @@ module Asana
         # id - [Id] The unicorn to get.
         def find_by_id(client, id)
 
-          new(body(client.get("/unicorns/#{id}")), client: client)
+          new(body(client.get("/unicorns/#{id}"), client: client)
         end
 
         # Returns the compact unicorn records for some filtered set of unicorns.
@@ -53,7 +53,7 @@ module Asana
         # breed - [Id] The breed to filter unicorns on.
         def find_all(client, world: nil, breed: nil)
           params = { world: world, breed: breed }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/unicorns", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/unicorns", params: params).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact unicorn records for all unicorns in the world.
@@ -61,7 +61,7 @@ module Asana
         # world - [Id] The world to find unicorns in.
         def find_by_world(client, world:)
 
-          Collection.new(body(client.get("/worlds/#{world}/unicorns")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/worlds/#{world}/unicorns").map { |data| new(data, client: client) }, client: client)
         end
       end
 
@@ -76,12 +76,32 @@ module Asana
       #
       # data - [Hash] the attributes to post.
       def update(**data)
-        refresh_with(body(client.put("/unicorns/#{id}", body: data)))
+
+        refresh_with(body(client.put("/unicorns/#{id}", body: data))
       end
 
       # Returns a collection of paws belonging to the unicorn.
       def paws()
-        Collection.new(body(client.get("/unicorns/#{id}/paws")).map { |data| Resource.new(data, client: client) }, client: client)
+
+        Collection.new(body(client.get("/unicorns/#{id}/paws").map { |data| Resource.new(data, client: client) }, client: client)
+      end
+
+      # Returns the newly added paw.
+      #
+      # data - [Hash] the attributes to post.
+      # paw - [Id] The paw to add.
+      def add_paw(paw:, **data)
+        with_params = data.merge(paw: paw).reject { |_,v| v.nil? }
+        Resource.new(body(client.post("/unicorns/#{id}/paws", body: with_params), client: client)
+      end
+
+      # Returns the updated unicorn record.
+      #
+      # data - [Hash] the attributes to post.
+      # friends - [Array.Id] The friend IDs to add.
+      def add_friends(friends:, **data)
+        with_params = data.merge(friends: friends).reject { |_,v| v.nil? }
+        refresh_with(body(client.post("/unicorns/#{id}/friends", body: with_params))
       end
 
       # A specific, existing unicorn can be deleted by making a DELETE request
@@ -89,8 +109,8 @@ module Asana
       #
       # Returns an empty data record.
       def delete()
-        client.delete("/unicorns/#{id}") && true
 
+        client.delete("/unicorns/#{id}") && true
       end
 
     end

@@ -80,6 +80,36 @@ actions:
     comment: |
       Returns a collection of paws belonging to the unicorn.
 
+  - name: addPaw
+    method: POST
+    path: "/unicorns/%d/paws"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to add paws to.
+      - name: paw
+        type: Id
+        required: true
+        comment: The paw to add.
+    comment: |
+      Returns the newly added paw.
+
+  - name: addFriends
+    method: POST
+    path: "/unicorns/%d/friends"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to add friends to.
+      - name: friends
+        type: Array.Id
+        required: true
+        comment: The friend IDs to add.
+    comment: |
+      Returns the updated unicorn record.
+
   - name: delete
     method: DELETE
     path: "/unicorns/%d"
