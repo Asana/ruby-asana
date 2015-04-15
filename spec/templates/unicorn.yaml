@@ -109,6 +109,17 @@ actions:
         comment: The friend IDs to add.
     comment: |
       Returns the updated unicorn record.
+ 
+  - name: getWorld
+    method: GET
+    path: "/unicorns/%d/getWorld"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to get the world of
+    comment: |
+      Returns the world of the unicorn.
 
   - name: delete
     method: DELETE

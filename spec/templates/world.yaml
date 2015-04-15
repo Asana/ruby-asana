@@ -1,0 +1,22 @@
+---
+name: world
+comment: |
+  A _world_ is a place where unicorns live.
+
+properties:
+
+  - name: id
+    type: Id
+
+actions:
+
+  - name: findById
+    method: GET
+    path: "/worlds/%d"
+    params:
+      - name: world
+        type: Id
+        required: true
+        comment: The world to get.
+    comment: |
+      Returns the complete world record for a single world.

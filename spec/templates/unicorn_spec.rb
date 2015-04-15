@@ -1,4 +1,5 @@
 require 'support/stub_api'
+require_relative 'world'
 require_relative 'unicorn'
 
 # rubocop:disable RSpec/FilePath
@@ -171,6 +172,19 @@ RSpec.describe Asana::Resources::Unicorn do
 
       john = described_class.new(john_data, client: client)
       expect(john.add_friends(friends: [2])).to be_john
+    end
+  end
+
+  describe '#get_world' do
+    it 'returns the world of the unicorn, with its inferred type' do
+      api.on(:get, '/unicorns/1/getWorld') do |response|
+        response.body = { data: { id: 123 } }
+      end
+
+      john = described_class.new(john_data, client: client)
+      world = john.get_world
+      expect(world).to be_a(Asana::Resources::World)
+      expect(world.id).to eq(123)
     end
   end
 
