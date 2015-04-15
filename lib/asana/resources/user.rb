@@ -28,7 +28,7 @@ module Asana
         # Returns the full user record for the currently authenticated user.
         def me(client)
 
-          new(body(client.get("/users/me")), client: client)
+          Resource.new(body(client.get("/users/me")), client: client)
         end
 
         # Returns the full user record for a single user.
@@ -36,7 +36,7 @@ module Asana
         # id - [Id] Globally unique identifier for the user.
         def find_by_id(client, id)
 
-          new(body(client.get("/users/#{id}")), client: client)
+          self.new(body(client.get("/users/#{id}")), client: client)
         end
 
         # Returns the user records for all users in all workspaces and organizations
@@ -45,7 +45,7 @@ module Asana
         # workspace - [Id] The workspace in which to get users.
         def find_by_workspace(client, workspace:)
 
-          Collection.new(body(client.get("/workspaces/#{workspace}/users")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/users")).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
@@ -54,7 +54,7 @@ module Asana
         # workspace - [Id] The workspace or organization to filter users on.
         def find_all(client, workspace: nil)
           params = { workspace: workspace }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/users", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/users", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 

@@ -58,7 +58,7 @@ module Asana
         # a fresh `sync` token in the response.
         def get(client, resource:, sync: nil)
           params = { resource: resource, sync: sync }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/events", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/events", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 

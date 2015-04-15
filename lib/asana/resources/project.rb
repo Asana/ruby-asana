@@ -33,13 +33,14 @@ module Asana
         #
         # Returns the full record of the newly created project.
         #
-        # data - [Hash] the attributes to post.
         # workspace - [Id] The workspace or organization to create the project in.
         # team - [Id] If creating in an organization, the specific team to create the
         # project in.
+        #
+        # data - [Hash] the attributes to post.
         def create(client, workspace:, team: nil, **data)
           with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? }
-          new(body(client.post("/projects", body: with_params)), client: client)
+          self.new(body(client.post("/projects", body: with_params)), client: client)
         end
 
         # If the workspace for your project _is_ an organization, you must also
@@ -47,22 +48,22 @@ module Asana
         #
         # Returns the full record of the newly created project.
         #
-        # data - [Hash] the attributes to post.
         # workspace - [Id] The workspace or organization to create the project in.
+        # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace:, **data)
 
-          new(body(client.post("/workspaces/#{workspace}/projects", body: data)), client: client)
+          self.new(body(client.post("/workspaces/#{workspace}/projects", body: data)), client: client)
         end
 
         # Creates a project shared with the given team.
         #
         # Returns the full record of the newly created project.
         #
-        # data - [Hash] the attributes to post.
         # team - [Id] The team to create the project in.
+        # data - [Hash] the attributes to post.
         def create_in_team(client, team:, **data)
 
-          new(body(client.post("/teams/#{team}/projects", body: data)), client: client)
+          self.new(body(client.post("/teams/#{team}/projects", body: data)), client: client)
         end
 
         # Returns the complete project record for a single project.
@@ -70,7 +71,7 @@ module Asana
         # id - [Id] The project to get.
         def find_by_id(client, id)
 
-          new(body(client.get("/projects/#{id}")), client: client)
+          self.new(body(client.get("/projects/#{id}")), client: client)
         end
 
         # Returns the compact project records for some filtered set of projects.
@@ -82,7 +83,7 @@ module Asana
         # this parameter.
         def find_all(client, workspace: nil, team: nil, archived: nil)
           params = { workspace: workspace, team: team, archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/projects", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the compact project records for all projects in the workspace.
@@ -92,7 +93,7 @@ module Asana
         # this parameter.
         def find_by_workspace(client, workspace:, archived: nil)
           params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/workspaces/#{workspace}/projects", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the compact project records for all projects in the team.
@@ -102,7 +103,7 @@ module Asana
         # this parameter.
         def find_by_team(client, team:, archived: nil)
           params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/teams/#{team}/projects", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/teams/#{team}/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 
@@ -118,6 +119,7 @@ module Asana
       #
       # data - [Hash] the attributes to post.
       def update(**data)
+
         refresh_with(body(client.put("/projects/#{id}", body: data)))
       end
 
@@ -126,8 +128,8 @@ module Asana
       #
       # Returns an empty data record.
       def delete()
-        client.delete("/projects/#{id}") && true
 
+        client.delete("/projects/#{id}") && true
       end
 
     end

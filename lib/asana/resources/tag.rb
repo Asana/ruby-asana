@@ -29,11 +29,11 @@ module Asana
         #
         # Returns the full record of the newly created tag.
         #
-        # data - [Hash] the attributes to post.
         # workspace - [Id] The workspace or organization to create the tag in.
+        # data - [Hash] the attributes to post.
         def create(client, workspace:, **data)
           with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? }
-          new(body(client.post("/tags", body: with_params)), client: client)
+          self.new(body(client.post("/tags", body: with_params)), client: client)
         end
 
         # Creates a new tag in a workspace or organization.
@@ -45,11 +45,11 @@ module Asana
         #
         # Returns the full record of the newly created tag.
         #
-        # data - [Hash] the attributes to post.
         # workspace - [Id] The workspace or organization to create the tag in.
+        # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace:, **data)
 
-          new(body(client.post("/workspaces/#{workspace}/tags", body: data)), client: client)
+          self.new(body(client.post("/workspaces/#{workspace}/tags", body: data)), client: client)
         end
 
         # Returns the complete tag record for a single tag.
@@ -57,7 +57,7 @@ module Asana
         # id - [Id] The tag to get.
         def find_by_id(client, id)
 
-          new(body(client.get("/tags/#{id}")), client: client)
+          self.new(body(client.get("/tags/#{id}")), client: client)
         end
 
         # Returns the compact tag records for some filtered set of tags.
@@ -69,7 +69,7 @@ module Asana
         # this parameter.
         def find_all(client, workspace: nil, team: nil, archived: nil)
           params = { workspace: workspace, team: team, archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/tags", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/tags", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the compact tag records for all tags in the workspace.
@@ -77,7 +77,7 @@ module Asana
         # workspace - [Id] The workspace or organization to find tags in.
         def find_by_workspace(client, workspace:)
 
-          Collection.new(body(client.get("/workspaces/#{workspace}/tags")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/tags")).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 
@@ -92,6 +92,7 @@ module Asana
       #
       # data - [Hash] the attributes to post.
       def update(**data)
+
         refresh_with(body(client.put("/tags/#{id}", body: data)))
       end
 
@@ -100,8 +101,8 @@ module Asana
       #
       # Returns an empty data record.
       def delete()
-        client.delete("/tags/#{id}") && true
 
+        client.delete("/tags/#{id}") && true
       end
 
     end

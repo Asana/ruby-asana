@@ -25,7 +25,7 @@ module Asana
         # id - [Id] Globally unique identifier for the team.
         def find_by_id(client, id)
 
-          new(body(client.get("/stories/#{id}")), client: client)
+          self.new(body(client.get("/stories/#{id}")), client: client)
         end
 
         # Returns the compact records for all stories on the task.
@@ -33,7 +33,7 @@ module Asana
         # task - [Id] Globally unique identifier for the task.
         def find_by_task(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/stories")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/tasks/#{task}/stories")).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -42,13 +42,13 @@ module Asana
         #
         # Returns the full record for the new story added to the task.
         #
-        # data - [Hash] the attributes to post.
         # task - [Id] Globally unique identifier for the task.
         #
         # text - [String] The plain text of the comment to add.
+        # data - [Hash] the attributes to post.
         def create_on_task(client, task:, text:, **data)
           with_params = data.merge(text: text).reject { |_,v| v.nil? }
-          new(body(client.post("/tasks/#{task}/stories", body: with_params)), client: client)
+          self.new(body(client.post("/tasks/#{task}/stories", body: with_params)), client: client)
         end
       end
 
