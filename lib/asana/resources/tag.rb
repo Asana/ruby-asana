@@ -69,7 +69,7 @@ module Asana
         # this parameter.
         def find_all(client, workspace: nil, team: nil, archived: nil)
           params = { workspace: workspace, team: team, archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/tags", params: params)), client: client)
+          Collection.new(body(client.get("/tags", params: params)).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact tag records for all tags in the workspace.
@@ -77,7 +77,7 @@ module Asana
         # workspace - [Id] The workspace or organization to find tags in.
         def find_by_workspace(client, workspace:)
 
-          Collection.new(body(client.get("/workspaces/#{workspace}/tags")), client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/tags")).map { |data| new(data, client: client) }, client: client)
         end
       end
 
@@ -107,5 +107,3 @@ module Asana
     end
   end
 end
-
-

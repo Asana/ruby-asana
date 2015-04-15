@@ -42,7 +42,7 @@ module Asana
         # Returns the compact records for all workspaces visible to the authorized user.
         def find_all(client)
 
-          Collection.new(body(client.get("/workspaces")), client: client)
+          Collection.new(body(client.get("/workspaces")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Retrieves objects in the workspace based on an auto-completion/typeahead
@@ -65,7 +65,7 @@ module Asana
         # If there are fewer results found than requested, all will be returned.
         def typeahead(client, workspace:, type:, query: nil, count: nil)
           params = { type: type, query: query, count: count }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/workspaces/#{workspace}/typeahead", params: params)), client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/typeahead", params: params)).map { |data| Resource.new(data, client: client) }, client: client)
         end
       end
 
@@ -79,5 +79,3 @@ module Asana
     end
   end
 end
-
-

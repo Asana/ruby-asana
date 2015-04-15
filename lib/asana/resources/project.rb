@@ -82,7 +82,7 @@ module Asana
         # this parameter.
         def find_all(client, workspace: nil, team: nil, archived: nil)
           params = { workspace: workspace, team: team, archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/projects", params: params)), client: client)
+          Collection.new(body(client.get("/projects", params: params)).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact project records for all projects in the workspace.
@@ -92,7 +92,7 @@ module Asana
         # this parameter.
         def find_by_workspace(client, workspace:, archived: nil)
           params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/workspaces/#{workspace}/projects", params: params)), client: client)
+          Collection.new(body(client.get("/workspaces/#{workspace}/projects", params: params)).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact project records for all projects in the team.
@@ -102,7 +102,7 @@ module Asana
         # this parameter.
         def find_by_team(client, team:, archived: nil)
           params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/teams/#{team}/projects", params: params)), client: client)
+          Collection.new(body(client.get("/teams/#{team}/projects", params: params)).map { |data| new(data, client: client) }, client: client)
         end
       end
 
@@ -133,5 +133,3 @@ module Asana
     end
   end
 end
-
-

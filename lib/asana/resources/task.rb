@@ -62,7 +62,7 @@ module Asana
         # projectId - [Id] The project in which to search for tasks.
         def find_by_project(client, projectId:)
 
-          Collection.new(body(client.get("/projects/#{projectId}/tasks")), client: client)
+          Collection.new(body(client.get("/projects/#{projectId}/tasks")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact task records for all tasks with the given tag.
@@ -70,7 +70,7 @@ module Asana
         # tag - [Id] The tag in which to search for tasks.
         def find_by_tag(client, tag:)
 
-          Collection.new(body(client.get("/tags/#{tag}/tasks")), client: client)
+          Collection.new(body(client.get("/tags/#{tag}/tasks")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact task records for some filtered set of tasks. Use one
@@ -97,7 +97,7 @@ module Asana
         # assigning, renaming, completing, and adding stories.
         def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil)
           params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/tasks", params: params)), client: client)
+          Collection.new(body(client.get("/tasks", params: params)).map { |data| new(data, client: client) }, client: client)
         end
 
         # Adds each of the specified followers to the task, if they are not already
@@ -127,7 +127,7 @@ module Asana
         # task - [Id] The task to get projects on.
         def projects(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/projects")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/projects")).map { |data| Resource.new(data, client: client) }, client: client)
         end
 
         # Adds the task to the specified project, in the optional location
@@ -173,7 +173,7 @@ module Asana
         # task - [Id] The task to get tags on.
         def tags(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/tags")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/tags")).map { |data| Resource.new(data, client: client) }, client: client)
         end
 
         # Adds a tag to a task. Returns an empty data block.
@@ -201,7 +201,7 @@ module Asana
         # task - [Id] The task to get the subtasks of.
         def subtasks(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/subtasks")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/subtasks")).map { |data| new(data, client: client) }, client: client)
         end
 
         # Makes an existing task a subtask of another. Returns an empty data block.
@@ -230,7 +230,7 @@ module Asana
         # task - [Id] The task containing the stories to get.
         def stories(client, task:)
 
-          Collection.new(body(client.get("/tasks/#{task}/stories")), client: client)
+          Collection.new(body(client.get("/tasks/#{task}/stories")).map { |data| Resource.new(data, client: client) }, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -278,5 +278,3 @@ module Asana
     end
   end
 end
-
-
