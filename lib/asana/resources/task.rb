@@ -30,7 +30,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create(client, **data)
 
-          new(body(client.post("/tasks", body: data)), client: client)
+          self.new(body(client.post("/tasks", body: data)), client: client)
         end
 
         # Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -41,11 +41,11 @@ module Asana
         # workspace cannot be changed once set. The workspace need not be set
         # explicitly if you specify a project or a parent task instead.
         #
-        # data - [Hash] the attributes to post.
         # workspace - [Id] The workspace to create a task in.
+        # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace:, **data)
 
-          new(body(client.post("/workspaces/#{workspace}/tasks", body: data)), client: client)
+          self.new(body(client.post("/workspaces/#{workspace}/tasks", body: data)), client: client)
         end
 
         # Returns the complete task record for a single task.
@@ -53,7 +53,7 @@ module Asana
         # id - [Id] The task to get.
         def find_by_id(client, id)
 
-          new(body(client.get("/tasks/#{id}")), client: client)
+          self.new(body(client.get("/tasks/#{id}")), client: client)
         end
 
         # Returns the compact task records for all tasks within the given project,
@@ -62,7 +62,7 @@ module Asana
         # projectId - [Id] The project in which to search for tasks.
         def find_by_project(client, projectId:)
 
-          Collection.new(body(client.get("/projects/#{projectId}/tasks")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/projects/#{projectId}/tasks")).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the compact task records for all tasks with the given tag.
@@ -70,7 +70,7 @@ module Asana
         # tag - [Id] The tag in which to search for tasks.
         def find_by_tag(client, tag:)
 
-          Collection.new(body(client.get("/tags/#{tag}/tasks")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/tags/#{tag}/tasks")).map { |data| self.new(data, client: client) }, client: client)
         end
 
         # Returns the compact task records for some filtered set of tasks. Use one
@@ -97,7 +97,7 @@ module Asana
         # assigning, renaming, completing, and adding stories.
         def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil)
           params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/tasks", params: params)).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/tasks", params: params)).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 
@@ -113,6 +113,7 @@ module Asana
       #
       # data - [Hash] the attributes to post.
       def update(**data)
+
         refresh_with(body(client.put("/tasks/#{id}", body: data)))
       end
 
@@ -123,31 +124,34 @@ module Asana
       #
       # Returns an empty data record.
       def delete()
-        client.delete("/tasks/#{id}") && true
 
+        client.delete("/tasks/#{id}") && true
       end
 
       # Adds each of the specified followers to the task, if they are not already
       # following. Returns the complete, updated record for the affected task.
       #
-      # data - [Hash] the attributes to post.
       # followers - [Array] An array of followers to add to the task.
+      # data - [Hash] the attributes to post.
       def add_followers(followers:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/addFollowers", body: data)), client: client)
+        with_params = data.merge(followers: followers).reject { |_,v| v.nil? }
+        refresh_with(body(client.post("/tasks/#{id}/addFollowers", body: with_params)))
       end
 
       # Removes each of the specified followers from the task if they are
       # following. Returns the complete, updated record for the affected task.
       #
-      # data - [Hash] the attributes to post.
       # followers - [Array] An array of followers to remove from the task.
+      # data - [Hash] the attributes to post.
       def remove_followers(followers:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/removeFollowers", body: data)), client: client)
+        with_params = data.merge(followers: followers).reject { |_,v| v.nil? }
+        refresh_with(body(client.post("/tasks/#{id}/removeFollowers", body: with_params)))
       end
 
       # Returns a compact representation of all of the projects the task is in.
       def projects()
-        Collection.new(body(client.get("/tasks/#{id}/projects")).map { |data| Resource.new(data, client: client) }, client: client)
+
+        Collection.new(body(client.get("/tasks/#{id}/projects")).map { |data| Project.new(data, client: client) }, client: client)
       end
 
       # Adds the task to the specified project, in the optional location
@@ -159,7 +163,6 @@ module Asana
       #
       # Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # project - [Id] The project to add the task to.
       # insertAfter - [Id] A task in the project to insert the task after, or `null` to
       # insert at the beginning of the list.
@@ -169,8 +172,11 @@ module Asana
       #
       # section - [Id] A section in the project to insert the task into. The task will be
       # inserted at the top of the section.
+      #
+      # data - [Hash] the attributes to post.
       def add_project(project:, insertAfter: nil, insertBefore: nil, section: nil, **data)
-        Resource.new(body(client.post("/tasks/#{id}/addProject", body: data)), client: client)
+        with_params = data.merge(project: project, insertAfter: insertAfter, insertBefore: insertBefore, section: section).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/addProject", body: with_params) && true
       end
 
       # Removes the task from the specified project. The task will still exist
@@ -178,58 +184,66 @@ module Asana
       #
       # Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # project - [Id] The project to remove the task from.
+      # data - [Hash] the attributes to post.
       def remove_project(project:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/removeProject", body: data)), client: client)
+        with_params = data.merge(project: project).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/removeProject", body: with_params) && true
       end
 
       # Returns a compact representation of all of the tags the task has.
       def tags()
-        Collection.new(body(client.get("/tasks/#{id}/tags")).map { |data| Resource.new(data, client: client) }, client: client)
+
+        Collection.new(body(client.get("/tasks/#{id}/tags")).map { |data| Tag.new(data, client: client) }, client: client)
       end
 
       # Adds a tag to a task. Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # tag - [Id] The tag to add to the task.
+      # data - [Hash] the attributes to post.
       def add_tag(tag:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/addTag", body: data)), client: client)
+        with_params = data.merge(tag: tag).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/addTag", body: with_params) && true
       end
 
       # Removes a tag from the task. Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # tag - [Id] The tag to remove from the task.
+      # data - [Hash] the attributes to post.
       def remove_tag(tag:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/removeTag", body: data)), client: client)
+        with_params = data.merge(tag: tag).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/removeTag", body: with_params) && true
       end
 
       # Returns a compact representation of all of the subtasks of a task.
       def subtasks()
+
         Collection.new(body(client.get("/tasks/#{id}/subtasks")).map { |data| self.class.new(data, client: client) }, client: client)
       end
 
       # Makes an existing task a subtask of another. Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # subtask - [Id] The subtask to add to the task.
+      # data - [Hash] the attributes to post.
       def add_subtask(subtask:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/subtasks", body: data)), client: client)
+        with_params = data.merge(subtask: subtask).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/subtasks", body: with_params) && true
       end
 
       # Changes the parent of a task. Each task may only be a subtask of a single
       # parent, or no parent task at all. Returns an empty data block.
       #
-      # data - [Hash] the attributes to post.
       # parent - [Id] The new parent of the task, or `null` for no parent.
+      # data - [Hash] the attributes to post.
       def set_parent(parent:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/setParent", body: data)), client: client)
+        with_params = data.merge(parent: parent).reject { |_,v| v.nil? }
+        client.post("/tasks/#{id}/setParent", body: with_params) && true
       end
 
       # Returns a compact representation of all of the stories on the task.
       def stories()
-        Collection.new(body(client.get("/tasks/#{id}/stories")).map { |data| Resource.new(data, client: client) }, client: client)
+
+        Collection.new(body(client.get("/tasks/#{id}/stories")).map { |data| Story.new(data, client: client) }, client: client)
       end
 
       # Adds a comment to a task. The comment will be authored by the
@@ -238,10 +252,11 @@ module Asana
       #
       # Returns the full record for the new story added to the task.
       #
-      # data - [Hash] the attributes to post.
       # text - [String] The plain text of the comment to add.
+      # data - [Hash] the attributes to post.
       def add_comment(text:, **data)
-        Resource.new(body(client.post("/tasks/#{id}/stories", body: data)), client: client)
+        with_params = data.merge(text: text).reject { |_,v| v.nil? }
+        Story.new(body(client.post("/tasks/#{id}/stories", body: with_params)), client: client)
       end
 
     end

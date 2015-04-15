@@ -36,13 +36,13 @@ module Asana
         # id - [Id] Globally unique identifier for the workspace or organization.
         def find_by_id(client, id)
 
-          new(body(client.get("/workspaces/#{id}")), client: client)
+          self.new(body(client.get("/workspaces/#{id}")), client: client)
         end
 
         # Returns the compact records for all workspaces visible to the authorized user.
         def find_all(client)
 
-          Collection.new(body(client.get("/workspaces")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/workspaces")).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 
@@ -50,6 +50,7 @@ module Asana
       #
       # data - [Hash] the attributes to post.
       def update(**data)
+
         refresh_with(body(client.put("/workspaces/#{id}", body: data)))
       end
 
@@ -71,7 +72,8 @@ module Asana
       # parameter is omitted, with a minimum of `1` and a maximum of `100`.
       # If there are fewer results found than requested, all will be returned.
       def typeahead(type:, query: nil, count: nil)
-        Collection.new(body(client.get("/workspaces/#{id}/typeahead")).map { |data| Resource.new(data, client: client) }, client: client)
+        params = { type: type, query: query, count: count }.reject { |_,v| v.nil? }
+        Collection.new(body(client.get("/workspaces/#{id}/typeahead", params: params)).map { |data| Resource.new(data, client: client) }, client: client)
       end
 
     end

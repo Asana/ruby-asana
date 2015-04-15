@@ -22,7 +22,7 @@ module Asana
         # id - [Id] Globally unique identifier for the team.
         def find_by_id(client, id)
 
-          new(body(client.get("/teams/#{id}")), client: client)
+          self.new(body(client.get("/teams/#{id}")), client: client)
         end
 
         # Returns the compact records for all teams in the organization visible to
@@ -31,13 +31,14 @@ module Asana
         # organization - [Id] Globally unique identifier for the workspace or organization.
         def find_by_organization(client, organization:)
 
-          Collection.new(body(client.get("/organizations/#{organization}/teams")).map { |data| new(data, client: client) }, client: client)
+          Collection.new(body(client.get("/organizations/#{organization}/teams")).map { |data| self.new(data, client: client) }, client: client)
         end
       end
 
       # Returns the compact records for all users that are members of the team.
       def users()
-        Collection.new(body(client.get("/teams/#{id}/users")).map { |data| Resource.new(data, client: client) }, client: client)
+
+        Collection.new(body(client.get("/teams/#{id}/users")).map { |data| User.new(data, client: client) }, client: client)
       end
 
     end
