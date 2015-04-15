@@ -33,14 +33,11 @@ module Asana
 
           Collection.new(body(client.get("/organizations/#{organization}/teams")).map { |data| new(data, client: client) }, client: client)
         end
+      end
 
-        # Returns the compact records for all users that are members of the team.
-        #
-        # team - [Id] Globally unique identifier for the team.
-        def users(client, team:)
-
-          Collection.new(body(client.get("/teams/#{team}/users")).map { |data| Resource.new(data, client: client) }, client: client)
-        end
+      # Returns the compact records for all users that are members of the team.
+      def users()
+        Collection.new(body(client.get("/teams/#{id}/users")).map { |data| Resource.new(data, client: client) }, client: client)
       end
 
     end
