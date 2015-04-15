@@ -68,6 +68,18 @@ actions:
 
       Returns the complete updated tag record.
 
+  - name: paws
+    method: GET
+    path: "/unicorns/%d/paws"
+    params:
+      - name: unicorn
+        type: Id
+        required: true
+        comment: The unicorn to get the paws of.
+    collection: true
+    comment: |
+      Returns a collection of paws belonging to the unicorn.
+
   - name: delete
     method: DELETE
     path: "/unicorns/%d"

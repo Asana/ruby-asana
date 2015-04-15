@@ -46,6 +46,14 @@ module Asana
           new(body(client.get("/unicorns/#{id}")), client: client)
         end
 
+        # Returns a collection of paws belonging to the unicorn.
+        #
+        # unicorn - [Id] The unicorn to get the paws of.
+        def paws(client, unicorn:)
+
+          Collection.new(body(client.get("/unicorns/#{unicorn}/paws")).map { |data| Resource.new(data, client: client) }, client: client)
+        end
+
         # Returns the compact unicorn records for some filtered set of unicorns.
         # Use one or more of the parameters provided to filter the unicorns returned.
         #
@@ -53,7 +61,7 @@ module Asana
         # breed - [Id] The breed to filter unicorns on.
         def find_all(client, world: nil, breed: nil)
           params = { world: world, breed: breed }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/unicorns", params: params)), client: client)
+          Collection.new(body(client.get("/unicorns", params: params)).map { |data| new(data, client: client) }, client: client)
         end
 
         # Returns the compact unicorn records for all unicorns in the world.
@@ -61,7 +69,7 @@ module Asana
         # world - [Id] The world to find unicorns in.
         def find_by_world(client, world:)
 
-          Collection.new(body(client.get("/worlds/#{world}/unicorns")), client: client)
+          Collection.new(body(client.get("/worlds/#{world}/unicorns")).map { |data| new(data, client: client) }, client: client)
         end
       end
 
@@ -91,5 +99,3 @@ module Asana
     end
   end
 end
-
-

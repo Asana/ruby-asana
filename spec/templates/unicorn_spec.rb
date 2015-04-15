@@ -3,6 +3,24 @@ require_relative 'unicorn'
 
 # rubocop:disable RSpec/FilePath
 RSpec.describe Asana::Resources::Unicorn do
+  RSpec::Matchers.define :be_john do
+    match do |unicorn|
+      unicorn.class == described_class &&
+        unicorn.id == 1 &&
+        unicorn.name == 'John' &&
+        unicorn.world == 123
+    end
+  end
+
+  RSpec::Matchers.define :be_laura do
+    match do |unicorn|
+      unicorn.class == described_class &&
+        unicorn.id == 2 &&
+        unicorn.name == 'Laura' &&
+        unicorn.world == 184
+    end
+  end
+
   let(:api) { StubAPI.new }
   let(:auth) { Asana::Authentication::TokenAuthentication.new('foo') }
   let(:client) do
@@ -25,10 +43,7 @@ RSpec.describe Asana::Resources::Unicorn do
         response.body = { data: john_data }
       end
       john = described_class.create(client, name: 'John', world: 123)
-      expect(john).to be_a(described_class)
-      expect(john.id).to eq(1)
-      expect(john.name).to eq('John')
-      expect(john.world).to eq(123)
+      expect(john).to be_john
     end
   end
 
@@ -40,10 +55,7 @@ RSpec.describe Asana::Resources::Unicorn do
         response.body = { data: john_data }
       end
       john = described_class.create_in_world(client, name: 'John', world: 123)
-      expect(john).to be_a(described_class)
-      expect(john.id).to eq(1)
-      expect(john.name).to eq('John')
-      expect(john.world).to eq(123)
+      expect(john).to be_john
     end
   end
 
@@ -53,10 +65,22 @@ RSpec.describe Asana::Resources::Unicorn do
         response.body = { data: john_data }
       end
       john = described_class.find_by_id(client, 1)
-      expect(john).to be_a(described_class)
-      expect(john.id).to eq(1)
-      expect(john.name).to eq('John')
-      expect(john.world).to eq(123)
+      expect(john).to be_john
+    end
+  end
+
+  describe '.paws' do
+    it 'returns a collection of paws as generic resources' do
+      paw_data = { id: 9, size: 4 }
+      api.on(:get, '/unicorns/1/paws') do |response|
+        response.body = { data: [paw_data] }
+      end
+
+      paws = described_class.paws(client, unicorn: 1)
+      expect(paws).to be_a(Asana::Resources::Collection)
+      expect(paws.size).to eq(1)
+      expect(paws.first).to be_a(Asana::Resources::Resource)
+      expect(paws.first.size).to eq(4)
     end
   end
 
@@ -69,8 +93,10 @@ RSpec.describe Asana::Resources::Unicorn do
       unicorns = described_class.find_all(client)
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(2)
-      expect(unicorns.first).to eq(john_data)
-      expect(unicorns.to_a.last).to eq(laura_data)
+
+      john, laura = unicorns.to_a
+      expect(john).to be_john
+      expect(laura).to be_laura
     end
 
     it 'finds all unicorns by world' do
@@ -81,7 +107,7 @@ RSpec.describe Asana::Resources::Unicorn do
       unicorns = described_class.find_all(client)
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
-      expect(unicorns.first).to eq(john_data)
+      expect(unicorns.first).to be_john
     end
 
     it 'finds all unicorns by breed' do
@@ -92,7 +118,7 @@ RSpec.describe Asana::Resources::Unicorn do
       unicorns = described_class.find_all(client)
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
-      expect(unicorns.first).to eq(laura_data)
+      expect(unicorns.first).to be_laura
     end
   end
 
@@ -105,7 +131,7 @@ RSpec.describe Asana::Resources::Unicorn do
       unicorns = described_class.find_by_world(client, world: 123)
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
-      expect(unicorns.first).to eq(john_data)
+      expect(unicorns.first).to be_john
     end
   end
 
