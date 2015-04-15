@@ -61,7 +61,7 @@ module Asana
 
       def method_missing(m, *args, &block)
         return super unless respond_to_missing?(m, *args)
-        @resource.public_send(m, *args, client: @client, &block)
+        @resource.public_send(m, *([@client] + args), &block)
       end
 
       def respond_to_missing?(m, *)

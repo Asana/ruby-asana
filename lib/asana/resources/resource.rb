@@ -4,6 +4,8 @@ require_relative 'response_helper'
 
 module Asana
   module Resources
+    # Public: The base resource class which provides some sugar over common
+    # resource functionality.
     class Resource
       include ResponseHelper
       extend ResponseHelper
@@ -15,8 +17,8 @@ module Asana
       def initialize(data, client:)
         @_client = client
         @_data   = data
-        data.each do |k,v|
-          self.instance_variable_set(:"@#{k}", v) if respond_to?(k)
+        data.each do |k, v|
+          instance_variable_set(:"@#{k}", v) if respond_to?(k)
         end
       end
 
@@ -55,7 +57,7 @@ module Asana
       end
 
       def to_s
-        attrs = to_h.map { |k,v| "#{k}: #{public_send(k).inspect}" }.join(', ')
+        attrs = to_h.map { |k, _| "#{k}: #{public_send(k).inspect}" }.join(', ')
         "#<Asana::#{self.class.name.split('::').last} #{attrs}>"
       end
 
@@ -64,7 +66,7 @@ module Asana
       private
 
       # Internal: The Asana::Client instance.
-      def client
+      def client # rubocop:disable Style/TrivialAccessors
         @_client
       end
 

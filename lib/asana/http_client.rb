@@ -72,6 +72,17 @@ module Asana
       perform_request(:post, resource_uri, data: body)
     end
 
+    # Public: Performs a DELETE request against the API.
+    #
+    # resource_uri - [String] the resource URI relative to the base Asana API
+    #                URL, e.g "/tags".
+    #
+    # Returns an [Asana::HttpClient::Response] if everything went well.
+    # Raises [Asana::Errors::APIError] if anything went wrong.
+    def delete(resource_uri)
+      perform_request(:delete, resource_uri)
+    end
+
     private
 
     def connection
@@ -85,7 +96,7 @@ module Asana
       end
     end
 
-    def perform_request(method, resource_uri, body)
+    def perform_request(method, resource_uri, body = {})
       handling_errors do
         url = BASE_URI + resource_uri
         log_request(method, url, body) if @debug_mode

@@ -17,6 +17,11 @@ module Asana
         end
       end
 
+      def size
+        @elements.size
+      end
+      alias_method :length, :size
+
       def to_s
         "#<Asana::Collection [#{@elements.map(&:inspect).join(', ')}]>"
       end
