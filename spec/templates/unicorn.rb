@@ -46,14 +46,6 @@ module Asana
           new(body(client.get("/unicorns/#{id}")), client: client)
         end
 
-        # Returns a collection of paws belonging to the unicorn.
-        #
-        # unicorn - [Id] The unicorn to get the paws of.
-        def paws(client, unicorn:)
-
-          Collection.new(body(client.get("/unicorns/#{unicorn}/paws")).map { |data| Resource.new(data, client: client) }, client: client)
-        end
-
         # Returns the compact unicorn records for some filtered set of unicorns.
         # Use one or more of the parameters provided to filter the unicorns returned.
         #
@@ -85,6 +77,11 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(**data)
         refresh_with(body(client.put("/unicorns/#{id}", body: data)))
+      end
+
+      # Returns a collection of paws belonging to the unicorn.
+      def paws()
+        Collection.new(body(client.get("/unicorns/#{id}/paws")).map { |data| Resource.new(data, client: client) }, client: client)
       end
 
       # A specific, existing unicorn can be deleted by making a DELETE request

@@ -69,21 +69,6 @@ RSpec.describe Asana::Resources::Unicorn do
     end
   end
 
-  describe '.paws' do
-    it 'returns a collection of paws as generic resources' do
-      paw_data = { id: 9, size: 4 }
-      api.on(:get, '/unicorns/1/paws') do |response|
-        response.body = { data: [paw_data] }
-      end
-
-      paws = described_class.paws(client, unicorn: 1)
-      expect(paws).to be_a(Asana::Resources::Collection)
-      expect(paws.size).to eq(1)
-      expect(paws.first).to be_a(Asana::Resources::Resource)
-      expect(paws.first.size).to eq(4)
-    end
-  end
-
   describe '.find_all' do
     it 'finds all unicorns in all worlds of any breed' do
       api.on(:get, '/unicorns') do |response|
@@ -146,6 +131,22 @@ RSpec.describe Asana::Resources::Unicorn do
       expect(jan.id).to eq(1)
       expect(jan.name).to eq('Jan')
       expect(jan.world).to eq(123)
+    end
+  end
+
+  describe '#paws' do
+    it 'returns a collection of paws as generic resources' do
+      paw_data = { id: 9, size: 4 }
+      api.on(:get, '/unicorns/1/paws') do |response|
+        response.body = { data: [paw_data] }
+      end
+
+      john = described_class.new(john_data, client: client)
+      paws = john.paws
+      expect(paws).to be_a(Asana::Resources::Collection)
+      expect(paws.size).to eq(1)
+      expect(paws.first).to be_a(Asana::Resources::Resource)
+      expect(paws.first.size).to eq(4)
     end
   end
 
