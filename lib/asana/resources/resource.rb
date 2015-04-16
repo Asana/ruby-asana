@@ -25,7 +25,7 @@ module Asana
       # If it has findById, it implements #refresh
       def refresh
         if self.class.respond_to?(:find_by_id)
-          self.class.find_by_id(id, client: client)
+          self.class.find_by_id(client, id)
         else
           fail "#{self.class.name} does not respond to #find_by_id"
         end
