@@ -13,6 +13,8 @@ module Asana
 
       attr_reader :assignee_status
 
+      include AttachmentUploading
+
       class << self
         # Returns the plural name of the resource.
         def plural_name

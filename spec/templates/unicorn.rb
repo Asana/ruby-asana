@@ -6,6 +6,7 @@ module Asana
     # A _unicorn_ is a fantastic animal.
     class Unicorn < Resource
 
+
       attr_reader :id
 
       attr_reader :name

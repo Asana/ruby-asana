@@ -28,7 +28,7 @@ RSpec.describe Asana::Client do
     end
 
     specify '#put' do
-      api.on(:put, '/tags/1', name: 'work') do |response|
+      api.on(:put, '/tags/1', data: { name: 'work' }) do |response|
         response.body = { data: { foo: 'bar' } }
       end
 

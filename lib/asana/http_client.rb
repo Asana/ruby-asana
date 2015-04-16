@@ -57,7 +57,7 @@ module Asana
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
     def put(resource_uri, body: {})
-      perform_request(:put, resource_uri, body)
+      perform_request(:put, resource_uri, data: body)
     end
 
     # Public: Performs a POST request against the API.
@@ -65,11 +65,19 @@ module Asana
     # resource_uri - [String] the resource URI relative to the base Asana API
     #                URL, e.g "/tags".
     # body         - [Hash] the body to POST.
+    # upload       - [Faraday::UploadIO] an upload object to post as multipart.
+    #                Defaults to nil.
     #
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
-    def post(resource_uri, body: {})
-      perform_request(:post, resource_uri, data: body)
+    def post(resource_uri, body: {}, upload: nil)
+      if upload
+        perform_request(:post, resource_uri, data: body, file: upload) do |c|
+          c.request :multipart
+        end
+      else
+        perform_request(:post, resource_uri, data: body)
+      end
     end
 
     # Public: Performs a DELETE request against the API.
@@ -85,10 +93,11 @@ module Asana
 
     private
 
-    def connection
+    def connection(&request_config)
       Faraday.new do |builder|
         @authentication.configure(builder)
         builder.headers[:user_agent] = @user_agent
+        request_config.call(builder) if request_config
         configure_format(builder)
         add_middleware(builder)
         @config.call(builder) if @config
@@ -96,11 +105,11 @@ module Asana
       end
     end
 
-    def perform_request(method, resource_uri, body = {})
+    def perform_request(method, resource_uri, body = {}, &request_config)
       handling_errors do
         url = BASE_URI + resource_uri
         log_request(method, url, body) if @debug_mode
-        Response.new(connection.public_send(method, url, body))
+        Response.new(connection(&request_config).public_send(method, url, body))
       end
     end
 
@@ -132,7 +141,7 @@ module Asana
                          self.class,
                          method.to_s.upcase,
                          url,
-                         JSON.dump(body))
+                         body.inspect)
     end
   end
 end

@@ -6,6 +6,7 @@ module Asana
     # A _world_ is a place where unicorns live.
     class World < Resource
 
+
       attr_reader :id
 
       class << self

@@ -123,7 +123,7 @@ RSpec.describe Asana::Resources::Unicorn do
 
   describe '#update' do
     it 'updates a unicorn' do
-      api.on(:put, '/unicorns/1', name: 'Jan') do |response|
+      api.on(:put, '/unicorns/1', data: { name: 'Jan' }) do |response|
         response.body = { data: john_data.merge(name: 'Jan') }
       end
 

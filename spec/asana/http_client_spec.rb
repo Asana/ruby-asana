@@ -22,7 +22,7 @@ RSpec.describe Asana::HttpClient do
 
   describe '#put' do
     it 'performs a PUT request against the Asana API' do
-      api.on(:put, '/users/me', 'name' => 'John') do |response|
+      api.on(:put, '/users/me', 'data' => { 'name' => 'John' }) do |response|
         response.body = { user: 'foo' }
       end
 
