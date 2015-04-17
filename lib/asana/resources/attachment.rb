@@ -32,17 +32,6 @@ module Asana
 
           Collection.new(body(client.get("/tasks/#{task}/attachments")).map { |data| self.new(data, client: client) }, client: client)
         end
-
-        # Returns the compact records for all attachments on the task.
-        #
-        # task - [Id] Globally unique identifier for the task.
-        #
-        # file - [File] TBD
-        # data - [Hash] the attributes to post.
-        def create_on_task(client, task:, file:, **data)
-          with_params = data.merge(file: file).reject { |_,v| v.nil? }
-          self.new(body(client.post("/tasks/#{task}/attachments", body: with_params)), client: client)
-        end
       end
 
     end
