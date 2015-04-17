@@ -13,6 +13,9 @@ module Asana
     # regular workspace.
     class Project < Resource
 
+      include EventSubscription
+
+
       attr_reader :id
 
       class << self

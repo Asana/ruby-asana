@@ -9,12 +9,14 @@ module Asana
     # the more detailed information presented in the details pane.
     class Task < Resource
 
+      include AttachmentUploading
+
+      include EventSubscription
+
+
       attr_reader :assignee
 
       attr_reader :assignee_status
-
-      include AttachmentUploading
-      include EventSubscription
 
       class << self
         # Returns the plural name of the resource.

@@ -8,6 +8,7 @@ module Asana
     # such as Dropbox or Google Drive.
     class Attachment < Resource
 
+
       attr_reader :id
 
       class << self

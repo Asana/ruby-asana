@@ -7,6 +7,7 @@ module Asana
     # organization. Each project in an organization is associated with a team.
     class Team < Resource
 
+
       attr_reader :id
 
       attr_reader :name
