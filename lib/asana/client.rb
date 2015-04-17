@@ -104,6 +104,13 @@ module Asana
       @http_client.put(url, *args)
     end
 
+    # Public: Performs a DELETE request against an arbitrary Asana URL. Allows
+    # for the user to interact with the API in ways that haven't been
+    # reflected/foreseen in this library.
+    def delete(url, *args)
+      @http_client.delete(url, *args)
+    end
+
     # Public: Exposes queries for all top-evel endpoints.
     #
     # E.g. #users will query /users and return a

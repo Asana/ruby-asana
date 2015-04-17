@@ -32,4 +32,30 @@ RSpec.describe Asana::HttpClient do
       end
     end
   end
+
+  describe '#post' do
+    it 'performs a POST request against the Asana API' do
+      api.on(:post, '/users/me', 'data' => { 'name' => 'John' }) do |response|
+        response.body = { user: 'foo' }
+      end
+
+      client.post('/users/me', body: { 'name' => 'John' }).tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('user' => 'foo')
+      end
+    end
+  end
+
+  describe '#delete' do
+    it 'performs a DELETE request against the Asana API' do
+      api.on(:delete, '/users/me') do |response|
+        response.body = {}
+      end
+
+      client.delete('/users/me').tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq({})
+      end
+    end
+  end
 end

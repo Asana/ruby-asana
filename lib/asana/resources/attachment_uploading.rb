@@ -17,7 +17,7 @@ module Asana
         response = client.post("/#{self.class.plural_name}/#{id}/attachments",
                                body: data,
                                upload: upload)
-        Attachment.new(body(response), client: client)
+        Attachment.new(parse(response).first, client: client)
       end
     end
   end

@@ -20,7 +20,7 @@ module Asana
         # id - [Id] The world to get.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/worlds/#{id}")), client: client)
+          self.new(parse(client.get("/worlds/#{id}")).first, client: client)
         end
       end
 

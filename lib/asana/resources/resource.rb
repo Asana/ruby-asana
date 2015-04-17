@@ -1,4 +1,3 @@
-require_relative 'dsl'
 require_relative 'registry'
 require_relative 'response_helper'
 

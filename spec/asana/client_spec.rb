@@ -35,5 +35,14 @@ RSpec.describe Asana::Client do
       expect(client.put('/tags/1', body: { name: 'work' }).body)
         .to eq('data' => { 'foo' => 'bar' })
     end
+
+    specify '#delete' do
+      api.on(:delete, '/tags/1') do |response|
+        response.body = { data: {} }
+      end
+
+      expect(client.delete('/tags/1').body)
+        .to eq('data' => {})
+    end
   end
 end
