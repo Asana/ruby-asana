@@ -12,6 +12,7 @@ module Asana
     # are associated with.
     class Tag < Resource
 
+
       attr_reader :id
 
       class << self

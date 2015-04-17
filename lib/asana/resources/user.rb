@@ -11,6 +11,7 @@ module Asana
     # a user ID is accepted, to refer to the current authenticated user.
     class User < Resource
 
+
       attr_reader :id
 
       attr_reader :email

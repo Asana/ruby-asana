@@ -19,6 +19,7 @@ module Asana
     # still reference organizations in any `workspace` parameter.
     class Workspace < Resource
 
+
       attr_reader :id
 
       attr_reader :name

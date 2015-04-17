@@ -12,6 +12,7 @@ module Asana
     # Once generated, it is not possible to modify a story.
     class Story < Resource
 
+
       attr_reader :id
 
       class << self
