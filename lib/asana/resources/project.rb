@@ -43,7 +43,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create(client, workspace:, team: nil, **data)
           with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? }
-          self.new(body(client.post("/projects", body: with_params)), client: client)
+          self.new(parse(client.post("/projects", body: with_params)).first, client: client)
         end
 
         # If the workspace for your project _is_ an organization, you must also
@@ -55,7 +55,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace:, **data)
 
-          self.new(body(client.post("/workspaces/#{workspace}/projects", body: data)), client: client)
+          self.new(parse(client.post("/workspaces/#{workspace}/projects", body: data)).first, client: client)
         end
 
         # Creates a project shared with the given team.
@@ -66,7 +66,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create_in_team(client, team:, **data)
 
-          self.new(body(client.post("/teams/#{team}/projects", body: data)), client: client)
+          self.new(parse(client.post("/teams/#{team}/projects", body: data)).first, client: client)
         end
 
         # Returns the complete project record for a single project.
@@ -74,7 +74,7 @@ module Asana
         # id - [Id] The project to get.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/projects/#{id}")), client: client)
+          self.new(parse(client.get("/projects/#{id}")).first, client: client)
         end
 
         # Returns the compact project records for some filtered set of projects.
@@ -84,9 +84,9 @@ module Asana
         # team - [Id] The team to filter projects on.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_all(client, workspace: nil, team: nil, archived: nil)
-          params = { workspace: workspace, team: team, archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
+        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20)
+          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/projects", params: params)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the workspace.
@@ -94,9 +94,9 @@ module Asana
         # workspace - [Id] The workspace or organization to find projects in.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_by_workspace(client, workspace:, archived: nil)
-          params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/workspaces/#{workspace}/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_workspace(client, workspace:, archived: nil, limit: 20)
+          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the team.
@@ -104,9 +104,9 @@ module Asana
         # team - [Id] The team to find projects in.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_by_team(client, team:, archived: nil)
-          params = { archived: archived }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/teams/#{team}/projects", params: params)).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_team(client, team:, archived: nil, limit: 20)
+          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/teams/#{team}/projects", params: params)), type: self, client: client)
         end
       end
 
@@ -123,7 +123,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(**data)
 
-        refresh_with(body(client.put("/projects/#{id}", body: data)))
+        refresh_with(parse(client.put("/projects/#{id}", body: data)).first)
       end
 
       # A specific, existing project can be deleted by making a DELETE request

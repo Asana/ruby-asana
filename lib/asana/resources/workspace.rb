@@ -37,13 +37,13 @@ module Asana
         # id - [Id] Globally unique identifier for the workspace or organization.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/workspaces/#{id}")), client: client)
+          self.new(parse(client.get("/workspaces/#{id}")).first, client: client)
         end
 
         # Returns the compact records for all workspaces visible to the authorized user.
-        def find_all(client)
-
-          Collection.new(body(client.get("/workspaces")).map { |data| self.new(data, client: client) }, client: client)
+        def find_all(client, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/workspaces", params: params)), type: self, client: client)
         end
       end
 
@@ -52,7 +52,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(**data)
 
-        refresh_with(body(client.put("/workspaces/#{id}", body: data)))
+        refresh_with(parse(client.put("/workspaces/#{id}", body: data)).first)
       end
 
       # Retrieves objects in the workspace based on an auto-completion/typeahead
@@ -72,9 +72,9 @@ module Asana
       # count - [Number] The number of results to return. The default is `20` if this
       # parameter is omitted, with a minimum of `1` and a maximum of `100`.
       # If there are fewer results found than requested, all will be returned.
-      def typeahead(type:, query: nil, count: nil)
-        params = { type: type, query: query, count: count }.reject { |_,v| v.nil? }
-        Collection.new(body(client.get("/workspaces/#{id}/typeahead", params: params)).map { |data| Resource.new(data, client: client) }, client: client)
+      def typeahead(type:, query: nil, count: nil, limit: 20)
+        params = { type: type, query: query, count: count, limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params)), type: Resource, client: client)
       end
 
     end
