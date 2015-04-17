@@ -14,7 +14,7 @@ RSpec.describe Asana::Resources::Resource do
 
   let!(:unicorn_class) do
     defresource 'Unicorn' do
-      def self.find_by_id(id, client:)
+      def self.find_by_id(client, id)
         new({ 'id' => id }, client: client)
       end
     end

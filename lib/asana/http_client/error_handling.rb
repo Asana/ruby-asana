@@ -35,6 +35,7 @@ module Asana
         when 401 then raise not_authorized(e.response)
         when 403 then raise forbidden(e.response)
         when 404 then raise not_found(e.response)
+        when 412 then recover_response(e.response)
         when 429 then raise rate_limit_enforced(e.response)
         when 500 then raise server_error(e.response)
         else raise api_error(e.response)
@@ -91,6 +92,11 @@ module Asana
       # Internal: Parser a response body from JSON.
       def body(response)
         MultiJson.load(response[:body])
+      end
+
+      def recover_response(response)
+        r = response.dup.tap { |res| res[:body] = body(response) }
+        Response.new(OpenStruct.new(env: OpenStruct.new(r)))
       end
     end
   end

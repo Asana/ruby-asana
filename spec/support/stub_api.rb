@@ -64,16 +64,20 @@ class StubAPI
   #   }
   #
   def on(method, resource_uri, body = nil)
-    args = [BASE_URI + resource_uri].tap do |as|
+    @stubs.send(method, *parse_args(method, resource_uri, body)) do |env|
+      if body.is_a?(Proc) && !body.call(env.body)
+        fail "Stubbed #{method.upcase} #{resource_uri} did not fulfill the " \
+          'argument validation block'
+      end
+      Response.new(env).tap { |response| yield response }.to_rack
+    end
+  end
+
+  def parse_args(method, resource_uri, body)
+    [BASE_URI + resource_uri].tap do |as|
       if [:post, :put, :patch].include?(method) && !body.is_a?(Proc)
         as.push MultiJson.dump(body)
       end
-    end
-    @stubs.send(method, *args) do |env|
-      if body.is_a?(Proc) && !body.call(env.body)
-        fail 'Stubbed #{method.upcase} #{resource_uri} did not fulfill the argument validation block'
-      end
-      Response.new(env).tap { |response| yield response }.to_rack
     end
   end
 end

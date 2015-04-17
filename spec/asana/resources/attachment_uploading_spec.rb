@@ -12,9 +12,10 @@ RSpec.describe Asana::Resources::AttachmentUploading do
 
   include ResourcesHelper
 
+  mod = described_class
   let!(:unicorn_class) do
     defresource 'Unicorn' do
-      include Asana::Resources::AttachmentUploading
+      include mod
 
       attr_reader :id
 
@@ -30,8 +31,10 @@ RSpec.describe Asana::Resources::AttachmentUploading do
       api.on(:post, '/unicorns/1/attachments', arg_matcher) do |response|
         response.body = { data: { id: 10 } }
       end
-      unicorn = unicorn_class.new({id: 1}, client: client)
-      attachment = unicorn.attach(filename: __FILE__, mime: 'image/jpg', name: 'file')
+      unicorn = unicorn_class.new({ id: 1 }, client: client)
+      attachment = unicorn.attach(filename: __FILE__,
+                                  mime: 'image/jpg',
+                                  name: 'file')
       expect(attachment).to be_a(Asana::Resources::Attachment)
       expect(attachment.id).to eq(10)
     end

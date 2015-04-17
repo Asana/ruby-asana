@@ -14,6 +14,7 @@ module Asana
       attr_reader :assignee_status
 
       include AttachmentUploading
+      include EventSubscription
 
       class << self
         # Returns the plural name of the resource.
