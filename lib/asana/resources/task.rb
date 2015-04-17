@@ -35,7 +35,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create(client, **data)
 
-          self.new(body(client.post("/tasks", body: data)), client: client)
+          self.new(parse(client.post("/tasks", body: data)).first, client: client)
         end
 
         # Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -50,7 +50,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace:, **data)
 
-          self.new(body(client.post("/workspaces/#{workspace}/tasks", body: data)), client: client)
+          self.new(parse(client.post("/workspaces/#{workspace}/tasks", body: data)).first, client: client)
         end
 
         # Returns the complete task record for a single task.
@@ -58,24 +58,24 @@ module Asana
         # id - [Id] The task to get.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/tasks/#{id}")), client: client)
+          self.new(parse(client.get("/tasks/#{id}")).first, client: client)
         end
 
         # Returns the compact task records for all tasks within the given project,
         # ordered by their priority within the project.
         #
         # projectId - [Id] The project in which to search for tasks.
-        def find_by_project(client, projectId:)
-
-          Collection.new(body(client.get("/projects/#{projectId}/tasks")).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_project(client, projectId:, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/projects/#{projectId}/tasks", params: params)), type: self, client: client)
         end
 
         # Returns the compact task records for all tasks with the given tag.
         #
         # tag - [Id] The tag in which to search for tasks.
-        def find_by_tag(client, tag:)
-
-          Collection.new(body(client.get("/tags/#{tag}/tasks")).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_tag(client, tag:, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/tags/#{tag}/tasks", params: params)), type: self, client: client)
         end
 
         # Returns the compact task records for some filtered set of tasks. Use one
@@ -100,9 +100,9 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil)
-          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since }.reject { |_,v| v.nil? }
-          Collection.new(body(client.get("/tasks", params: params)).map { |data| self.new(data, client: client) }, client: client)
+        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil, limit: 20)
+          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/tasks", params: params)), type: self, client: client)
         end
       end
 
@@ -119,7 +119,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(**data)
 
-        refresh_with(body(client.put("/tasks/#{id}", body: data)))
+        refresh_with(parse(client.put("/tasks/#{id}", body: data)).first)
       end
 
       # A specific, existing task can be deleted by making a DELETE request on the
@@ -140,7 +140,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_followers(followers:, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? }
-        refresh_with(body(client.post("/tasks/#{id}/addFollowers", body: with_params)))
+        refresh_with(parse(client.post("/tasks/#{id}/addFollowers", body: with_params)).first)
       end
 
       # Removes each of the specified followers from the task if they are
@@ -150,13 +150,13 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_followers(followers:, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? }
-        refresh_with(body(client.post("/tasks/#{id}/removeFollowers", body: with_params)))
+        refresh_with(parse(client.post("/tasks/#{id}/removeFollowers", body: with_params)).first)
       end
 
       # Returns a compact representation of all of the projects the task is in.
-      def projects()
-
-        Collection.new(body(client.get("/tasks/#{id}/projects")).map { |data| Project.new(data, client: client) }, client: client)
+      def projects(limit: 20)
+        params = { limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/tasks/#{id}/projects", params: params)), type: Project, client: client)
       end
 
       # Adds the task to the specified project, in the optional location
@@ -197,9 +197,9 @@ module Asana
       end
 
       # Returns a compact representation of all of the tags the task has.
-      def tags()
-
-        Collection.new(body(client.get("/tasks/#{id}/tags")).map { |data| Tag.new(data, client: client) }, client: client)
+      def tags(limit: 20)
+        params = { limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/tasks/#{id}/tags", params: params)), type: Tag, client: client)
       end
 
       # Adds a tag to a task. Returns an empty data block.
@@ -221,9 +221,9 @@ module Asana
       end
 
       # Returns a compact representation of all of the subtasks of a task.
-      def subtasks()
-
-        Collection.new(body(client.get("/tasks/#{id}/subtasks")).map { |data| self.class.new(data, client: client) }, client: client)
+      def subtasks(limit: 20)
+        params = { limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/tasks/#{id}/subtasks", params: params)), type: self.class, client: client)
       end
 
       # Makes an existing task a subtask of another. Returns an empty data block.
@@ -246,9 +246,9 @@ module Asana
       end
 
       # Returns a compact representation of all of the stories on the task.
-      def stories()
-
-        Collection.new(body(client.get("/tasks/#{id}/stories")).map { |data| Story.new(data, client: client) }, client: client)
+      def stories(limit: 20)
+        params = { limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/tasks/#{id}/stories", params: params)), type: Story, client: client)
       end
 
       # Adds a comment to a task. The comment will be authored by the
@@ -261,7 +261,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_comment(text:, **data)
         with_params = data.merge(text: text).reject { |_,v| v.nil? }
-        Story.new(body(client.post("/tasks/#{id}/stories", body: with_params)), client: client)
+        Story.new(parse(client.post("/tasks/#{id}/stories", body: with_params)).first, client: client)
       end
 
     end

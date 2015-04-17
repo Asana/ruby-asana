@@ -26,15 +26,15 @@ module Asana
         # id - [Id] Globally unique identifier for the team.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/stories/#{id}")), client: client)
+          self.new(parse(client.get("/stories/#{id}")).first, client: client)
         end
 
         # Returns the compact records for all stories on the task.
         #
         # task - [Id] Globally unique identifier for the task.
-        def find_by_task(client, task:)
-
-          Collection.new(body(client.get("/tasks/#{task}/stories")).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_task(client, task:, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/tasks/#{task}/stories", params: params)), type: self, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -49,7 +49,7 @@ module Asana
         # data - [Hash] the attributes to post.
         def create_on_task(client, task:, text:, **data)
           with_params = data.merge(text: text).reject { |_,v| v.nil? }
-          self.new(body(client.post("/tasks/#{task}/stories", body: with_params)), client: client)
+          self.new(parse(client.post("/tasks/#{task}/stories", body: with_params)).first, client: client)
         end
       end
 

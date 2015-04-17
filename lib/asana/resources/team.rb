@@ -23,23 +23,23 @@ module Asana
         # id - [Id] Globally unique identifier for the team.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/teams/#{id}")), client: client)
+          self.new(parse(client.get("/teams/#{id}")).first, client: client)
         end
 
         # Returns the compact records for all teams in the organization visible to
         # the authorized user.
         #
         # organization - [Id] Globally unique identifier for the workspace or organization.
-        def find_by_organization(client, organization:)
-
-          Collection.new(body(client.get("/organizations/#{organization}/teams")).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_organization(client, organization:, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params)), type: self, client: client)
         end
       end
 
       # Returns the compact records for all users that are members of the team.
-      def users()
-
-        Collection.new(body(client.get("/teams/#{id}/users")).map { |data| User.new(data, client: client) }, client: client)
+      def users(limit: 20)
+        params = { limit: limit }.reject { |_,v| v.nil? }
+        Collection.new(parse(client.get("/teams/#{id}/users", params: params)), type: User, client: client)
       end
 
     end

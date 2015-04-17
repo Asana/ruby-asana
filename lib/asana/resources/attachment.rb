@@ -22,15 +22,15 @@ module Asana
         # id - [Id] Globally unique identifier for the attachment.
         def find_by_id(client, id)
 
-          self.new(body(client.get("/attachments/#{id}")), client: client)
+          self.new(parse(client.get("/attachments/#{id}")).first, client: client)
         end
 
         # Returns the compact records for all attachments on the task.
         #
         # task - [Id] Globally unique identifier for the task.
-        def find_by_task(client, task:)
-
-          Collection.new(body(client.get("/tasks/#{task}/attachments")).map { |data| self.new(data, client: client) }, client: client)
+        def find_by_task(client, task:, limit: 20)
+          params = { limit: limit }.reject { |_,v| v.nil? }
+          Collection.new(parse(client.get("/tasks/#{task}/attachments", params: params)), type: self, client: client)
         end
       end
 
