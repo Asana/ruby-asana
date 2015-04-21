@@ -3,6 +3,7 @@ AllCops:
     - '**/Rakefile'
   Exclude:
     - 'bin/**/*'
+    - 'examples/**/*'
     - 'lib/asana/resources/attachment.rb'
     - 'lib/asana/resources/project.rb'
     - 'lib/asana/resources/story.rb'
