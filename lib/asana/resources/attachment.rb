@@ -20,17 +20,22 @@ module Asana
         # Returns the full record for a single attachment.
         #
         # id - [Id] Globally unique identifier for the attachment.
-        def find_by_id(client, id)
+        #
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/attachments/#{id}")).first, client: client)
+          self.new(parse(client.get("/attachments/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact records for all attachments on the task.
         #
         # task - [Id] Globally unique identifier for the task.
-        def find_by_task(client, task:, limit: 20)
-          params = { limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/tasks/#{task}/attachments", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_task(client, task:, limit: 20, options: {})
+          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/tasks/#{task}/attachments", params: params, options: options)), type: self, client: client)
         end
       end
 

@@ -24,17 +24,22 @@ module Asana
         # Returns the full record for a single story.
         #
         # id - [Id] Globally unique identifier for the team.
-        def find_by_id(client, id)
+        #
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/stories/#{id}")).first, client: client)
+          self.new(parse(client.get("/stories/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact records for all stories on the task.
         #
         # task - [Id] Globally unique identifier for the task.
-        def find_by_task(client, task:, limit: 20)
-          params = { limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/tasks/#{task}/stories", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_task(client, task:, limit: 20, options: {})
+          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/tasks/#{task}/stories", params: params, options: options)), type: self, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -46,10 +51,11 @@ module Asana
         # task - [Id] Globally unique identifier for the task.
         #
         # text - [String] The plain text of the comment to add.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_on_task(client, task:, text:, **data)
-          with_params = data.merge(text: text).reject { |_,v| v.nil? }
-          self.new(parse(client.post("/tasks/#{task}/stories", body: with_params)).first, client: client)
+        def create_on_task(client, task:, text:, options: {}, **data)
+          with_params = data.merge(text: text).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/tasks/#{task}/stories", body: with_params, options: options)).first, client: client)
         end
       end
 
