@@ -166,7 +166,7 @@ filesystem and its MIME type, and the file will be uploaded for you:
 ```ruby
 task = client.tasks.find_by_id(12)
 attachment = task.attach(filename: '/absolute/path/to/my/file.png',
-mime: 'image/png')
+                         mime: 'image/png')
 attachment.name # => 'file.png'
 ```
 
@@ -253,8 +253,8 @@ If you wish to make changes on the code generation script:
 3. Run `rake` or, more granularly, `rake codegen && rspec
    spec/templates/unicorn_spec.rb`
 
-Once you're sure your code works, submit a pull request and ask a contributor to
-make a release, as they'll need to run a release script from the
+Once you're sure your code works, submit a pull request and ask the maintainer
+to make a release, as they'll need to run a release script from the
 [asana-api-meta][meta] repository.
 
 ## Contributing
