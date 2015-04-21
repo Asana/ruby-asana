@@ -33,7 +33,7 @@ module Asana
         STDOUT.puts '1. Go to the following URL to authorize the ' \
           " application: #{client.authorize_url}"
         STDOUT.puts '2. Paste the authorization code here: '
-        auth_code = STDIN.noecho(&:gets).chomp
+        auth_code = STDIN.gets.chomp
         client.token_from_auth_code(auth_code)
       end
     end

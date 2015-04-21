@@ -109,17 +109,27 @@ end
 
 If you use `omniauth-asana` or a browser-based OAuth2 authentication strategy in
 general, possibly because your application is a web application, you can reuse
-those credentials to authenticate with this API client. Here's how to do it:
+those credentials to authenticate with this API client. Here's how to do it from
+the callback method:
 
 ```ruby
-# TODO: Verify
-client = strategy.client # from your omniauth oauth2 strategy
-omniauth = request.env['omniauth.auth']
-access_token = OAuth2::AccessToken.from_hash client, omniauth['credentials']
-Asana::Client.new do |c|
-  c.authentication :oauth2, access_token
+# assuming we're using Sinatra and omniauth-asana
+get '/auth/:name/callback' do
+  creds = request.env["omniauth.auth"]["credentials"].tap { |h| h.delete('expires') }
+  strategy = request.env["omniauth.strategy"]
+
+  # We need to refresh the omniauth OAuth2 token
+  access_token = OAuth2::AccessToken.from_hash(strategy.client, creds).refresh!
+
+  $client = Asana::Client.new do |c|
+    c.authentication :oauth2, access_token
+  end
+ 
+  redirect '/'
 end
 ```
+
+See `examples/omniauth_integration.rb` for a working example of this.
 
 ##### Using an OAuth2 offline authentication flow (for CLI applications)
 
@@ -128,11 +138,13 @@ If your application can't receive HTTP requests and thus you can't use
 follows:
 
 ```ruby
-# TODO: Expose in a more convenient namespace
-access_token = Asana::Authentication::OAuth2.offline_flow
-Asana::Client.new do |c|
+access_token = Asana::Authentication::OAuth2.offline_flow(client_id: ...,
+                                                          client_secret: ...)
+client = Asana::Client.new do |c|
   c.authentication :oauth2, access_token
 end
+
+client.tasks.find_by_id(12)
 ```
 
 This will print an authorization URL on STDOUT, and block until you paste in the
