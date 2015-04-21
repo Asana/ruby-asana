@@ -18,6 +18,29 @@ RSpec.describe Asana::HttpClient do
         expect(response.body).to eq('user' => 'foo')
       end
     end
+
+    it 'accepts I/O options' do
+      api.on(:get, '/users/me?opt_pretty=true') do |response|
+        response.body = { user: 'foo' }
+      end
+
+      client.get('/users/me', options: { pretty: true }).tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('user' => 'foo')
+      end
+    end
+
+    it 'accepts I/O options containing arrays' do
+      api.on(:get, '/users/me?opt_fields=foo,bar') do |response|
+        response.body = { user: 'foo' }
+      end
+
+      client.get('/users/me',
+                 options: { fields: %w(foo bar) }).tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('user' => 'foo')
+      end
+    end
   end
 
   describe '#put' do
@@ -31,6 +54,21 @@ RSpec.describe Asana::HttpClient do
         expect(response.body).to eq('user' => 'foo')
       end
     end
+
+    it 'accepts I/O options' do
+      api.on(:put, '/users/me',
+             'data' => { 'name' => 'John' },
+             'options' => { 'fields' => %w(foo bar) }) do |response|
+        response.body = { user: 'foo' }
+      end
+
+      client.put('/users/me',
+                 body: { 'name' => 'John' },
+                 options: { fields: %w(foo bar) }).tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('user' => 'foo')
+      end
+    end
   end
 
   describe '#post' do
@@ -40,6 +78,21 @@ RSpec.describe Asana::HttpClient do
       end
 
       client.post('/users/me', body: { 'name' => 'John' }).tap do |response|
+        expect(response.status).to eq(200)
+        expect(response.body).to eq('user' => 'foo')
+      end
+    end
+
+    it 'accepts I/O options' do
+      api.on(:post, '/users/me',
+             'data' => { 'name' => 'John' },
+             'options' => { 'fields' => %w(foo bar) }) do |response|
+        response.body = { user: 'foo' }
+      end
+
+      client.post('/users/me',
+                  body: { 'name' => 'John' },
+                  options: { fields: %w(foo bar) }).tap do |response|
         expect(response.status).to eq(200)
         expect(response.body).to eq('user' => 'foo')
       end

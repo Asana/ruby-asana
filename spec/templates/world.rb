@@ -18,9 +18,10 @@ module Asana
         # Returns the complete world record for a single world.
         #
         # id - [Id] The world to get.
-        def find_by_id(client, id)
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/worlds/#{id}")).first, client: client)
+          self.new(parse(client.get("/worlds/#{id}", options: options)).first, client: client)
         end
       end
 

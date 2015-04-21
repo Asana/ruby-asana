@@ -29,11 +29,13 @@ module Asana
       # resource - [String] a resource ID. Can be a task id or a workspace id.
       # client   - [Asana::Client] a client to perform the requests.
       # wait     - [Integer] the number of seconds to wait between each poll.
-      def initialize(resource:, client:, wait: 1)
+      # options  - [Hash] the request I/O options
+      def initialize(resource:, client:, wait: 1, options: {})
         @resource  = resource
         @client    = client
         @events    = []
         @wait      = wait
+        @options   = options
         @sync      = nil
         @last_poll = nil
       end
@@ -71,7 +73,9 @@ module Asana
       # a fresh `sync` token in the response.
       def poll
         rate_limiting do
-          body     = @client.get('/events', params: params).body
+          body     = @client.get('/events',
+                                 params: params,
+                                 options: @options).body
           @sync    = body['sync']
           @events += body.fetch('data', []).map do |event_data|
             Event.new(event_data, client: @client)

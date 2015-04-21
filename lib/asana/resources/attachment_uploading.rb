@@ -7,8 +7,9 @@ module Asana
       #
       # filename - [String] the absolute path of the file to upload.
       # mime     - [String] the MIME type of the file
-      # data     - [Hash] extra attributes to post.
-      def attach(filename:, mime:, **data)
+      # options  - [Hash] the request I/O options
+      # data     - [Hash] extra attributes to post
+      def attach(filename:, mime:, options: {}, **data)
         path = File.expand_path(filename)
         unless File.exist?(path)
           fail ArgumentError, "file #{filename} doesn't exist"
@@ -16,7 +17,8 @@ module Asana
         upload = Faraday::UploadIO.new(path, mime)
         response = client.post("/#{self.class.plural_name}/#{id}/attachments",
                                body: data,
-                               upload: upload)
+                               upload: upload,
+                               options: options)
         Attachment.new(parse(response).first, client: client)
       end
     end

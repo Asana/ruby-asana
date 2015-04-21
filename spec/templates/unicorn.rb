@@ -22,10 +22,11 @@ module Asana
         # Returns the full record of the newly created unicorn.
         #
         # world - [Id] The world to create the unicorn in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, world:, **data)
-          with_params = data.merge(world: world).reject { |_,v| v.nil? }
-          self.new(parse(client.post("/unicorns", body: with_params)).first, client: client)
+        def create(client, world:, options: {}, **data)
+          with_params = data.merge(world: world).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/unicorns", body: with_params, options: options)).first, client: client)
         end
 
         # Creates a new unicorn in a world.
@@ -33,18 +34,20 @@ module Asana
         # Returns the full record of the newly created unicorn.
         #
         # world - [Id] The world to create the unicorn in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_world(client, world:, **data)
+        def create_in_world(client, world:, options: {}, **data)
 
-          self.new(parse(client.post("/worlds/#{world}/unicorns", body: data)).first, client: client)
+          self.new(parse(client.post("/worlds/#{world}/unicorns", body: data, options: options)).first, client: client)
         end
 
         # Returns the complete unicorn record for a single unicorn.
         #
         # id - [Id] The unicorn to get.
-        def find_by_id(client, id)
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/unicorns/#{id}")).first, client: client)
+          self.new(parse(client.get("/unicorns/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact unicorn records for some filtered set of unicorns.
@@ -52,17 +55,21 @@ module Asana
         #
         # world - [Id] The world to filter unicorns on.
         # breed - [Id] The breed to filter unicorns on.
-        def find_all(client, world: nil, breed: nil, limit: 20)
-          params = { world: world, breed: breed, limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/unicorns", params: params)), type: self, client: client)
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_all(client, world: nil, breed: nil, limit: 20, options: {})
+          params = { world: world, breed: breed, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/unicorns", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact unicorn records for all unicorns in the world.
         #
         # world - [Id] The world to find unicorns in.
-        def find_by_world(client, world:, limit: 20)
-          params = { limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/worlds/#{world}/unicorns", params: params)), type: self, client: client)
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_world(client, world:, limit: 20, options: {})
+          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/worlds/#{world}/unicorns", params: params, options: options)), type: self, client: client)
         end
       end
 
@@ -75,40 +82,48 @@ module Asana
       #
       # Returns the complete updated tag record.
       #
+      # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update(**data)
+      def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/unicorns/#{id}", body: data)).first)
+        refresh_with(parse(client.put("/unicorns/#{id}", body: data, options: options)).first)
       end
 
       # Returns a collection of paws belonging to the unicorn.
-      def paws(limit: 20)
-        params = { limit: limit }.reject { |_,v| v.nil? }
-        Collection.new(parse(client.get("/unicorns/#{id}/paws", params: params)), type: Resource, client: client)
+      #
+      # limit - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def paws(limit: 20, options: {})
+        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/unicorns/#{id}/paws", params: params, options: options)), type: Resource, client: client)
       end
 
       # Returns the newly added paw.
       #
       # paw - [Id] The paw to add.
+      # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_paw(paw:, **data)
-        with_params = data.merge(paw: paw).reject { |_,v| v.nil? }
-        Resource.new(parse(client.post("/unicorns/#{id}/paws", body: with_params)).first, client: client)
+      def add_paw(paw:, options: {}, **data)
+        with_params = data.merge(paw: paw).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/unicorns/#{id}/paws", body: with_params, options: options)).first, client: client)
       end
 
       # Returns the updated unicorn record.
       #
       # friends - [Array.Id] The friend IDs to add.
+      # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_friends(friends:, **data)
-        with_params = data.merge(friends: friends).reject { |_,v| v.nil? }
-        refresh_with(parse(client.post("/unicorns/#{id}/friends", body: with_params)).first)
+      def add_friends(friends:, options: {}, **data)
+        with_params = data.merge(friends: friends).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.post("/unicorns/#{id}/friends", body: with_params, options: options)).first)
       end
 
       # Returns the world of the unicorn.
-      def get_world()
+      #
+      # options - [Hash] the request I/O options.
+      def get_world(options: {})
 
-        World.new(parse(client.get("/unicorns/#{id}/getWorld")).first, client: client)
+        World.new(parse(client.get("/unicorns/#{id}/getWorld", options: options)).first, client: client)
       end
 
       # A specific, existing unicorn can be deleted by making a DELETE request

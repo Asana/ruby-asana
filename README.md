@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-First, you'll need to create an instance of `Asana::Client` and configure it
+To do anything, you'll need always an instance of `Asana::Client` configured
 with your preferred authentication method (see the Authentication section below
 for more complex scenarios) and other options.
 
@@ -33,7 +33,7 @@ client = Asana::Client.new do |c|
   c.authentication :api_token, 'my_api_token'
 end
 
-client.do_something
+client.workspaces.find_all.first
 ```
 
 A full-blown customized client using OAuth2 wih a previously obtained refresh
@@ -53,12 +53,15 @@ client = Asana::Client.new do |c|
   c.configure_faraday { |conn| conn.use SomeFaradayMiddleware }
 end
 
-workspace = client.workspaces.find(12)
+workspace = client.workspaces.find_by_id(12)
 workspace.users
 # => #<Asana::Collection<User> ...>
-workspace.tags.create(name: 'foo')
+client.tags.create_in_workspace(workspace: workspace.id, name: 'foo')
 # => #<Asana::Tag id: ..., name: "foo">
 ```
+
+All resources are exposed as methods on the `Asana::Client` instance. Check out
+the [documentation for each of them][docs].
 
 ### Authentication
 
@@ -145,15 +148,114 @@ are represented as exceptions under the namespace `Asana::Errors`.
 All errors are subclasses of `Asana::Errors::APIError`, so make sure to rescue
 instances of this class if you want to handle them yourself.
 
+### I/O options
+
+All requests (except `DELETE`) accept extra I/O options
+[as documented in the API docs][io]. Just pass an extra `options` hash to any
+request:
+
+```ruby
+client.tasks.find_by_id(12, options: { expand: ['workspace'] })
+```
+
+### Attachment uploading
+
+To attach a file to a task or a project, you just need its absolute path on your
+filesystem and its MIME type, and the file will be uploaded for you:
+
+```ruby
+task = client.tasks.find_by_id(12)
+attachment = task.attach(filename: '/absolute/path/to/my/file.png',
+mime: 'image/png')
+attachment.name # => 'file.png'
+```
+
+### Event streams
+
+To subscribe to an event stream of a task or a project, just call `#events` on
+it:
+
+```ruby
+task = client.tasks.find_by_id(12)
+task.events # => #<Asana::Events ...>
+
+# You can do the same with only the task id:
+events = client.events.for(task.id)
+```
+
+An `Asana::Events` object is an infinite collection of `Asana::Event`
+instances. Be warned that if you call `#each` on it, it will block forever!
+
+Note that, by default, an event stream will wait at least 1 second between
+polls, but that's configurable with the `wait` parameter:
+
+```ruby
+# wait at least 3 and a half seconds between each poll to the API
+task.events(wait: 3.5) # => #<Asana::Events ...>
+```
+
+There are some interesting things you can do with an event stream, as it is a
+normal Ruby Enumerable. Read below to get some ideas.
+
+#### Subscribe to the event stream with a callback, polling every 2 seconds
+
+```ruby
+# Run this in another thread so that we don't block forever
+events = client.tasks.find_by_id(12).events(wait: 2)
+Thread.new do
+  events.each do |event|
+    notify_someone "New event arrived! #{event}"
+  end
+end
+```
+
+#### Make the stream lazy and filter it by a specific pattern
+
+To do that we need to call `#lazy` on the `Events` instance, just like with any
+other `Enumerable`.
+
+```ruby
+events = client.tasks.find_by_id(12).events
+only_change_events = events.lazy.select { |event| event.action == 'changed' }
+Thread.new do
+  only_change_events.each do |event|
+    notify_someone "New change event arrived! #{event}"
+  end
+end
+```
+
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`bin/console` for an interactive prompt that will allow you to experiment.
 
 Run the build with `rake`. This is equivalent to:
 
     $ rake spec && rake rubocop && rake yard
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To
+release a new version, update the version number in `version.rb`, and then run
+`bundle exec rake release` to create a git tag for the version, push git commits
+and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+### Code generation
+
+The specific Asana resource classes (`Tag`, `Workspace`, `Task`, etc) are
+generated code, hence they shouldn't be modified by hand. The code that
+generates it lives in `lib/templates/resource.ejs`, and is tested by generating
+`spec/templates/unicorn.rb` and running `spec/templates/unicorn_spec.rb` as part
+of the build.
+
+If you wish to make changes on the code generation script:
+
+1. Add/modify a spec on `spec/templates/unicorn_spec.rb`
+2. Add your new feature or change to `lib/templates/resource.ejs`
+3. Run `rake` or, more granularly, `rake codegen && rspec
+   spec/templates/unicorn_spec.rb`
+
+Once you're sure your code works, submit a pull request and ask a contributor to
+make a release, as they'll need to run a release script from the
+[asana-api-meta][meta] repository.
 
 ## Contributing
 
@@ -164,3 +266,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 5. Create a new Pull Request
 
 [apidocs]: https://asana.com/developers
+[io]: https://asana.com/developers/documentation/getting-started/input-output-options
+[docs]: https://asana.github.com/ruby-asana
+[meta]: https://github.com/asana/asana-api-meta

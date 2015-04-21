@@ -86,25 +86,47 @@ RSpec.describe Asana::Resources::Unicorn do
     end
 
     it 'finds all unicorns by world' do
-      api.on(:get, '/unicorns', data: { world: 123 }) do |response|
+      api.on(:get, '/unicorns?world=123&limit=20') do |response|
         response.body = { data: [john_data] }
       end
 
-      unicorns = described_class.find_all(client)
+      unicorns = described_class.find_all(client, world: 123)
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
       expect(unicorns.first).to be_john
     end
 
     it 'finds all unicorns by breed' do
-      api.on(:get, '/unicorns', data: { breed: 'magical' }) do |response|
+      api.on(:get, '/unicorns?breed=magical&limit=20') do |response|
         response.body = { data: [laura_data] }
       end
 
-      unicorns = described_class.find_all(client)
+      unicorns = described_class.find_all(client, breed: 'magical')
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
       expect(unicorns.first).to be_laura
+    end
+
+    it 'paginates unicorns' do
+      api.on(:get, '/unicorns?limit=1') do |response|
+        response.body = { data: [john_data] }
+      end
+
+      unicorns = described_class.find_all(client, limit: 1)
+      expect(unicorns).to be_a(Asana::Resources::Collection)
+      expect(unicorns.size).to eq(1)
+      expect(unicorns.first).to be_john
+    end
+
+    it 'accepts I/O options' do
+      api.on(:get, '/unicorns?opt_pretty=true') do |response|
+        response.body = { data: [john_data] }
+      end
+
+      unicorns = described_class.find_all(client, options: { pretty: true })
+      expect(unicorns).to be_a(Asana::Resources::Collection)
+      expect(unicorns.size).to eq(1)
+      expect(unicorns.first).to be_john
     end
   end
 

@@ -4,8 +4,8 @@ module Asana
     # itself.
     module EventSubscription
       # Public: Returns an infinite collection of events on the resource.
-      def events
-        Events.new(resource: id, client: client)
+      def events(wait: 1, options: {})
+        Events.new(resource: id, client: client, wait: wait, options: options)
       end
     end
   end

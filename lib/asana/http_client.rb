@@ -41,11 +41,18 @@ module Asana
     #
     # resource_uri - [String] the resource URI relative to the base Asana API
     #                URL, e.g "/users/me".
+    # params       - [Hash] the request parameters
+    # options      - [Hash] the request I/O options
     #
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
-    def get(resource_uri, params: {})
-      perform_request(:get, resource_uri, params)
+    def get(resource_uri, params: {}, options: {})
+      opts = options.reduce({}) do |acc, (k, v)|
+        acc.tap do |hash|
+          hash[:"opt_#{k}"] = v.is_a?(Array) ? v.join(',') : v
+        end
+      end
+      perform_request(:get, resource_uri, params.merge(opts))
     end
 
     # Public: Performs a PUT request against the API.
@@ -53,11 +60,13 @@ module Asana
     # resource_uri - [String] the resource URI relative to the base Asana API
     #                URL, e.g "/users/me".
     # body         - [Hash] the body to PUT.
+    # options      - [Hash] the request I/O options
     #
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
-    def put(resource_uri, body: {})
-      perform_request(:put, resource_uri, data: body)
+    def put(resource_uri, body: {}, options: {})
+      params = { data: body }.merge(options.empty? ? {} : { options: options })
+      perform_request(:put, resource_uri, params)
     end
 
     # Public: Performs a POST request against the API.
@@ -67,16 +76,18 @@ module Asana
     # body         - [Hash] the body to POST.
     # upload       - [Faraday::UploadIO] an upload object to post as multipart.
     #                Defaults to nil.
+    # options      - [Hash] the request I/O options
     #
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
-    def post(resource_uri, body: {}, upload: nil)
+    def post(resource_uri, body: {}, upload: nil, options: {})
+      params = { data: body }.merge(options.empty? ? {} : { options: options })
       if upload
-        perform_request(:post, resource_uri, data: body, file: upload) do |c|
+        perform_request(:post, resource_uri, params.merge(file: upload)) do |c|
           c.request :multipart
         end
       else
-        perform_request(:post, resource_uri, data: body)
+        perform_request(:post, resource_uri, params)
       end
     end
 
