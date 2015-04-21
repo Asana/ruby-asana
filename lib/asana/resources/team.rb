@@ -21,25 +21,33 @@ module Asana
         # Returns the full record for a single team.
         #
         # id - [Id] Globally unique identifier for the team.
-        def find_by_id(client, id)
+        #
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/teams/#{id}")).first, client: client)
+          self.new(parse(client.get("/teams/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact records for all teams in the organization visible to
         # the authorized user.
         #
         # organization - [Id] Globally unique identifier for the workspace or organization.
-        def find_by_organization(client, organization:, limit: 20)
-          params = { limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_organization(client, organization:, limit: 20, options: {})
+          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
         end
       end
 
       # Returns the compact records for all users that are members of the team.
-      def users(limit: 20)
-        params = { limit: limit }.reject { |_,v| v.nil? }
-        Collection.new(parse(client.get("/teams/#{id}/users", params: params)), type: User, client: client)
+      #
+      # limit - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def users(limit: 20, options: {})
+        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/teams/#{id}/users", params: params, options: options)), type: User, client: client)
       end
 
     end

@@ -31,10 +31,11 @@ module Asana
         # Returns the full record of the newly created tag.
         #
         # workspace - [Id] The workspace or organization to create the tag in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, workspace:, **data)
-          with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? }
-          self.new(parse(client.post("/tags", body: with_params)).first, client: client)
+        def create(client, workspace:, options: {}, **data)
+          with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/tags", body: with_params, options: options)).first, client: client)
         end
 
         # Creates a new tag in a workspace or organization.
@@ -47,18 +48,20 @@ module Asana
         # Returns the full record of the newly created tag.
         #
         # workspace - [Id] The workspace or organization to create the tag in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_workspace(client, workspace:, **data)
+        def create_in_workspace(client, workspace:, options: {}, **data)
 
-          self.new(parse(client.post("/workspaces/#{workspace}/tags", body: data)).first, client: client)
+          self.new(parse(client.post("/workspaces/#{workspace}/tags", body: data, options: options)).first, client: client)
         end
 
         # Returns the complete tag record for a single tag.
         #
         # id - [Id] The tag to get.
-        def find_by_id(client, id)
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/tags/#{id}")).first, client: client)
+          self.new(parse(client.get("/tags/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact tag records for some filtered set of tags.
@@ -68,17 +71,22 @@ module Asana
         # team - [Id] The team to filter tags on.
         # archived - [Boolean] Only return tags whose `archived` field takes on the value of
         # this parameter.
-        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20)
-          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/tags", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20, options: {})
+          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/tags", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact tag records for all tags in the workspace.
         #
         # workspace - [Id] The workspace or organization to find tags in.
-        def find_by_workspace(client, workspace:, limit: 20)
-          params = { limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/workspaces/#{workspace}/tags", params: params)), type: self, client: client)
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_workspace(client, workspace:, limit: 20, options: {})
+          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/#{workspace}/tags", params: params, options: options)), type: self, client: client)
         end
       end
 
@@ -91,10 +99,11 @@ module Asana
       #
       # Returns the complete updated tag record.
       #
+      # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update(**data)
+      def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/tags/#{id}", body: data)).first)
+        refresh_with(parse(client.put("/tags/#{id}", body: data, options: options)).first)
       end
 
       # A specific, existing tag can be deleted by making a DELETE request

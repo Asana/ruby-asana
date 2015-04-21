@@ -40,10 +40,11 @@ module Asana
         # team - [Id] If creating in an organization, the specific team to create the
         # project in.
         #
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, workspace:, team: nil, **data)
-          with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? }
-          self.new(parse(client.post("/projects", body: with_params)).first, client: client)
+        def create(client, workspace:, team: nil, options: {}, **data)
+          with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/projects", body: with_params, options: options)).first, client: client)
         end
 
         # If the workspace for your project _is_ an organization, you must also
@@ -52,10 +53,11 @@ module Asana
         # Returns the full record of the newly created project.
         #
         # workspace - [Id] The workspace or organization to create the project in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_workspace(client, workspace:, **data)
+        def create_in_workspace(client, workspace:, options: {}, **data)
 
-          self.new(parse(client.post("/workspaces/#{workspace}/projects", body: data)).first, client: client)
+          self.new(parse(client.post("/workspaces/#{workspace}/projects", body: data, options: options)).first, client: client)
         end
 
         # Creates a project shared with the given team.
@@ -63,18 +65,20 @@ module Asana
         # Returns the full record of the newly created project.
         #
         # team - [Id] The team to create the project in.
+        # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_team(client, team:, **data)
+        def create_in_team(client, team:, options: {}, **data)
 
-          self.new(parse(client.post("/teams/#{team}/projects", body: data)).first, client: client)
+          self.new(parse(client.post("/teams/#{team}/projects", body: data, options: options)).first, client: client)
         end
 
         # Returns the complete project record for a single project.
         #
         # id - [Id] The project to get.
-        def find_by_id(client, id)
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/projects/#{id}")).first, client: client)
+          self.new(parse(client.get("/projects/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact project records for some filtered set of projects.
@@ -84,9 +88,12 @@ module Asana
         # team - [Id] The team to filter projects on.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20)
-          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/projects", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20, options: {})
+          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/projects", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the workspace.
@@ -94,9 +101,12 @@ module Asana
         # workspace - [Id] The workspace or organization to find projects in.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_by_workspace(client, workspace:, archived: nil, limit: 20)
-          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_workspace(client, workspace:, archived: nil, limit: 20, options: {})
+          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the team.
@@ -104,9 +114,12 @@ module Asana
         # team - [Id] The team to find projects in.
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
-        def find_by_team(client, team:, archived: nil, limit: 20)
-          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? }
-          Collection.new(parse(client.get("/teams/#{team}/projects", params: params)), type: self, client: client)
+        #
+        # limit - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_team(client, team:, archived: nil, limit: 20, options: {})
+          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end
       end
 
@@ -120,10 +133,11 @@ module Asana
       #
       # Returns the complete updated project record.
       #
+      # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update(**data)
+      def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/projects/#{id}", body: data)).first)
+        refresh_with(parse(client.put("/projects/#{id}", body: data, options: options)).first)
       end
 
       # A specific, existing project can be deleted by making a DELETE request
