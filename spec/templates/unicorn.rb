@@ -55,20 +55,20 @@ module Asana
         #
         # world - [Id] The world to filter unicorns on.
         # breed - [Id] The breed to filter unicorns on.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, world: nil, breed: nil, limit: 20, options: {})
-          params = { world: world, breed: breed, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, world: nil, breed: nil, per_page: 20, options: {})
+          params = { world: world, breed: breed, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/unicorns", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact unicorn records for all unicorns in the world.
         #
         # world - [Id] The world to find unicorns in.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_world(client, world: required("world"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_world(client, world: required("world"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/worlds/#{world}/unicorns", params: params, options: options)), type: self, client: client)
         end
       end
@@ -91,10 +91,10 @@ module Asana
 
       # Returns a collection of paws belonging to the unicorn.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def paws(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def paws(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/unicorns/#{id}/paws", params: params, options: options)), type: Resource, client: client)
       end
 

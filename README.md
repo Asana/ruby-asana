@@ -2,6 +2,10 @@
 
 A Ruby client for the 1.0 version of the Asana API.
 
+Supported rubies:
+
+* MRI 2.0.0 up to 2.2.x stable
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -150,6 +154,29 @@ client.tasks.find_by_id(12)
 This will print an authorization URL on STDOUT, and block until you paste in the
 authorization code, which you can get by visiting that URL and granting the
 necessary permissions.
+
+### Pagination
+
+Whenever you ask for a collection of resources, you can provide a number of
+results per page to fetch, between 1 and 100. If you don't provide any, it
+defaults to 20.
+
+```ruby
+my_tasks = client.tasks.find_by_tag(tag: tag_id, per_page: 5)
+# => #<Asana::Collection<Task> ...>
+```
+
+An `Asana::Collection` is a paginated collection -- it holds the first
+`per_page` results, and a reference to the next page if any.
+
+When you iterate an `Asana::Collection`, it'll transparently keep fetching all
+the pages, and caching them along the way:
+
+```ruby
+my_tasks.size # => 23, not 5
+my_tasks.take(14)
+# => [#<Asana::Task ...>, #<Asana::Task ...>, ... until 14]
+```
 
 ### Error handling
 

@@ -109,13 +109,19 @@ RSpec.describe Asana::Resources::Unicorn do
 
     it 'paginates unicorns' do
       api.on(:get, '/unicorns?limit=1') do |response|
-        response.body = { data: [john_data] }
+        response.body = { data: [john_data],
+                          next_page: { path: '/unicorns?limit=1&offset=xyz' } }
       end
 
-      unicorns = described_class.find_all(client, limit: 1)
+      api.on(:get, '/unicorns?limit=1&offset=xyz') do |response|
+        response.body = { data: [laura_data] }
+      end
+
+      unicorns = described_class.find_all(client, per_page: 1)
       expect(unicorns).to be_a(Asana::Resources::Collection)
-      expect(unicorns.size).to eq(1)
+      expect(unicorns.size).to eq(2)
       expect(unicorns.first).to be_john
+      expect(unicorns.to_a.last).to be_laura
     end
 
     it 'accepts I/O options' do
