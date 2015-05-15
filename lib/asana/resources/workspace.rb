@@ -44,10 +44,10 @@ module Asana
 
         # Returns the compact records for all workspaces visible to the authorized user.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces", params: params, options: options)), type: self, client: client)
         end
       end
@@ -79,10 +79,10 @@ module Asana
       # parameter is omitted, with a minimum of `1` and a maximum of `100`.
       # If there are fewer results found than requested, all will be returned.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def typeahead(type: required("type"), query: nil, count: nil, limit: 20, options: {})
-        params = { type: type, query: query, count: count, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def typeahead(type: required("type"), query: nil, count: nil, per_page: 20, options: {})
+        params = { type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 

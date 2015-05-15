@@ -89,10 +89,10 @@ module Asana
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20, options: {})
-          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, workspace: nil, team: nil, archived: nil, per_page: 20, options: {})
+          params = { workspace: workspace, team: team, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects", params: params, options: options)), type: self, client: client)
         end
 
@@ -102,10 +102,10 @@ module Asana
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), archived: nil, limit: 20, options: {})
-          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_workspace(client, workspace: required("workspace"), archived: nil, per_page: 20, options: {})
+          params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params, options: options)), type: self, client: client)
         end
 
@@ -115,10 +115,10 @@ module Asana
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_team(client, team: required("team"), archived: nil, limit: 20, options: {})
-          params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_team(client, team: required("team"), archived: nil, per_page: 20, options: {})
+          params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end
       end
