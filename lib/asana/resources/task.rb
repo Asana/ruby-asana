@@ -68,20 +68,20 @@ module Asana
         # ordered by their priority within the project.
         #
         # projectId - [Id] The project in which to search for tasks.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_project(client, projectId: required("projectId"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_project(client, projectId: required("projectId"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects/#{projectId}/tasks", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact task records for all tasks with the given tag.
         #
         # tag - [Id] The tag in which to search for tasks.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_tag(client, tag: required("tag"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_tag(client, tag: required("tag"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tags/#{tag}/tasks", params: params, options: options)), type: self, client: client)
         end
 
@@ -95,7 +95,7 @@ module Asana
         #
         # modified_since - [String] Only return tasks that have been modified since the given time.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         # Notes:
         #
@@ -109,8 +109,8 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil, limit: 20, options: {})
-          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
+          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
         end
       end
@@ -167,10 +167,10 @@ module Asana
 
       # Returns a compact representation of all of the projects the task is in.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def projects(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def projects(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/tasks/#{id}/projects", params: params, options: options)), type: Project, client: client)
       end
 
@@ -215,10 +215,10 @@ module Asana
 
       # Returns a compact representation of all of the tags the task has.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def tags(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def tags(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/tasks/#{id}/tags", params: params, options: options)), type: Tag, client: client)
       end
 
@@ -244,10 +244,10 @@ module Asana
 
       # Returns a compact representation of all of the subtasks of a task.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def subtasks(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def subtasks(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/tasks/#{id}/subtasks", params: params, options: options)), type: self.class, client: client)
       end
 
@@ -274,10 +274,10 @@ module Asana
 
       # Returns a compact representation of all of the stories on the task.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def stories(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def stories(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/tasks/#{id}/stories", params: params, options: options)), type: Story, client: client)
       end
 

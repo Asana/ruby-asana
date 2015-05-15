@@ -33,20 +33,20 @@ module Asana
         #
         # organization - [Id] Globally unique identifier for the workspace or organization.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_organization(client, organization: required("organization"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_organization(client, organization: required("organization"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
         end
       end
 
       # Returns the compact records for all users that are members of the team.
       #
-      # limit - [Integer] the number of records to fetch per page.
+      # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def users(limit: 20, options: {})
-        params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+      def users(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/teams/#{id}/users", params: params, options: options)), type: User, client: client)
       end
 

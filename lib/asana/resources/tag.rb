@@ -72,20 +72,20 @@ module Asana
         # archived - [Boolean] Only return tags whose `archived` field takes on the value of
         # this parameter.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, workspace: nil, team: nil, archived: nil, limit: 20, options: {})
-          params = { workspace: workspace, team: team, archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, workspace: nil, team: nil, archived: nil, per_page: 20, options: {})
+          params = { workspace: workspace, team: team, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tags", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact tag records for all tags in the workspace.
         #
         # workspace - [Id] The workspace or organization to find tags in.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/tags", params: params, options: options)), type: self, client: client)
         end
       end

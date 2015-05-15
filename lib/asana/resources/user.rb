@@ -48,10 +48,10 @@ module Asana
         # accessible to the authenticated user.
         #
         # workspace - [Id] The workspace in which to get users.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/users", params: params, options: options)), type: self, client: client)
         end
 
@@ -59,10 +59,10 @@ module Asana
         # organization.
         #
         # workspace - [Id] The workspace or organization to filter users on.
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, workspace: nil, limit: 20, options: {})
-          params = { workspace: workspace, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, workspace: nil, per_page: 20, options: {})
+          params = { workspace: workspace, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/users", params: params, options: options)), type: self, client: client)
         end
       end

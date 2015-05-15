@@ -35,10 +35,10 @@ module Asana
         #
         # task - [Id] Globally unique identifier for the task.
         #
-        # limit - [Integer] the number of records to fetch per page.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_task(client, task: required("task"), limit: 20, options: {})
-          params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_task(client, task: required("task"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks/#{task}/stories", params: params, options: options)), type: self, client: client)
         end
 
