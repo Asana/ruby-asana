@@ -1,6 +1,6 @@
-
 require 'bundler'
 Bundler.require
+require 'asana'
 
 class SinatraApp < Sinatra::Base
   id, secret = ENV['ASANA_CLIENT_ID'], ENV['ASANA_CLIENT_SECRET']
