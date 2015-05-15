@@ -13,7 +13,7 @@ module Asana
         Registry.register(base)
       end
 
-      def initialize(data, client:)
+      def initialize(data, client: required('client'))
         @_client = client
         @_data   = data
         data.each do |k, v|

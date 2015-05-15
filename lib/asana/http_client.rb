@@ -25,7 +25,7 @@ module Asana
     # user_agent     - [String] The user agent. Defaults to "ruby-asana vX.Y.Z".
     # config         - [Proc] An optional block that yields the Faraday builder
     #                  object for customization.
-    def initialize(authentication:,
+    def initialize(authentication: required('authentication'),
                    adapter: nil,
                    user_agent: nil,
                    debug_mode: false,

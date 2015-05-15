@@ -15,7 +15,9 @@ module Asana
       # type              - [Class] the type of resource that the collection
       #                     contains. Defaults to the generic Resource.
       # client            - [Asana::Client] the client to perform requests.
-      def initialize((elements, extra), type: Resource, client:)
+      def initialize((elements, extra),
+                     type: Resource,
+                     client: required('client'))
         @elements  = elements.map { |elem| type.new(elem, client: client) }
         @type      = type
         @next_page = extra['next_page']

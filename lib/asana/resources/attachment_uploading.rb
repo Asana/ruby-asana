@@ -9,7 +9,12 @@ module Asana
       # mime     - [String] the MIME type of the file
       # options  - [Hash] the request I/O options
       # data     - [Hash] extra attributes to post
-      def attach(filename:, mime:, options: {}, **data)
+      #
+      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
+      def attach(filename: required('filename'),
+                 mime: required('mime'),
+                 options: {}, **data)
         path = File.expand_path(filename)
         unless File.exist?(path)
           fail ArgumentError, "file #{filename} doesn't exist"
@@ -21,6 +26,8 @@ module Asana
                                options: options)
         Attachment.new(parse(response).first, client: client)
       end
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end
