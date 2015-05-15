@@ -42,7 +42,7 @@ module Asana
         #
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, workspace:, team: nil, options: {}, **data)
+        def create(client, workspace: required("workspace"), team: nil, options: {}, **data)
           with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/projects", body: with_params, options: options)).first, client: client)
         end
@@ -55,7 +55,7 @@ module Asana
         # workspace - [Id] The workspace or organization to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_workspace(client, workspace:, options: {}, **data)
+        def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
 
           self.new(parse(client.post("/workspaces/#{workspace}/projects", body: data, options: options)).first, client: client)
         end
@@ -67,7 +67,7 @@ module Asana
         # team - [Id] The team to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_team(client, team:, options: {}, **data)
+        def create_in_team(client, team: required("team"), options: {}, **data)
 
           self.new(parse(client.post("/teams/#{team}/projects", body: data, options: options)).first, client: client)
         end
@@ -104,7 +104,7 @@ module Asana
         #
         # limit - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace:, archived: nil, limit: 20, options: {})
+        def find_by_workspace(client, workspace: required("workspace"), archived: nil, limit: 20, options: {})
           params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params, options: options)), type: self, client: client)
         end
@@ -117,7 +117,7 @@ module Asana
         #
         # limit - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_team(client, team:, archived: nil, limit: 20, options: {})
+        def find_by_team(client, team: required("team"), archived: nil, limit: 20, options: {})
           params = { archived: archived, limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end

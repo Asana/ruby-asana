@@ -33,7 +33,7 @@ module Asana
         # workspace - [Id] The workspace or organization to create the tag in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, workspace:, options: {}, **data)
+        def create(client, workspace: required("workspace"), options: {}, **data)
           with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/tags", body: with_params, options: options)).first, client: client)
         end
@@ -50,7 +50,7 @@ module Asana
         # workspace - [Id] The workspace or organization to create the tag in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_workspace(client, workspace:, options: {}, **data)
+        def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
 
           self.new(parse(client.post("/workspaces/#{workspace}/tags", body: data, options: options)).first, client: client)
         end
@@ -84,7 +84,7 @@ module Asana
         # workspace - [Id] The workspace or organization to find tags in.
         # limit - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace:, limit: 20, options: {})
+        def find_by_workspace(client, workspace: required("workspace"), limit: 20, options: {})
           params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/tags", params: params, options: options)), type: self, client: client)
         end
