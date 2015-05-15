@@ -35,7 +35,7 @@ module Asana
         #
         # limit - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_organization(client, organization:, limit: 20, options: {})
+        def find_by_organization(client, organization: required("organization"), limit: 20, options: {})
           params = { limit: limit }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
         end
