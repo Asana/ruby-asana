@@ -1,5 +1,5 @@
-$: << '../lib'
-require 'asana'
+require 'bundler'
+Bundler.require
 
 id, secret = ENV['ASANA_CLIENT_ID'], ENV['ASANA_CLIENT_SECRET']
 unless id && secret

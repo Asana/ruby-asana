@@ -1,7 +1,6 @@
 
-%w(rubygems omniauth omniauth-asana sinatra).each { |dependency| require dependency }
-$: << '../lib'
-require 'asana'
+require 'bundler'
+Bundler.require
 
 class SinatraApp < Sinatra::Base
   id, secret = ENV['ASANA_CLIENT_ID'], ENV['ASANA_CLIENT_SECRET']
