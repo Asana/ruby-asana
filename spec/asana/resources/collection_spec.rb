@@ -93,7 +93,7 @@ RSpec.describe Asana::Resources::Collection do
       extra = { 'next_page' => { 'path' => path + '&offset=abc' } }
       api.on(:get, path + '&offset=abc') do |response|
         response.body = { 'next_page' => { 'path' => path + '&offset=def' },
-                         'data' => unicorns.drop(5).take(5) }
+                          'data' => unicorns.drop(5).take(5) }
       end
       collection = described_class.new([unicorns.take(5), extra],
                                        type: unicorn_class,

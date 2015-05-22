@@ -46,7 +46,7 @@ module Asana
       def to_s
         "#<Asana::Collection<#{@type}> " \
           "[#{@elements.map(&:inspect).join(', ')}" +
-          (@next_page_data ? ', ...' : '') + "]>"
+          (@next_page_data ? ', ...' : '') + ']>'
       end
 
       alias_method :inspect, :to_s
