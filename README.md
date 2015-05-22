@@ -178,6 +178,32 @@ my_tasks.take(14)
 # => [#<Asana::Task ...>, #<Asana::Task ...>, ... until 14]
 ```
 
+#### Manual pagination
+
+If you only want to deal with one page at a time and manually paginate, you can
+get the elements of the current page with `#elements` and ask for the next page
+with `#next_page`, which will return an `Asana::Collection` with the next page
+of elements:
+
+```ruby
+my_tasks.elements # => [#<Asana::Task ...>, #<Asana::Task ...>, ... until 5]
+my_tasks.next_page # => #<Asana::Collection ...>
+```
+
+#### Lazy pagination
+
+Because an `Asana::Collection` represents the entire collection, it is often
+handy to just take what you need from it, rather than let it fetch all its
+contents from the network. You can accomplish this by turning it into a lazy
+collection with `#lazy`:
+
+```ruby
+# let my_tasks be an Asana::Collection of 10 pages of 100 elements each
+my_tasks.lazy.drop(120).take(15).to_a
+# Fetches only 2 pages, enough to get elements 120 to 135
+# => [#<Asana::Task ...>, #<Asana::Task ...>, ...]
+```
+
 ### Error handling
 
 In any request against the Asana API, there a number of errors that could

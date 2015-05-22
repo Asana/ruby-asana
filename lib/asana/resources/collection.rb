@@ -7,6 +7,8 @@ module Asana
       include Enumerable
       include ResponseHelper
 
+      attr_reader :elements
+
       # Public: Initializes a collection representing a page of resources of a
       # given type.
       #
@@ -26,8 +28,12 @@ module Asana
 
       # Public: Iterates over the elements of the collection.
       def each(&block)
-        @elements.each(&block)
-        (next_page || []).each(&block)
+        if block
+          @elements.each(&block)
+          (next_page || []).each(&block)
+        else
+          to_enum
+        end
       end
 
       # Public: Returns the size of the collection.
@@ -39,14 +45,13 @@ module Asana
       # Public: Returns a String representation of the collection.
       def to_s
         "#<Asana::Collection<#{@type}> " \
-          "[#{map(&:inspect).join(', ')}]>"
+          "[#{@elements.map(&:inspect).join(', ')}" +
+          (@next_page_data ? ', ...' : '') + "]>"
       end
 
       alias_method :inspect, :to_s
 
-      private
-
-      # Internal: Returns a new Asana::Resources::Collection with the next page
+      # Public: Returns a new Asana::Resources::Collection with the next page
       # or nil if there are no more pages. Caches the result.
       def next_page
         if defined?(@next_page)
