@@ -300,10 +300,21 @@ Run the build with `rake`. This is equivalent to:
 
     $ rake spec && rake rubocop && rake yard
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
-`bundle exec rake release` to create a git tag for the version, push git commits
-and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`.
+
+## Releasing a new version
+
+To release a new version, run either of these commands:
+
+    rake bump:patch
+    rake bump:minor
+    rake bump:major
+
+This will: update `lib/asana/version.rb`, commit and tag the commit. Then you
+just need to `push --tags` to let Travis build and release the new version to
+Rubygems:
+
+    git push --tags
 
 ### Code generation
 

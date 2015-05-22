@@ -1,4 +1,12 @@
 language: ruby
 rvm:
-  - "2.2.2"
-  - "2.0.0"
+  - 2.2.2
+  - 2.0.0
+deploy:
+  provider: rubygems
+  api_key:
+    secure: "SECURE_RUBYGEMS_API_KEY"
+  gem: ruby-asana
+  on:
+    tags: true
+    repo: Asana/ruby-asana
