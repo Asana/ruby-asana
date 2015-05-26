@@ -1,11 +1,11 @@
 language: ruby
 rvm:
-  - 2.2.2
-  - 2.0.0
+- 2.2.2
+- 2.0.0
 deploy:
   provider: rubygems
   api_key:
-    secure: "SECURE_RUBYGEMS_API_KEY"
+    secure: ZFzExKt6auBOcQyg8955GwlZW2OaS64Q+XHGSay2MzjALw1iiy5uuMdwkueCKrGWSv6/eBe9jjsmYBe3OfkUIpIBbUacnbEYeaC70AyucNjvFrrl0YVYHb7neojarJUmKz9bz9Pkju/jdxksaYaj58xfq5YPQDfjFtdmylvuNEYpujT6goPEbxG4U4PpIhhQOZRDRXXAPS+f7jHejTSK06kvJjiJw0d51VJtBbp+0TKNKL6BDKdOKjKeHuebuUmSw8crDyaYdnwYwmNg1cJrGOv2t76M08zoKkkIO2lwPMHisi1/+cbVcZfxM4SfdHJeU6cQuRdb0uCUbbj6GsGwT8vWP2mGUrLe4UV/GfZDmvK3MKeKIlkgig31a3Qny9yjn8EjSnKHYuHBbJvPQDPPpFUfgEneUxn2t4P6m+epkd1gldWqTWf8mhMR/6xAFT4s+BaxnMMJsTC3Ea+dZZ30EqCw/kx5B2Z1KVLgsxHeMN/Q+AeOcbOvlGDsFL0Mjk/PqDTW1AWKLs/D1ohcxjSmlNJGWR6JHa/Ei0GqjDE2+/ZGsKsRfcDD4kU5qnKdqdzDlbL3cL4tChzuWVcguYdrg1yZzqPrCPzmy+2D7Hphyaj9CPKEh7qwT+IQU5o/V2peOJUjKrMlJS4gFq6MvTDh5U59J88Kkg72DXhcEUcySkU=
   gem: ruby-asana
   on:
     tags: true
