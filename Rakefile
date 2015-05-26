@@ -51,13 +51,13 @@ EOS
 
   desc 'Bumps a minor version'
   task :minor do
-    major, minor, _ = read_version
+    major, minor, = read_version
     write_version major, minor + 1, 0
   end
 
   desc 'Bumps a major version'
   task :major do
-    major, _, _ = read_version
+    major, = read_version
     write_version major + 1, 0, 0
   end
 end
