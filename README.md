@@ -1,5 +1,7 @@
 # Asana
 
+[![Build Status](https://travis-ci.org/Asana/ruby-asana.svg)](https://travis-ci.org/Asana/ruby-asana)
+
 A Ruby client for the 1.0 version of the Asana API.
 
 Supported rubies:
