@@ -23,6 +23,7 @@ namespace :bump do
       .map { |n| Integer(n) }
   end
 
+  # rubocop:disable Metrics/MethodLength
   def write_version(major, minor, patch)
     str = <<-EOS
 #:nodoc:
@@ -36,8 +37,9 @@ EOS
     end
 
     new_version = "#{major}.#{minor}.#{patch}"
-    system("git add lib/asana/version.rb")
-    system(%Q{git commit -m "Bumped to #{new_version}" && git tag -a v#{new_version} -m "Version #{new_version}"})
+    system('git add lib/asana/version.rb')
+    system(%(git commit -m "Bumped to #{new_version}" && ) +
+           %(git tag -a v#{new_version} -m "Version #{new_version}"))
     puts "\nRun git push --tags to release."
   end
 
