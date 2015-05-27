@@ -1,6 +1,7 @@
 # Asana
 
 [![Build Status](https://travis-ci.org/Asana/ruby-asana.svg)](https://travis-ci.org/Asana/ruby-asana)
+[![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
 
 A Ruby client for the 1.0 version of the Asana API.
 
