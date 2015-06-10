@@ -16,7 +16,7 @@ Supported rubies:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ruby-asana'
+gem 'asana'
 ```
 
 And then execute:
@@ -25,7 +25,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby-asana
+    $ gem install asana
 
 ## Usage
 
