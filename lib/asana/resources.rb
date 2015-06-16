@@ -1,7 +1,7 @@
 require_relative 'resources/resource'
 require_relative 'resources/collection'
 
-Dir[File.join(File.dirname(__FILE__), 'resources', '*.rb')]
+Dir[File.join(File.dirname(__FILE__), 'resources', '*.rb')].sort
   .each { |resource| require resource }
 
 module Asana
