@@ -2,17 +2,14 @@ require 'faraday'
 require 'faraday_middleware'
 require 'faraday_middleware/multi_json'
 
-require_relative 'version'
 require_relative 'http_client/error_handling'
+require_relative 'http_client/environment_info'
 require_relative 'http_client/response'
 
 module Asana
   # Internal: Wrapper over Faraday that abstracts authentication, request
   # parsing and common options.
   class HttpClient
-    # Internal: The default user agent to use in all requests to the API.
-    USER_AGENT = "ruby-asana v#{Asana::VERSION}"
-
     # Internal: The API base URI.
     BASE_URI = 'https://app.asana.com/api/1.0'
 
@@ -30,11 +27,11 @@ module Asana
                    user_agent: nil,
                    debug_mode: false,
                    &config)
-      @authentication = authentication
-      @adapter        = adapter || Faraday.default_adapter
-      @user_agent     = user_agent || USER_AGENT
-      @debug_mode     = debug_mode
-      @config         = config
+      @authentication   = authentication
+      @adapter          = adapter || Faraday.default_adapter
+      @environment_info = EnvironmentInfo.new(user_agent)
+      @debug_mode       = debug_mode
+      @config           = config
     end
 
     # Public: Performs a GET request against the API.
@@ -107,7 +104,7 @@ module Asana
     def connection(&request_config)
       Faraday.new do |builder|
         @authentication.configure(builder)
-        builder.headers[:user_agent] = @user_agent
+        @environment_info.configure(builder)
         request_config.call(builder) if request_config
         configure_format(builder)
         add_middleware(builder)

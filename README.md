@@ -1,5 +1,10 @@
 # Asana
 
+[![Build Status](https://travis-ci.org/Asana/ruby-asana.svg)](https://travis-ci.org/Asana/ruby-asana)
+[![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
+[![Dependency Status](https://gemnasium.com/Asana/ruby-asana.svg)](https://gemnasium.com/Asana/ruby-asana)
+
+
 A Ruby client for the 1.0 version of the Asana API.
 
 Supported rubies:
@@ -11,7 +16,7 @@ Supported rubies:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ruby-asana'
+gem 'asana'
 ```
 
 And then execute:
@@ -20,7 +25,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby-asana
+    $ gem install asana
 
 ## Usage
 
@@ -178,6 +183,32 @@ my_tasks.take(14)
 # => [#<Asana::Task ...>, #<Asana::Task ...>, ... until 14]
 ```
 
+#### Manual pagination
+
+If you only want to deal with one page at a time and manually paginate, you can
+get the elements of the current page with `#elements` and ask for the next page
+with `#next_page`, which will return an `Asana::Collection` with the next page
+of elements:
+
+```ruby
+my_tasks.elements # => [#<Asana::Task ...>, #<Asana::Task ...>, ... until 5]
+my_tasks.next_page # => #<Asana::Collection ...>
+```
+
+#### Lazy pagination
+
+Because an `Asana::Collection` represents the entire collection, it is often
+handy to just take what you need from it, rather than let it fetch all its
+contents from the network. You can accomplish this by turning it into a lazy
+collection with `#lazy`:
+
+```ruby
+# let my_tasks be an Asana::Collection of 10 pages of 100 elements each
+my_tasks.lazy.drop(120).take(15).to_a
+# Fetches only 2 pages, enough to get elements 120 to 135
+# => [#<Asana::Task ...>, #<Asana::Task ...>, ...]
+```
+
 ### Error handling
 
 In any request against the Asana API, there a number of errors that could
@@ -274,10 +305,21 @@ Run the build with `rake`. This is equivalent to:
 
     $ rake spec && rake rubocop && rake yard
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
-`bundle exec rake release` to create a git tag for the version, push git commits
-and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`.
+
+## Releasing a new version
+
+To release a new version, run either of these commands:
+
+    rake bump:patch
+    rake bump:minor
+    rake bump:major
+
+This will: update `lib/asana/version.rb`, commit and tag the commit. Then you
+just need to `push --tags` to let Travis build and release the new version to
+Rubygems:
+
+    git push --tags
 
 ### Code generation
 

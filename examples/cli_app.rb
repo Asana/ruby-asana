@@ -1,4 +1,5 @@
-$: << '../lib'
+require 'bundler'
+Bundler.require
 require 'asana'
 
 id, secret = ENV['ASANA_CLIENT_ID'], ENV['ASANA_CLIENT_SECRET']

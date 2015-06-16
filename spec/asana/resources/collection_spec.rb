@@ -54,5 +54,52 @@ RSpec.describe Asana::Resources::Collection do
         expect(collection.to_a.map(&:id)).to eq((1..5).to_a)
       end
     end
+
+    context 'as a lazy collection' do
+      it 'fetches only as many pages as needed' do
+        path = '/unicorns?limit=5'
+        api.on(:get, path + '&offset=abc') do |response|
+          response.body = { 'next_page' => { 'path' => path + '&offset=def' },
+                            'data' => unicorns.drop(5).take(5) }
+        end
+
+        api.on(:get, path + '&offset=def') do |response|
+          response.body = { 'next_page' => { 'path' => path + '&offset=ghi' },
+                            'data' => unicorns.drop(10).take(5) }
+        end
+
+        extra = { 'next_page' => { 'path' => path + '&offset=abc' } }
+        lazy = described_class.new([unicorns.take(5), extra],
+                                   type: unicorn_class,
+                                   client: client).lazy
+
+        expect(lazy.drop(6).take(6).map(&:id).to_a).to eq((7..12).to_a)
+      end
+    end
+  end
+
+  describe '#elements' do
+    it 'returns the current page of elements' do
+      collection = described_class.new([unicorns.take(5), {}],
+                                       type: unicorn_class,
+                                       client: client)
+      expect(collection.elements.map(&:id)).to eq((1..5).to_a)
+    end
+  end
+
+  describe '#next_page' do
+    it 'returns the next page of elements as an Asana::Collection' do
+      path = '/unicorns?limit=5'
+      extra = { 'next_page' => { 'path' => path + '&offset=abc' } }
+      api.on(:get, path + '&offset=abc') do |response|
+        response.body = { 'next_page' => { 'path' => path + '&offset=def' },
+                          'data' => unicorns.drop(5).take(5) }
+      end
+      collection = described_class.new([unicorns.take(5), extra],
+                                       type: unicorn_class,
+                                       client: client)
+      nxt = collection.next_page
+      expect(nxt.elements.map(&:id)).to eq((6..10).to_a)
+    end
   end
 end
