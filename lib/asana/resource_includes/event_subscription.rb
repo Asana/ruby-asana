@@ -1,3 +1,5 @@
+require_relative 'events'
+
 module Asana
   module Resources
     # Public: Mixin to enable a resource with the ability to fetch events about

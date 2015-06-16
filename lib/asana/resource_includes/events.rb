@@ -1,3 +1,5 @@
+require_relative 'event'
+
 module Asana
   module Resources
     # Public: An infinite collection of events.
