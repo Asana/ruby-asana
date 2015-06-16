@@ -65,7 +65,7 @@ module Asana
       private
 
       # Internal: The Asana::Client instance.
-      def client # rubocop:disable Style/TrivialAccessors
+      def client
         @_client
       end
 

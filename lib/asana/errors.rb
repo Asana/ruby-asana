@@ -19,8 +19,8 @@ module Asana
     # user could not be authenticated.
     NotAuthorized = Class.new(APIError) do
       def to_s
-        'A valid API key was not provided with the request, so the API could' \
-        ' not associate a user with the request.'
+        'A valid API key was not provided with the request, so the API could '\
+        'not associate a user with the request.'
       end
     end
 
@@ -28,8 +28,8 @@ module Asana
     # access the requested resource or to perform the requested action on it.
     Forbidden = Class.new(APIError) do
       def to_s
-        'The API key and request syntax was valid but the server is refusing' \
-        'to complete the request. This can happen if you try to read or write' \
+        'The API key and request syntax was valid but the server is refusing '\
+        'to complete the request. This can happen if you try to read or write '\
         'to objects or properties that the user does not have access to.'
       end
     end
@@ -37,8 +37,8 @@ module Asana
     # Public: A 404 error. Raised when the requested resource doesn't exist.
     NotFound = Class.new(APIError) do
       def to_s
-        'Either the request method and path supplied do not specify a known' \
-        'action in the API, or the object specified by the request does not' \
+        'Either the request method and path supplied do not specify a known '\
+        'action in the API, or the object specified by the request does not '\
         'exist.'
       end
     end
@@ -54,7 +54,7 @@ module Asana
       end
 
       def to_s
-        "There has been an error on Asana's end. Use this unique phrase to" \
+        "There has been an error on Asana's end. Use this unique phrase to "\
         'identify the problem when contacting developer support: ' +
         %("#{@phrase}")
       end
@@ -64,6 +64,7 @@ module Asana
     # parameters. It contains a list of errors indicating the specific problems.
     InvalidRequest = Class.new(APIError) do
       attr_accessor :errors
+
       def initialize(errors)
         @errors = errors
       end
@@ -78,6 +79,7 @@ module Asana
     # before retrying the operation.
     RateLimitEnforced = Class.new(APIError) do
       attr_accessor :retry_after_seconds
+
       def initialize(retry_after_seconds)
         @retry_after_seconds = retry_after_seconds
       end
