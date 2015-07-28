@@ -13,7 +13,17 @@ module Asana
     class Tag < Resource
 
 
-      attr_reader :id
+      attr_reader :created_at
+
+      attr_reader :followers
+
+      attr_reader :name
+
+      attr_reader :color
+
+      attr_reader :notes
+
+      attr_reader :workspace
 
       class << self
         # Returns the plural name of the resource.

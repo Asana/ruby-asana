@@ -18,6 +18,40 @@ module Asana
 
       attr_reader :assignee_status
 
+      attr_reader :created_at
+
+      attr_reader :completed
+
+      attr_reader :completed_at
+
+      attr_reader :due_on
+
+      attr_reader :due_at
+
+      attr_reader :external
+
+      attr_reader :followers
+
+      attr_reader :hearted
+
+      attr_reader :hearts
+
+      attr_reader :modified_at
+
+      attr_reader :name
+
+      attr_reader :notes
+
+      attr_reader :num_hearts
+
+      attr_reader :projects
+
+      attr_reader :parent
+
+      attr_reader :workspace
+
+      attr_reader :memberships
+
       class << self
         # Returns the plural name of the resource.
         def plural_name

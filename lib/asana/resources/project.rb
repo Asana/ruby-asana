@@ -16,7 +16,23 @@ module Asana
       include EventSubscription
 
 
-      attr_reader :id
+      attr_reader :archived
+
+      attr_reader :created_at
+
+      attr_reader :followers
+
+      attr_reader :modified_at
+
+      attr_reader :name
+
+      attr_reader :color
+
+      attr_reader :notes
+
+      attr_reader :workspace
+
+      attr_reader :team
 
       class << self
         # Returns the plural name of the resource.
