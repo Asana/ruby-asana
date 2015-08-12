@@ -125,6 +125,16 @@ module Asana
         client.delete("/tags/#{id}") && true
       end
 
+      # Returns the compact task records for all tasks with the given tag.
+      # Tasks can have more than one tag at a time.
+      #
+      # per_page - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def get_tasks_with_tag(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/tags/#{id}/tasks", params: params, options: options)), type: Task, client: client)
+      end
+
     end
   end
 end
