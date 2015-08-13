@@ -137,17 +137,6 @@ module Asana
           params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end
-
-        # Returns the compact task records for all tasks within the given project,
-        # ordered by their priority within the project. Tasks can exist in more than one project at a time.
-        #
-        # projectId - [Id] The project in which to search for tasks.
-        # per_page - [Integer] the number of records to fetch per page.
-        # options - [Hash] the request I/O options.
-        def get_tasks_in_project(client, projectId: required("projectId"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/projects/#{projectId}/tasks", params: params, options: options)), type: Task, client: client)
-        end
       end
 
       # A specific, existing project can be updated by making a PUT request on the
@@ -183,6 +172,16 @@ module Asana
       def sections(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/projects/#{id}/sections", params: params, options: options)), type: Resource, client: client)
+      end
+
+      # Returns the compact task records for all tasks within the given project,
+      # ordered by their priority within the project. Tasks can exist in more than one project at a time.
+      #
+      # per_page - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def get_tasks_in_project(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/projects/#{id}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end
