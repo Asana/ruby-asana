@@ -1,3 +1,5 @@
+require_relative 'events'
+
 module Asana
   module Resources
     # An _event_ is an object representing a change to a resource that was

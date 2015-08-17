@@ -1,6 +1,7 @@
 # Asana
 
-[![Build Status](https://travis-ci.org/Asana/ruby-asana.svg)](https://travis-ci.org/Asana/ruby-asana)
+[![Gem Version](https://badge.fury.io/rb/asana.svg)](http://badge.fury.io/rb/asana)
+[![Build Status](https://travis-ci.org/Asana/ruby-asana.svg?branch=master)](https://travis-ci.org/Asana/ruby-asana)
 [![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
 [![Dependency Status](https://gemnasium.com/Asana/ruby-asana.svg)](https://gemnasium.com/Asana/ruby-asana)
 
