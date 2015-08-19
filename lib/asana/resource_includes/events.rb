@@ -77,10 +77,10 @@ module Asana
       # a fresh `sync` token in the response.
       def poll
         rate_limiting do
-          body     = @client.get('/events',
-                                 params: params,
-                                 options: @options).body
-          @sync    = body['sync']
+          body = @client.get('/events',
+                             params: params,
+                             options: @options).body
+          @sync = body['sync']
           @events += body.fetch('data', []).map do |event_data|
             Event.new(event_data, client: @client)
           end
