@@ -179,7 +179,7 @@ module Asana
       #
       # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def get_tasks_in_project(per_page: 20, options: {})
+      def tasks(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/projects/#{id}/tasks", params: params, options: options)), type: Task, client: client)
       end
