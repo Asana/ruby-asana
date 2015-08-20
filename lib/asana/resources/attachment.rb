@@ -9,7 +9,17 @@ module Asana
     class Attachment < Resource
 
 
-      attr_reader :id
+      attr_reader :created_at
+
+      attr_reader :download_url
+
+      attr_reader :host
+
+      attr_reader :name
+
+      attr_reader :parent
+
+      attr_reader :view_url
 
       class << self
         # Returns the plural name of the resource.

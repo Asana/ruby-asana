@@ -12,7 +12,7 @@ module Asana
     class User < Resource
 
 
-      attr_reader :id
+      attr_reader :name
 
       attr_reader :email
 
@@ -34,7 +34,7 @@ module Asana
           Resource.new(parse(client.get("/users/me", options: options)).first, client: client)
         end
 
-        # Returns the full user record for a single user.
+        # Returns the full user record for the single user with the provided ID.
         #
         # id - [Id] Globally unique identifier for the user.
         #
@@ -44,8 +44,8 @@ module Asana
           self.new(parse(client.get("/users/#{id}", options: options)).first, client: client)
         end
 
-        # Returns the user records for all users in all workspaces and organizations
-        # accessible to the authenticated user.
+        # Returns the user records for all users in the specified workspace or
+        # organization.
         #
         # workspace - [Id] The workspace in which to get users.
         # per_page - [Integer] the number of records to fetch per page.
@@ -55,8 +55,9 @@ module Asana
           Collection.new(parse(client.get("/workspaces/#{workspace}/users", params: params, options: options)), type: self, client: client)
         end
 
-        # Returns the user records for all users in the specified workspace or
-        # organization.
+        # Returns the user records for all users in all workspaces and organizations
+        # accessible to the authenticated user. Accepts an optional workspace ID
+        # parameter.
         #
         # workspace - [Id] The workspace or organization to filter users on.
         # per_page - [Integer] the number of records to fetch per page.

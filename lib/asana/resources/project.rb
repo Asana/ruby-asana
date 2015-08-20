@@ -16,7 +16,23 @@ module Asana
       include EventSubscription
 
 
-      attr_reader :id
+      attr_reader :archived
+
+      attr_reader :created_at
+
+      attr_reader :followers
+
+      attr_reader :modified_at
+
+      attr_reader :name
+
+      attr_reader :color
+
+      attr_reader :notes
+
+      attr_reader :workspace
+
+      attr_reader :team
 
       class << self
         # Returns the plural name of the resource.
@@ -147,6 +163,25 @@ module Asana
       def delete()
 
         client.delete("/projects/#{id}") && true
+      end
+
+      # Returns compact records for all sections in the specified project.
+      #
+      # per_page - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def sections(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/projects/#{id}/sections", params: params, options: options)), type: Resource, client: client)
+      end
+
+      # Returns the compact task records for all tasks within the given project,
+      # ordered by their priority within the project. Tasks can exist in more than one project at a time.
+      #
+      # per_page - [Integer] the number of records to fetch per page.
+      # options - [Hash] the request I/O options.
+      def tasks(per_page: 20, options: {})
+        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/projects/#{id}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end

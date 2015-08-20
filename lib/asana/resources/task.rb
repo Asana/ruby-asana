@@ -18,6 +18,40 @@ module Asana
 
       attr_reader :assignee_status
 
+      attr_reader :created_at
+
+      attr_reader :completed
+
+      attr_reader :completed_at
+
+      attr_reader :due_on
+
+      attr_reader :due_at
+
+      attr_reader :external
+
+      attr_reader :followers
+
+      attr_reader :hearted
+
+      attr_reader :hearts
+
+      attr_reader :modified_at
+
+      attr_reader :name
+
+      attr_reader :notes
+
+      attr_reader :num_hearts
+
+      attr_reader :projects
+
+      attr_reader :parent
+
+      attr_reader :workspace
+
+      attr_reader :memberships
+
       class << self
         # Returns the plural name of the resource.
         def plural_name
@@ -32,11 +66,12 @@ module Asana
         # workspace cannot be changed once set. The workspace need not be set
         # explicitly if you specify a `project` or a `parent` task instead.
         #
+        # workspace - [Id] The workspace to create a task in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, options: {}, **data)
-
-          self.new(parse(client.post("/tasks", body: data, options: options)).first, client: client)
+        def create(client, workspace: nil, options: {}, **data)
+          with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/tasks", body: with_params, options: options)).first, client: client)
         end
 
         # Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -45,7 +80,7 @@ module Asana
         #
         # Every task is required to be created in a specific workspace, and this
         # workspace cannot be changed once set. The workspace need not be set
-        # explicitly if you specify a project or a parent task instead.
+        # explicitly if you specify a `project` or a `parent` task instead.
         #
         # workspace - [Id] The workspace to create a task in.
         # options - [Hash] the request I/O options.
@@ -251,14 +286,14 @@ module Asana
         Collection.new(parse(client.get("/tasks/#{id}/subtasks", params: params, options: options)), type: self.class, client: client)
       end
 
-      # Makes an existing task a subtask of another. Returns an empty data block.
+      # Creates a new subtask and adds it to the parent task. Returns the full record
+      # for the newly created subtask.
       #
-      # subtask - [Id] The subtask to add to the task.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_subtask(subtask: required("subtask"), options: {}, **data)
-        with_params = data.merge(subtask: subtask).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/tasks/#{id}/subtasks", body: with_params, options: options) && true
+      def add_subtask(options: {}, **data)
+
+        self.class.new(parse(client.post("/tasks/#{id}/subtasks", body: data, options: options)).first, client: client)
       end
 
       # Changes the parent of a task. Each task may only be a subtask of a single

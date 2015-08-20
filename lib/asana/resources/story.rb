@@ -13,7 +13,25 @@ module Asana
     class Story < Resource
 
 
-      attr_reader :id
+      attr_reader :created_at
+
+      attr_reader :created_by
+
+      attr_reader :hearted
+
+      attr_reader :hearts
+
+      attr_reader :num_hearts
+
+      attr_reader :text
+
+      attr_reader :html_text
+
+      attr_reader :target
+
+      attr_reader :source
+
+      attr_reader :type
 
       class << self
         # Returns the plural name of the resource.
@@ -23,7 +41,7 @@ module Asana
 
         # Returns the full record for a single story.
         #
-        # id - [Id] Globally unique identifier for the team.
+        # id - [Id] Globally unique identifier for the story.
         #
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
