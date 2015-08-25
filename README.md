@@ -40,7 +40,7 @@ The most minimal example would be as follows:
 require 'asana'
 
 client = Asana::Client.new do |c|
-  c.authentication :api_token, 'my_api_token'
+  c.authentication :access_token, 'personal_access_token'
 end
 
 client.workspaces.find_all.first
@@ -77,11 +77,11 @@ the [documentation for each of them][docs].
 
 This gem supports authenticating against the Asana API with either an API token or through OAuth2.
 
-#### API Token
+#### Personal Access Token
 
 ```ruby
 Asana::Client.new do |c|
-  c.authentication :api_token, 'my_api_token'
+  c.authentication :access_token, 'personal_access_token'
 end
 ```
 

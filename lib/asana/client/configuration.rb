@@ -5,7 +5,7 @@ module Asana
     # Examples
     #
     #   config = Configuration.new
-    #   config.authentication :api_token, 'my_api_token'
+    #   config.authentication :access_token, 'personal_access_token'
     #   config.adapter :typhoeus
     #   config.configure_faraday { |conn| conn.use MyMiddleware }
     #   config.to_h

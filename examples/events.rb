@@ -5,7 +5,7 @@ require 'asana'
 
 access_token = ENV['ASANA_ACCESS_TOKEN']
 unless access_token
-  abort "Run this program with the env var ASANA_API_TOKEN.\n"  \
+  abort "Run this program with the env var ASANA_ACCESS_TOKEN.\n"  \
     "Go to http://app.asana.com/-/account_api to create a personal access token."
 end
 
