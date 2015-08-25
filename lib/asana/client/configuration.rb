@@ -30,7 +30,7 @@ module Asana
       # Raises ArgumentError if the arguments are invalid.
       def authentication(type, value)
         auth = case type
-               when :oauth2    then oauth2(value)
+               when :oauth2 then oauth2(value)
                when :access_token then from_bearer_token(value)
                else error "unsupported authentication type #{type}"
                end
