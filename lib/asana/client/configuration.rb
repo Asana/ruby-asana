@@ -31,7 +31,7 @@ module Asana
       def authentication(type, value)
         auth = case type
                when :oauth2    then oauth2(value)
-               when :api_token then api_token(value)
+               when :access_token then from_bearer_token(value)
                else error "unsupported authentication type #{type}"
                end
         @configuration[:authentication] = auth
@@ -98,16 +98,6 @@ module Asana
             '::OAuth2::AccessToken object of your own or a hash ' \
             'containing :refresh_token or :bearer_token.'
         end
-      end
-      # rubocop:enable Metrics/MethodLength
-
-      # Internal: Configures a TokenAuthentication strategy.
-      #
-      # token - [String] the API token
-      #
-      # Returns a [Authentication::TokenAuthentication] strategy.
-      def api_token(token)
-        Authentication::TokenAuthentication.new(token)
       end
 
       # Internal: Configures an OAuth2 AccessTokenAuthentication strategy.

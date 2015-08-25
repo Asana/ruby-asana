@@ -4,7 +4,7 @@ RSpec.describe Asana::Client do
   let(:api) { StubAPI.new }
   let(:client) do
     described_class.new do |c|
-      c.authentication :api_token, 'foo'
+      c.authentication :access_token, 'foo'
       c.faraday_adapter api.adapter
     end
   end

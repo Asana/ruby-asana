@@ -3,14 +3,14 @@ require 'bundler'
 Bundler.require
 require 'asana'
 
-api_token = ENV['ASANA_API_TOKEN']
-unless api_token
+access_token = ENV['ASANA_ACCESS_TOKEN']
+unless access_token
   abort "Run this program with the env var ASANA_API_TOKEN.\n"  \
-    "Go to http://app.asana.com/-/account_api to see your API token."
+    "Go to http://app.asana.com/-/account_api to create a personal access token."
 end
 
 client = Asana::Client.new do |c|
-  c.authentication :api_token, api_token
+  c.authentication :access_token, access_token
 end
 
 workspace = client.workspaces.find_all.first
