@@ -62,13 +62,13 @@ RSpec.describe Asana::Client::Configuration do
       end
     end
 
-    context 'with :api_token' do
+    context 'with :access_token' do
       it 'sets authentication with an API token' do
         auth = described_class.new.tap do |config|
-          config.authentication :api_token, 'token'
+          config.authentication :access_token, 'token'
         end.to_h[:authentication]
 
-        expect(auth).to be_a(Asana::Authentication::TokenAuthentication)
+        expect(auth).to be_a(Asana::Authentication::OAuth2::BearerTokenAuthentication)
       end
     end
   end

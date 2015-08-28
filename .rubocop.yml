@@ -8,4 +8,7 @@ AllCops:
     - 'spec/templates/unicorn.rb'
     - 'spec/templates/world.rb'
     - 'test.rb'
+
+LineLength:
+  Max: 120
 require: rubocop-rspec
