@@ -18,12 +18,10 @@ module Asana
 
         # Returns the full record for a single team.
         #
-        # id - [Id] Globally unique identifier for the team.
-        #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, id, options: {})
+        def find_by_id(client, options: {})
 
-          self.new(parse(client.get("/teams/#{id}", options: options)).first, client: client)
+          Resource.new(parse(client.get("/teams/%s", options: options)).first, client: client)
         end
 
         # Returns the compact records for all teams in the organization visible to
@@ -34,8 +32,8 @@ module Asana
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_organization(client, organization: required("organization"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
+          params = { organization: organization, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/organizations/%s/teams", params: params, options: options)), type: self, client: client)
         end
       end
 
@@ -45,7 +43,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def users(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/teams/#{id}/users", params: params, options: options)), type: User, client: client)
+        Collection.new(parse(client.get("/teams/%s/users", params: params, options: options)), type: User, client: client)
       end
 
     end
