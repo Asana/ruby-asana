@@ -8,9 +8,9 @@ module Asana
   #
   # Examples
   #
-  #   # Authentication with an API token
+  #   # Authentication with a personal access token
   #   Asana::Client.new do |client|
-  #     client.authentication :api_token, '...'
+  #     client.authentication :access_token, '...'
   #   end
   #
   #   # OAuth2 with a plain bearer token (doesn't support auto-refresh)
