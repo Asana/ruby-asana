@@ -20,6 +20,8 @@ module Asana
     class Workspace < Resource
 
 
+      attr_reader :id
+
       attr_reader :name
 
       attr_reader :is_organization

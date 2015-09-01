@@ -9,6 +9,8 @@ module Asana
     class Attachment < Resource
 
 
+      attr_reader :id
+
       attr_reader :created_at
 
       attr_reader :download_url

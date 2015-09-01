@@ -16,6 +16,8 @@ module Asana
       include EventSubscription
 
 
+      attr_reader :id
+
       attr_reader :archived
 
       attr_reader :created_at

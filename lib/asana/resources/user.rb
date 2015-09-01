@@ -12,6 +12,8 @@ module Asana
     class User < Resource
 
 
+      attr_reader :id
+
       attr_reader :name
 
       attr_reader :email

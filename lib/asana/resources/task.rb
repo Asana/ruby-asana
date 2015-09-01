@@ -14,6 +14,8 @@ module Asana
       include EventSubscription
 
 
+      attr_reader :id
+
       attr_reader :assignee
 
       attr_reader :assignee_status

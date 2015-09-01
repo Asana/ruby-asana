@@ -8,6 +8,8 @@ module Asana
     class Team < Resource
 
 
+      attr_reader :id
+
       attr_reader :name
 
       class << self

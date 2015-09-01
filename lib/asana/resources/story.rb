@@ -13,6 +13,8 @@ module Asana
     class Story < Resource
 
 
+      attr_reader :id
+
       attr_reader :created_at
 
       attr_reader :created_by
