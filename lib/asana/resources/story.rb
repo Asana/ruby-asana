@@ -43,10 +43,12 @@ module Asana
 
         # Returns the full record for a single story.
         #
+        # id - [Id] Globally unique identifier for the story.
+        #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, options: {})
+        def find_by_id(client, id, options: {})
 
-          Resource.new(parse(client.get("/stories/%s", options: options)).first, client: client)
+          self.new(parse(client.get("/stories/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact records for all stories on the task.
@@ -56,8 +58,8 @@ module Asana
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_task(client, task: required("task"), per_page: 20, options: {})
-          params = { task: task, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/tasks/%s/stories", params: params, options: options)), type: self, client: client)
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/tasks/#{task}/stories", params: params, options: options)), type: self, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
@@ -72,8 +74,8 @@ module Asana
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create_on_task(client, task: required("task"), text: required("text"), options: {}, **data)
-          with_params = data.merge(task: task, text: text).reject { |_,v| v.nil? || Array(v).empty? }
-          self.new(parse(client.post("/tasks/%s/stories", body: with_params, options: options)).first, client: client)
+          with_params = data.merge(text: text).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/tasks/#{task}/stories", body: with_params, options: options)).first, client: client)
         end
       end
 
