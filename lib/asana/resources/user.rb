@@ -38,14 +38,10 @@ module Asana
 
         # Returns the full user record for the single user with the provided ID.
         #
-        # user - [String] An identifier for the user. Can be one of an email address,
-        # the globally unique identifier for the user, or the keyword `me`
-        # to indicate the current user making the request.
-        #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, user: required("user"), options: {})
-          params = { user: user }.reject { |_,v| v.nil? || Array(v).empty? }
-          Resource.new(parse(client.get("/users/%s", params: params, options: options)).first, client: client)
+        def find_by_id(client, options: {})
+
+          Resource.new(parse(client.get("/users/%s", options: options)).first, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
@@ -69,36 +65,6 @@ module Asana
         def find_all(client, workspace: nil, per_page: 20, options: {})
           params = { workspace: workspace, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/users", params: params, options: options)), type: self, client: client)
-        end
-
-        # The user can be referenced by their globally unique user ID or their email address.
-        # Returns the full user record for the invited user.
-        #
-        # workspace - [Id] The workspace or organization to invite the user to.
-        # user - [String] An identifier for the user. Can be one of an email address,
-        # the globally unique identifier for the user, or the keyword `me`
-        # to indicate the current user making the request.
-        #
-        # options - [Hash] the request I/O options.
-        # data - [Hash] the attributes to post.
-        def add(client, workspace: required("workspace"), user: required("user"), options: {}, **data)
-          with_params = data.merge(workspace: workspace, user: user).reject { |_,v| v.nil? || Array(v).empty? }
-          self.new(parse(client.post("/workspaces/%s/addUser", body: with_params, options: options)).first, client: client)
-        end
-
-        # The user making this call must be an admin in the workspace.
-        # Returns an empty data record.
-        #
-        # workspace - [Id] The workspace or organization to invite the user to.
-        # user - [String] An identifier for the user. Can be one of an email address,
-        # the globally unique identifier for the user, or the keyword `me`
-        # to indicate the current user making the request.
-        #
-        # options - [Hash] the request I/O options.
-        # data - [Hash] the attributes to post.
-        def remove(client, workspace: required("workspace"), user: required("user"), options: {}, **data)
-          with_params = data.merge(workspace: workspace, user: user).reject { |_,v| v.nil? || Array(v).empty? }
-          client.post("/workspaces/%s/removeUser", body: with_params, options: options) && true
         end
       end
 
