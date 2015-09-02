@@ -38,12 +38,10 @@ module Asana
 
         # Returns the full user record for the single user with the provided ID.
         #
-        # id - [Id] Globally unique identifier for the user.
-        #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, id, options: {})
+        def find_by_id(client, options: {})
 
-          self.new(parse(client.get("/users/#{id}", options: options)).first, client: client)
+          Resource.new(parse(client.get("/users/%s", options: options)).first, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
@@ -53,8 +51,8 @@ module Asana
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/workspaces/#{workspace}/users", params: params, options: options)), type: self, client: client)
+          params = { workspace: workspace, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/%s/users", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the user records for all users in all workspaces and organizations

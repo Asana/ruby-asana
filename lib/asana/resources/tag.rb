@@ -63,17 +63,16 @@ module Asana
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
-
-          self.new(parse(client.post("/workspaces/#{workspace}/tags", body: data, options: options)).first, client: client)
+          with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? || Array(v).empty? }
+          self.new(parse(client.post("/workspaces/%s/tags", body: with_params, options: options)).first, client: client)
         end
 
         # Returns the complete tag record for a single tag.
         #
-        # id - [Id] The tag to get.
         # options - [Hash] the request I/O options.
-        def find_by_id(client, id, options: {})
+        def find_by_id(client, options: {})
 
-          self.new(parse(client.get("/tags/#{id}", options: options)).first, client: client)
+          Resource.new(parse(client.get("/tags/%s", options: options)).first, client: client)
         end
 
         # Returns the compact tag records for some filtered set of tags.
@@ -97,8 +96,8 @@ module Asana
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/workspaces/#{workspace}/tags", params: params, options: options)), type: self, client: client)
+          params = { workspace: workspace, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/%s/tags", params: params, options: options)), type: self, client: client)
         end
       end
 
@@ -111,20 +110,23 @@ module Asana
       #
       # Returns the complete updated tag record.
       #
+      # tag - [Id] The tag to update.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update(options: {}, **data)
-
-        refresh_with(parse(client.put("/tags/#{id}", body: data, options: options)).first)
+      def update(tag: required("tag"), options: {}, **data)
+        with_params = data.merge(tag: tag).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.put("/tags/%s", body: with_params, options: options)).first)
       end
 
       # A specific, existing tag can be deleted by making a DELETE request
       # on the URL for that tag.
       #
       # Returns an empty data record.
-      def delete()
-
-        client.delete("/tags/#{id}") && true
+      #
+      # tag - [Id] The tag to delete.
+      def delete(tag: required("tag"))
+        params = { tag: tag }.reject { |_,v| v.nil? || Array(v).empty? }
+        client.delete("/tags/%s", params: params) && true
       end
 
       # Returns the compact task records for all tasks with the given tag.
@@ -134,7 +136,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_tasks_with_tag(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/tags/#{id}/tasks", params: params, options: options)), type: Task, client: client)
+        Collection.new(parse(client.get("/tags/%s/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end
