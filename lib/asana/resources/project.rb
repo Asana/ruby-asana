@@ -16,27 +16,17 @@ module Asana
       include EventSubscription
 
 
-      attr_reader :name
-
       attr_reader :id
-
-      attr_reader :owner
-
-      attr_reader :current_status
-
-      attr_reader :due_date
-
-      attr_reader :created_at
-
-      attr_reader :modified_at
 
       attr_reader :archived
 
-      attr_reader :public
-
-      attr_reader :members
+      attr_reader :created_at
 
       attr_reader :followers
+
+      attr_reader :modified_at
+
+      attr_reader :name
 
       attr_reader :color
 
