@@ -34,10 +34,12 @@ module Asana
 
         # Returns the full workspace record for a single workspace.
         #
+        # id - [Id] Globally unique identifier for the workspace or organization.
+        #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, options: {})
+        def find_by_id(client, id, options: {})
 
-          Resource.new(parse(client.get("/workspaces/%s", options: options)).first, client: client)
+          self.new(parse(client.get("/workspaces/#{id}", options: options)).first, client: client)
         end
 
         # Returns the compact records for all workspaces visible to the authorized user.
@@ -58,12 +60,11 @@ module Asana
       #
       # Returns the complete, updated workspace record.
       #
-      # workspace - [Id] The workspace to update.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update(workspace: required("workspace"), options: {}, **data)
-        with_params = data.merge(workspace: workspace).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.put("/workspaces/%s", body: with_params, options: options)).first)
+      def update(options: {}, **data)
+
+        refresh_with(parse(client.put("/workspaces/#{id}", body: data, options: options)).first)
       end
 
       # Retrieves objects in the workspace based on an auto-completion/typeahead
@@ -88,7 +89,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def typeahead(type: required("type"), query: nil, count: nil, per_page: 20, options: {})
         params = { type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/workspaces/%s/typeahead", params: params, options: options)), type: Resource, client: client)
+        Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 
     end
