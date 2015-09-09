@@ -351,5 +351,5 @@ to make a release, as they'll need to run a release script from the
 
 [apidocs]: https://asana.com/developers
 [io]: https://asana.com/developers/documentation/getting-started/input-output-options
-[docs]: https://asana.github.com/ruby-asana
+[docs]: http://www.rubydoc.info/github/Asana/ruby-asana/master
 [meta]: https://github.com/asana/asana-api-meta
