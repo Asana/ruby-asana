@@ -41,16 +41,6 @@ module Asana
           'stories'
         end
 
-        # Returns the full record for a single story.
-        #
-        # id - [Id] Globally unique identifier for the story.
-        #
-        # options - [Hash] the request I/O options.
-        def find_by_id(client, id, options: {})
-
-          self.new(parse(client.get("/stories/#{id}", options: options)).first, client: client)
-        end
-
         # Returns the compact records for all stories on the task.
         #
         # task - [Id] Globally unique identifier for the task.
@@ -60,6 +50,16 @@ module Asana
         def find_by_task(client, task: required("task"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks/#{task}/stories", params: params, options: options)), type: self, client: client)
+        end
+
+        # Returns the full record for a single story.
+        #
+        # id - [Id] Globally unique identifier for the story.
+        #
+        # options - [Hash] the request I/O options.
+        def find_by_id(client, id, options: {})
+
+          self.new(parse(client.get("/stories/#{id}", options: options)).first, client: client)
         end
 
         # Adds a comment to a task. The comment will be authored by the
