@@ -125,7 +125,7 @@ module Asana
         # Returns the compact task records for some filtered set of tasks. Use one
         # or more of the parameters provided to filter the tasks returned.
         #
-        # assignee - [Id] The assignee to filter tasks on.
+        # assignee - [String] The assignee to filter tasks on.
         # workspace - [Id] The workspace or organization to filter tasks on.
         # completed_since - [String] Only return tasks that are either incomplete or that have been
         # completed since this time.
