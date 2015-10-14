@@ -50,6 +50,36 @@ module Asana
         Collection.new(parse(client.get("/teams/#{id}/users", params: params, options: options)), type: User, client: client)
       end
 
+      # The user making this call must be a member of the team in order to add others.
+      # The user to add must exist in the same organization as the team in order to be added.
+      # The user to add can be referenced by their globally unique user ID or their email address.
+      # Returns the full user record for the added user.
+      #
+      # user - [String] An identifier for the user. Can be one of an email address,
+      # the globally unique identifier for the user, or the keyword `me`
+      # to indicate the current user making the request.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_user(user: required("user"), options: {}, **data)
+        with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
+        User.new(parse(client.post("/teams/#{id}/addUser", body: with_params, options: options)).first, client: client)
+      end
+
+      # The user to remove can be referenced by their globally unique user ID or their email address.
+      # Removes the user from the specified team. Returns an empty data record.
+      #
+      # user - [String] An identifier for the user. Can be one of an email address,
+      # the globally unique identifier for the user, or the keyword `me`
+      # to indicate the current user making the request.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_user(user: required("user"), options: {}, **data)
+        with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
+        client.post("/teams/#{id}/removeUser", body: with_params, options: options) && true
+      end
+
     end
   end
 end

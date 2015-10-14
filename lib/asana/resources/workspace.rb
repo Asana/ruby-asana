@@ -92,6 +92,34 @@ module Asana
         Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 
+      # The user can be referenced by their globally unique user ID or their email address.
+      # Returns the full user record for the invited user.
+      #
+      # user - [String] An identifier for the user. Can be one of an email address,
+      # the globally unique identifier for the user, or the keyword `me`
+      # to indicate the current user making the request.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_user(user: required("user"), options: {}, **data)
+        with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
+        User.new(parse(client.post("/workspaces/#{id}/addUser", body: with_params, options: options)).first, client: client)
+      end
+
+      # The user making this call must be an admin in the workspace.
+      # Returns an empty data record.
+      #
+      # user - [String] An identifier for the user. Can be one of an email address,
+      # the globally unique identifier for the user, or the keyword `me`
+      # to indicate the current user making the request.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_user(user: required("user"), options: {}, **data)
+        with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
+        client.post("/workspaces/#{id}/removeUser", body: with_params, options: options) && true
+      end
+
     end
   end
 end
