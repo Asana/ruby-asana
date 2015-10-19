@@ -196,6 +196,49 @@ module Asana
         Collection.new(parse(client.get("/projects/#{id}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
+      # Adds the specified list of users as followers to the project. Followers are a subset of members, therefore if
+      # the users are not already members of the project they will also become members as a result of this operation.
+      # Returns the updated project record.
+      #
+      # followers - [Array] An array of followers to add to the project.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_followers(followers: required("followers"), options: {}, **data)
+        with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.post("/projects/#{id}/addFollowers", body: with_params, options: options)).first)
+      end
+
+      # Removes the specified list of users from following the project, this will not affect project membership status.
+      # Returns the updated project record.
+      #
+      # followers - [Array] An array of followers to remove from the project.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_followers(followers: required("followers"), options: {}, **data)
+        with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.post("/projects/#{id}/removeFollowers", body: with_params, options: options)).first)
+      end
+
+      # Adds the specified list of users as members of the project. Returns the updated project record.
+      #
+      # members - [Array] An array of members to add to the project.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_members(members: required("members"), options: {}, **data)
+        with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.post("/projects/#{id}/addMembers", body: with_params, options: options)).first)
+      end
+
+      # Removes the specified list of members from the project. Returns the updated project record.
+      #
+      # members - [Array] An array of members to remove from the project.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_members(members: required("members"), options: {}, **data)
+        with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.post("/projects/#{id}/removeMembers", body: with_params, options: options)).first)
+      end
+
     end
   end
 end
