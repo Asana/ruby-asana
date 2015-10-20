@@ -54,6 +54,8 @@ module Asana
 
       attr_reader :memberships
 
+      attr_reader :tags
+
       class << self
         # Returns the plural name of the resource.
         def plural_name
