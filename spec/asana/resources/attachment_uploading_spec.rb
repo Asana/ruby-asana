@@ -27,7 +27,7 @@ RSpec.describe Asana::Resources::AttachmentUploading do
 
   describe '#attach' do
     it 'uploads an attachment to a unicorn' do
-      arg_matcher = -> body { body.is_a?(Faraday::CompositeReadIO) }
+      arg_matcher = ->(body) { body.is_a?(Faraday::CompositeReadIO) }
       api.on(:post, '/unicorns/1/attachments', arg_matcher) do |response|
         response.body = { data: { id: 10 } }
       end

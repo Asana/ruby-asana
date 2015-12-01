@@ -108,10 +108,11 @@ module Asana
         #
         # resource - [Id] Only return webhooks for the given resource.
         #
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def get_all(client, workspace: required("workspace"), resource: nil, options: {})
-          params = { workspace: workspace, resource: resource }.reject { |_,v| v.nil? || Array(v).empty? }
-          self.new(parse(client.get("/webhooks", params: params, options: options)).first, client: client)
+        def get_all(client, workspace: required("workspace"), resource: nil, per_page: 20, options: {})
+          params = { workspace: workspace, resource: resource, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/webhooks", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the full record for the given webhook.

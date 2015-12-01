@@ -89,9 +89,9 @@ module Asana
         case value
         when ::OAuth2::AccessToken
           from_access_token(value)
-        when -> v { v.is_a?(Hash) && v[:refresh_token] }
+        when ->(v) { v.is_a?(Hash) && v[:refresh_token] }
           from_refresh_token(value)
-        when -> v { v.is_a?(Hash) && v[:bearer_token] }
+        when ->(v) { v.is_a?(Hash) && v[:bearer_token] }
           from_bearer_token(value[:bearer_token])
         else
           error 'Invalid OAuth2 configuration: pass in either an ' \
