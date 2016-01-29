@@ -79,7 +79,7 @@ module Asana
                        adapter:        config[:faraday_adapter],
                        user_agent:     config[:user_agent],
                        debug_mode:     config[:debug_mode],
-                       &config[:faraday_config])
+                       &config[:faraday_configuration])
     end
 
     # Public: Performs a GET request against an arbitrary Asana URL. Allows for
