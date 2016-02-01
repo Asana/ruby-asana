@@ -6,7 +6,7 @@ module Asana
     # Internal: Adds environment information to a Faraday request.
     class EnvironmentInfo
       # Internal: The default user agent to use in all requests to the API.
-      USER_AGENT = "ruby-asana v#{Asana::VERSION}"
+      USER_AGENT = "ruby-asana v#{Asana::VERSION}".freeze
 
       def initialize(user_agent = nil)
         @user_agent = user_agent || USER_AGENT

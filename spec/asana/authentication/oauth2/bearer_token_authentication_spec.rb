@@ -1,4 +1,3 @@
-# rubocop:disable RSpec/FilePath
 RSpec.describe Asana::Authentication::OAuth2::BearerTokenAuthentication do
   let(:auth) { described_class.new('MYTOKEN') }
 
@@ -9,4 +8,3 @@ RSpec.describe Asana::Authentication::OAuth2::BearerTokenAuthentication do
     expect(conn.builder.handlers.first).to eq(FaradayMiddleware::OAuth2)
   end
 end
-# rubocop:enable RSpec/FilePath

@@ -11,7 +11,7 @@ module Asana
   # parsing and common options.
   class HttpClient
     # Internal: The API base URI.
-    BASE_URI = 'https://app.asana.com/api/1.0'
+    BASE_URI = 'https://app.asana.com/api/1.0'.freeze
 
     # Public: Initializes an HttpClient to make requests to the Asana API.
     #
@@ -105,7 +105,7 @@ module Asana
       Faraday.new do |builder|
         @authentication.configure(builder)
         @environment_info.configure(builder)
-        request_config.call(builder) if request_config
+        yield builder if request_config
         configure_format(builder)
         add_middleware(builder)
         @config.call(builder) if @config

@@ -2,7 +2,6 @@ require 'support/stub_api'
 require_relative 'world'
 require_relative 'unicorn'
 
-# rubocop:disable RSpec/FilePath
 RSpec.describe Asana::Resources::Unicorn do
   RSpec::Matchers.define :be_john do
     match do |unicorn|
@@ -227,4 +226,3 @@ RSpec.describe Asana::Resources::Unicorn do
     end
   end
 end
-# rubocop:enable RSpec/FilePath

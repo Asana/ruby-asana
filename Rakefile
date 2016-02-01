@@ -18,9 +18,9 @@ end
 namespace :bump do
   def read_version
     File.readlines('./lib/asana/version.rb')
-      .detect { |l| l =~ /VERSION/ }
-      .scan(/VERSION = '([^']+)/).flatten.first.split('.')
-      .map { |n| Integer(n) }
+        .detect { |l| l =~ /VERSION/ }
+        .scan(/VERSION = '([^']+)/).flatten.first.split('.')
+        .map { |n| Integer(n) }
   end
 
   # rubocop:disable Metrics/MethodLength

@@ -94,9 +94,9 @@ module Asana
 
       # Internal: Executes a block if at least @wait seconds have passed since
       # @last_poll.
-      def rate_limiting(&block)
+      def rate_limiting
         return if @last_poll && Time.now - @last_poll <= @wait
-        block.call.tap { @last_poll = Time.now }
+        yield.tap { @last_poll = Time.now }
       end
     end
   end

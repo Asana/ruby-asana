@@ -44,7 +44,7 @@ class StubAPI
   def to_proc
     ->(builder) { builder.use Faraday::Adapter::Test, @stubs }
   end
-  alias_method :adapter, :to_proc
+  alias adapter to_proc
 
   # Public: Adds a stub for a particular method and resource_uri.
   #

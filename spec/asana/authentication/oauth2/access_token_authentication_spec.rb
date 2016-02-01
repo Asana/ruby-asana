@@ -1,4 +1,3 @@
-# rubocop:disable RSpec/FilePath
 RSpec.describe Asana::Authentication::OAuth2::AccessTokenAuthentication do
   describe described_class do
     let(:auth) { described_class.new(token) }
@@ -32,4 +31,3 @@ RSpec.describe Asana::Authentication::OAuth2::AccessTokenAuthentication do
     end
   end
 end
-# rubocop:enable RSpec/FilePath
