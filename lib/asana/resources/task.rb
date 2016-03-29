@@ -68,7 +68,10 @@ module Asana
         #
         # Every task is required to be created in a specific workspace, and this
         # workspace cannot be changed once set. The workspace need not be set
-        # explicitly if you specify a `project` or a `parent` task instead.
+        # explicitly if you specify `projects` or a `parent` task instead.
+        #
+        # `projects` can be a comma separated list of projects, or just a single
+        # project the task should belong to.
         #
         # workspace - [Id] The workspace to create a task in.
         # options - [Hash] the request I/O options.
@@ -125,7 +128,8 @@ module Asana
         end
 
         # Returns the compact task records for some filtered set of tasks. Use one
-        # or more of the parameters provided to filter the tasks returned.
+        # or more of the parameters provided to filter the tasks returned. You must
+        # specify a `project` or `tag` if you do not specify `assignee` and `workspace`.
         #
         # assignee - [String] The assignee to filter tasks on.
         # workspace - [Id] The workspace or organization to filter tasks on.
@@ -223,10 +227,10 @@ module Asana
       # Returns an empty data block.
       #
       # project - [Id] The project to add the task to.
-      # insertAfter - [Id] A task in the project to insert the task after, or `null` to
+      # insert_after - [Id] A task in the project to insert the task after, or `null` to
       # insert at the beginning of the list.
       #
-      # insertBefore - [Id] A task in the project to insert the task before, or `null` to
+      # insert_before - [Id] A task in the project to insert the task before, or `null` to
       # insert at the end of the list.
       #
       # section - [Id] A section in the project to insert the task into. The task will be
@@ -234,8 +238,8 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_project(project: required("project"), insertAfter: nil, insertBefore: nil, section: nil, options: {}, **data)
-        with_params = data.merge(project: project, insertAfter: insertAfter, insertBefore: insertBefore, section: section).reject { |_,v| v.nil? || Array(v).empty? }
+      def add_project(project: required("project"), insert_after: nil, insert_before: nil, section: nil, options: {}, **data)
+        with_params = data.merge(project: project, insert_after: insert_after, insert_before: insert_before, section: section).reject { |_,v| v.nil? || Array(v).empty? }
         client.post("/tasks/#{id}/addProject", body: with_params, options: options) && true
       end
 
