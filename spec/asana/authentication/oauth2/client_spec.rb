@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/FilePath
 RSpec.describe Asana::Authentication::OAuth2::Client do
   let(:client) do
     described_class.new(client_id: 'CLIENT_ID',
@@ -13,3 +14,4 @@ RSpec.describe Asana::Authentication::OAuth2::Client do
     end
   end
 end
+# rubocop:enable RSpec/FilePath

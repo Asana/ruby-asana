@@ -22,6 +22,7 @@ RSpec.describe Asana::Client::Configuration do
               .with('refresh_token') do
                 ::OAuth2::AccessToken.new(nil, 'token')
               end
+            # rubocop:enable RSpec/AnyInstance
           end
 
           it 'sets authentication with an OAuth2 access token' do

@@ -9,9 +9,6 @@ AllCops:
     - 'spec/templates/world.rb'
     - 'test.rb'
 
-RSpec/FilePath:
-  Enabled: false
-
 Style/SignalException:
   Enabled: false
 
