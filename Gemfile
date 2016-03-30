@@ -10,7 +10,7 @@ group :tools do
   # changes have been made. In this situation it's better to intentionally
   # upgrade Rubocop and fix issues at that time.
   gem 'rubocop', '~> 0.37.2'
-  gem 'rubocop-rspec'
+  gem 'rubocop-rspec', '~> 1.4.0'
 
   gem 'guard'
   gem 'guard-rspec'
