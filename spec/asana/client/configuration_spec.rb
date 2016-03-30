@@ -16,6 +16,7 @@ RSpec.describe Asana::Client::Configuration do
       context 'and a hash with a :refresh_token' do
         context 'and valid client credentials' do
           before do
+            # rubocop:disable RSpec/AnyInstance
             expect_any_instance_of(Asana::Authentication::OAuth2::Client)
               .to receive(:token_from_refresh_token)
               .with('refresh_token') do

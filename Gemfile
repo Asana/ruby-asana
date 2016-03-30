@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :tools do
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.37.2'
   gem 'rubocop-rspec'
 
   gem 'guard'
