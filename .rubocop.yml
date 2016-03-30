@@ -9,9 +9,6 @@ AllCops:
     - 'spec/templates/world.rb'
     - 'test.rb'
 
-Style/SignalException:
-  Enabled: false
-
 LineLength:
   Max: 120
 require: rubocop-rspec

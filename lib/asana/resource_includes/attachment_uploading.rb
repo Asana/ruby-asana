@@ -17,7 +17,7 @@ module Asana
                  options: {}, **data)
         path = File.expand_path(filename)
         unless File.exist?(path)
-          fail ArgumentError, "file #{filename} doesn't exist"
+          raise ArgumentError, "file #{filename} doesn't exist"
         end
         upload = Faraday::UploadIO.new(path, mime)
         response = client.post("/#{self.class.plural_name}/#{id}/attachments",

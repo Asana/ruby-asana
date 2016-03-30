@@ -66,7 +66,7 @@ class StubAPI
   def on(method, resource_uri, body = nil)
     @stubs.send(method, *parse_args(method, resource_uri, body)) do |env|
       if body.is_a?(Proc) && !body.call(env.body)
-        fail "Stubbed #{method.upcase} #{resource_uri} did not fulfill the " \
+        raise "Stubbed #{method.upcase} #{resource_uri} did not fulfill the " \
           'argument validation block'
       end
       Response.new(env).tap { |response| yield response }.to_rack

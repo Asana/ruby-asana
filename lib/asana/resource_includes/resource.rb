@@ -23,7 +23,7 @@ module Asana
 
       # If it has findById, it implements #refresh
       def refresh
-        fail "#{self.class.name} does not respond to #find_by_id" unless \
+        raise "#{self.class.name} does not respond to #find_by_id" unless \
           self.class.respond_to?(:find_by_id)
         self.class.find_by_id(client, id)
       end

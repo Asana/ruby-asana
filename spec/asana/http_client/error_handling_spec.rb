@@ -4,9 +4,9 @@ RSpec.describe Asana::HttpClient::ErrorHandling do
   describe '.handle' do
     def failed_response(status, headers: {}, body: {})
       lambda do
-        fail Faraday::ClientError.new(nil, status: status,
-                                           body: MultiJson.dump(body),
-                                           headers: headers)
+        raise Faraday::ClientError.new(nil, status: status,
+                                            body: MultiJson.dump(body),
+                                            headers: headers)
       end
     end
 
