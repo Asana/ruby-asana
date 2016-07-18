@@ -107,10 +107,12 @@ module Asana
         # ordered by their priority within the project.
         #
         # projectId - [Id] The project in which to search for tasks.
+        # completed_since - [String] Only return tasks that are either incomplete or that have been
+        # completed since this time.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_project(client, projectId: required("projectId"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_project(client, projectId: required("projectId"), completed_since: nil, per_page: 20, options: {})
+          params = { limit: per_page, completed_since: completed_since }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects/#{projectId}/tasks", params: params, options: options)), type: self, client: client)
         end
 
