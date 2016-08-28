@@ -87,7 +87,7 @@ module Asana
       #
       # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def typeahead(type: required("type"), query: nil, count: nil, per_page: 20, options: {})
+      def typeahead(type: asana_arg_required("type"), query: nil, count: nil, per_page: 20, options: {})
         params = { type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
@@ -101,7 +101,7 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_user(user: required("user"), options: {}, **data)
+      def add_user(user: asana_arg_required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
         User.new(parse(client.post("/workspaces/#{id}/addUser", body: with_params, options: options)).first, client: client)
       end
@@ -115,7 +115,7 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def remove_user(user: required("user"), options: {}, **data)
+      def remove_user(user: asana_arg_required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
         client.post("/workspaces/#{id}/removeUser", body: with_params, options: options) && true
       end

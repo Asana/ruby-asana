@@ -47,7 +47,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_task(client, task: required("task"), per_page: 20, options: {})
+        def find_by_task(client, task: asana_arg_required("task"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks/#{task}/stories", params: params, options: options)), type: self, client: client)
         end
@@ -73,7 +73,7 @@ module Asana
         # text - [String] The plain text of the comment to add.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_on_task(client, task: required("task"), text: required("text"), options: {}, **data)
+        def create_on_task(client, task: asana_arg_required("task"), text: asana_arg_required("text"), options: {}, **data)
           with_params = data.merge(text: text).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/tasks/#{task}/stories", body: with_params, options: options)).first, client: client)
         end

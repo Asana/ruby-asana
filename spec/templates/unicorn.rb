@@ -24,7 +24,7 @@ module Asana
         # world - [Id] The world to create the unicorn in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, world: required("world"), options: {}, **data)
+        def create(client, world: asana_arg_required("world"), options: {}, **data)
           with_params = data.merge(world: world).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/unicorns", body: with_params, options: options)).first, client: client)
         end
@@ -36,7 +36,7 @@ module Asana
         # world - [Id] The world to create the unicorn in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_world(client, world: required("world"), options: {}, **data)
+        def create_in_world(client, world: asana_arg_required("world"), options: {}, **data)
 
           self.new(parse(client.post("/worlds/#{world}/unicorns", body: data, options: options)).first, client: client)
         end
@@ -67,7 +67,7 @@ module Asana
         # world - [Id] The world to find unicorns in.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_world(client, world: required("world"), per_page: 20, options: {})
+        def find_by_world(client, world: asana_arg_required("world"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/worlds/#{world}/unicorns", params: params, options: options)), type: self, client: client)
         end
@@ -103,7 +103,7 @@ module Asana
       # paw - [Id] The paw to add.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_paw(paw: required("paw"), options: {}, **data)
+      def add_paw(paw: asana_arg_required("paw"), options: {}, **data)
         with_params = data.merge(paw: paw).reject { |_,v| v.nil? || Array(v).empty? }
         Resource.new(parse(client.post("/unicorns/#{id}/paws", body: with_params, options: options)).first, client: client)
       end
@@ -113,7 +113,7 @@ module Asana
       # friends - [Array.Id] The friend IDs to add.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_friends(friends: required("friends"), options: {}, **data)
+      def add_friends(friends: asana_arg_required("friends"), options: {}, **data)
         with_params = data.merge(friends: friends).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.post("/unicorns/#{id}/friends", body: with_params, options: options)).first)
       end

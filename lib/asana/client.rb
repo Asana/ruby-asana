@@ -54,7 +54,7 @@ module Asana
     # Internal: Proxies Resource classes to implement a fluent API on the Client
     # instances.
     class ResourceProxy
-      def initialize(client: required('client'), resource: required('resource'))
+      def initialize(client: asana_arg_required('client'), resource: asana_arg_required('resource'))
         @client   = client
         @resource = resource
       end
