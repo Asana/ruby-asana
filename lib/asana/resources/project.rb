@@ -70,7 +70,7 @@ module Asana
         #
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, workspace: required("workspace"), team: nil, options: {}, **data)
+        def create(client, workspace: asana_arg_required("workspace"), team: nil, options: {}, **data)
           with_params = data.merge(workspace: workspace, team: team).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/projects", body: with_params, options: options)).first, client: client)
         end
@@ -83,7 +83,7 @@ module Asana
         # workspace - [Id] The workspace or organization to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
+        def create_in_workspace(client, workspace: asana_arg_required("workspace"), options: {}, **data)
 
           self.new(parse(client.post("/workspaces/#{workspace}/projects", body: data, options: options)).first, client: client)
         end
@@ -95,7 +95,7 @@ module Asana
         # team - [Id] The team to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create_in_team(client, team: required("team"), options: {}, **data)
+        def create_in_team(client, team: asana_arg_required("team"), options: {}, **data)
 
           self.new(parse(client.post("/teams/#{team}/projects", body: data, options: options)).first, client: client)
         end
@@ -132,7 +132,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), archived: nil, per_page: 20, options: {})
+        def find_by_workspace(client, workspace: asana_arg_required("workspace"), archived: nil, per_page: 20, options: {})
           params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params, options: options)), type: self, client: client)
         end
@@ -145,7 +145,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_team(client, team: required("team"), archived: nil, per_page: 20, options: {})
+        def find_by_team(client, team: asana_arg_required("team"), archived: nil, per_page: 20, options: {})
           params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end
@@ -203,7 +203,7 @@ module Asana
       # followers - [Array] An array of followers to add to the project.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_followers(followers: required("followers"), options: {}, **data)
+      def add_followers(followers: asana_arg_required("followers"), options: {}, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.post("/projects/#{id}/addFollowers", body: with_params, options: options)).first)
       end
@@ -214,7 +214,7 @@ module Asana
       # followers - [Array] An array of followers to remove from the project.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def remove_followers(followers: required("followers"), options: {}, **data)
+      def remove_followers(followers: asana_arg_required("followers"), options: {}, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.post("/projects/#{id}/removeFollowers", body: with_params, options: options)).first)
       end
@@ -224,7 +224,7 @@ module Asana
       # members - [Array] An array of members to add to the project.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_members(members: required("members"), options: {}, **data)
+      def add_members(members: asana_arg_required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.post("/projects/#{id}/addMembers", body: with_params, options: options)).first)
       end

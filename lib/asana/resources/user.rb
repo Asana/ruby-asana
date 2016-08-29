@@ -43,7 +43,7 @@ module Asana
         # to indicate the current user making the request.
         #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, user: required("user"), options: {})
+        def find_by_id(client, user: asana_arg_required("user"), options: {})
           params = { user: user }.reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.get("/users/%s", params: params, options: options)).first, client: client)
         end
@@ -54,7 +54,7 @@ module Asana
         # workspace - [Id] The workspace in which to get users.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
+        def find_by_workspace(client, workspace: asana_arg_required("workspace"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/users", params: params, options: options)), type: self, client: client)
         end

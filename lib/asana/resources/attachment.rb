@@ -45,7 +45,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_task(client, task: required("task"), per_page: 20, options: {})
+        def find_by_task(client, task: asana_arg_required("task"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks/#{task}/attachments", params: params, options: options)), type: self, client: client)
         end

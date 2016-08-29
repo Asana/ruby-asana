@@ -12,8 +12,8 @@ module Asana
       #
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/MethodLength
-      def attach(filename: required('filename'),
-                 mime: required('mime'),
+      def attach(filename: asana_arg_required('filename'),
+                 mime: asana_arg_required('mime'),
                  options: {}, **data)
         path = File.expand_path(filename)
         unless File.exist?(path)

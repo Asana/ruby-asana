@@ -35,7 +35,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_organization(client, organization: required("organization"), per_page: 20, options: {})
+        def find_by_organization(client, organization: asana_arg_required("organization"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
         end
@@ -61,7 +61,7 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_user(user: required("user"), options: {}, **data)
+      def add_user(user: asana_arg_required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
         User.new(parse(client.post("/teams/#{id}/addUser", body: with_params, options: options)).first, client: client)
       end
@@ -75,7 +75,7 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def remove_user(user: required("user"), options: {}, **data)
+      def remove_user(user: asana_arg_required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
         client.post("/teams/#{id}/removeUser", body: with_params, options: options) && true
       end

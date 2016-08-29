@@ -96,7 +96,7 @@ module Asana
         #
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, resource: required("resource"), target: required("target"), options: {}, **data)
+        def create(client, resource: asana_arg_required("resource"), target: asana_arg_required("target"), options: {}, **data)
           with_params = data.merge(resource: resource, target: target).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/webhooks", body: with_params, options: options)).first, client: client)
         end
@@ -110,7 +110,7 @@ module Asana
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def get_all(client, workspace: required("workspace"), resource: nil, per_page: 20, options: {})
+        def get_all(client, workspace: asana_arg_required("workspace"), resource: nil, per_page: 20, options: {})
           params = { workspace: workspace, resource: resource, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/webhooks", params: params, options: options)), type: self, client: client)
         end
