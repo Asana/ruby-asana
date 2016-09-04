@@ -148,8 +148,8 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
-          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, assignee: nil, workspace: nil, project: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
+          params = { assignee: assignee, workspace: workspace, project: project, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
         end
       end

@@ -44,8 +44,8 @@ module Asana
         #
         # options - [Hash] the request I/O options.
         def find_by_id(client, user: required("user"), options: {})
-          params = { user: user }.reject { |_,v| v.nil? || Array(v).empty? }
-          Resource.new(parse(client.get("/users/%s", params: params, options: options)).first, client: client)
+          params = {}.reject { |_,v| v.nil? || Array(v).empty? }
+          Resource.new(parse(client.get("/users/#{user}", params: params, options: options)).first, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
