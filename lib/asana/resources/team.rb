@@ -5,7 +5,7 @@ module Asana
   module Resources
     # A _team_ is used to group related projects and people together within an
     # organization. Each project in an organization is associated with a team.
-    class Team < Resource
+    class Teams < Resource
 
 
       attr_reader :id
@@ -38,6 +38,20 @@ module Asana
         def find_by_organization(client, organization: required("organization"), per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
+        end
+
+        # Returns the compact records for all teams to which user is assigned.
+        #
+        # user - [String] An identifier for the user. Can be one of an email address,
+        # the globally unique identifier for the user, or the keyword `me`
+        # to indicate the current user making the request.
+        #
+        # organization - [Id] The workspace or organization to filter teams on.
+        # per_page - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_user(client, user: required("user"), organization: nil, per_page: 20, options: {})
+          params = { organization: organization, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/users/#{user}/teams", params: params, options: options)), type: self, client: client)
         end
       end
 

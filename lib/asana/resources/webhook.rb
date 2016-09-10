@@ -3,8 +3,6 @@
 
 module Asana
   module Resources
-    # **Webhooks are currently in BETA - The information here may change.**
-    #
     # Webhooks allow an application to be notified of changes. This is in addition
     # to the ability to fetch those changes directly as
     # [Events](/developers/api-reference/events) - in fact, Webhooks are just a way
@@ -49,7 +47,7 @@ module Asana
     #
     # Webhooks themselves contain only the information necessary to deliver the
     # events to the desired target as they are generated.
-    class Webhook < Resource
+    class Webhooks < Resource
 
 
       attr_reader :id
