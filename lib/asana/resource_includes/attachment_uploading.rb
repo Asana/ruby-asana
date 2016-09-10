@@ -24,7 +24,7 @@ module Asana
                                body: data,
                                upload: upload,
                                options: options)
-        Attachment.new(parse(response).first, client: client)
+        Attachments.new(parse(response).first, client: client)
       end
       # rubocop:enable Metrics/MethodLength
       # rubocop:enable Metrics/AbcSize

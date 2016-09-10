@@ -35,7 +35,7 @@ RSpec.describe Asana::Resources::AttachmentUploading do
       attachment = unicorn.attach(filename: __FILE__,
                                   mime: 'image/jpg',
                                   name: 'file')
-      expect(attachment).to be_a(Asana::Resources::Attachment)
+      expect(attachment).to be_a(Asana::Resources::Attachments)
       expect(attachment.id).to eq(10)
     end
   end
