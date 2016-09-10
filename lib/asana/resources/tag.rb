@@ -10,7 +10,7 @@ module Asana
     # simplify them in the future so it is not encouraged to rely too heavily on it.
     # Unlike projects, tags do not provide any ordering on the tasks they
     # are associated with.
-    class Tag < Resource
+    class Tags < Resource
 
 
       attr_reader :id
