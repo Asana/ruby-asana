@@ -12,8 +12,54 @@ Supported rubies:
 
 * MRI 2.0.0 up to 2.2.x stable
 
-## Installation
+## Required: Security procedures for outdated OpenSSL versions
 
+Older versions of OpenSSL can cause a problem when using `ruby-asana` In particular, at the time of this writing, at least **MacOS X 10.11 and below** ship with a very old version of OpenSSL:
+    
+    $ openssl version
+    OpenSSL 0.9.8zh 14 Jan 2016
+
+OpenSSL 0.9.8 was first released in 2005, and therefore only supports TLS (Transport Layer Security) version 1.0. Asana has deprecated and stopped accepting requests for clients which do not suport [TLS 1.0 and above](https://asa.na/tls), which unfortunately includes any software linked against this version of the library - this includes both the MacOS X provided Ruby interpreter and any homebrew installed Ruby that is not specifically configured to link against a newer version.
+
+To see if your Ruby version is affected, run
+   
+    $ ruby -ropenssl -e 'puts OpenSSL::OPENSSL_VERSION'
+
+If the version printed at the command line is older than `1.0.1`, when, in 2012, OpenSSL first supported TLS 1.1 and 1.2, you will not be able to use `ruby-asana` to connect to Asana. Specifically, you will recieve `400 Bad Request` responses with an error message in the response body about the lack of support for TLS 1.1 and above.
+
+Asana highly recommends using a Ruby installation manager, either RVM or `rbenv`. Instructions on how to install an up-to-date `ruby` for each of these are below.
+
+### Solution when using RVM
+
+RVM makes it easy to install both an updated OpenSSL and a Ruby interpreter that links to it. If you are using MacPorts or Homebrew, you're probably fine out of the box; RVM favors package management using either one of these to satisfy dependencies, and so can keep your ruby up to date automatically. If you are not using these, consider using them, as they're very simple to install and use.
+
+If you don't use your package manager, you can use RVM's [package manager](https://rvm.io/packages) to install from source.
+
+If you want to build OpenSSL from source yourself, you have to specify how to link to this OpenSSL installation:
+
+    $ rvm install ruby-{version} --with-openssl-dir={ssl_dir}
+          # Specify your openssl path prefix, wherever openssl dirs 
+          # "bin", "include", and "lib" are installed; usually
+          # "/usr" for system installs, or $PREFIX for configure/make locally.
+    $ ruby -ropenssl -e 'puts OpenSSL::OPENSSL_VERSION' # Verify inside Ruby
+    OpenSSL 1.0.2h  3 May 2016
+
+If you see the version of OpenSSL greater than OpenSSL 1.0.1, then you're all set to start using `ruby-asana`
+
+### Solution when using rbenv
+
+Similar to RVM, rbenv compiles rubies with knowledge of MacPorts and Homebrew libraries. When a newer version of OpenSSL is installed via the method above, all rubies built (after that time of course) will link to the newer version of OpenSSL.
+
+If you don't use a package manager, as above, you can build by explicitly supplying the directory in which to find OpenSSL:
+
+    $ RUBY_CONFIGURE_OPTS=--with-openssl-dir=/opt/local rbenv install ruby-{version}
+          # Specify your openssl path prefix, wherever openssl dirs 
+          # "bin", "include", and "lib" are installed; usually
+          # "/usr" for system installs, or $PREFIX for configure/make locally.
+    $ ruby -ropenssl -e 'puts OpenSSL::OPENSSL_VERSION' # Verify inside Ruby
+    OpenSSL 1.0.2h  3 May 2016
+
+## Gem Installation
 Add this line to your application's Gemfile:
 
 ```ruby

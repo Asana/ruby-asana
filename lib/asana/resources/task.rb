@@ -26,6 +26,8 @@ module Asana
 
       attr_reader :completed_at
 
+      attr_reader :custom_fields
+
       attr_reader :due_on
 
       attr_reader :due_at
@@ -132,6 +134,7 @@ module Asana
         # specify a `project` or `tag` if you do not specify `assignee` and `workspace`.
         #
         # assignee - [String] The assignee to filter tasks on.
+        # project - [Id] The project to filter tasks on.
         # workspace - [Id] The workspace or organization to filter tasks on.
         # completed_since - [String] Only return tasks that are either incomplete or that have been
         # completed since this time.
@@ -152,8 +155,8 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
-          params = { assignee: assignee, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, assignee: nil, project: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
+          params = { assignee: assignee, project: project, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
         end
       end
