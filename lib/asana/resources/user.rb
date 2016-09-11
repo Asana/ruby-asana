@@ -9,7 +9,7 @@ module Asana
     # Like other objects in the system, users are referred to by numerical IDs.
     # However, the special string identifier `me` can be used anywhere
     # a user ID is accepted, to refer to the current authenticated user.
-    class Users < Resource
+    class User < Resource
 
 
       attr_reader :id

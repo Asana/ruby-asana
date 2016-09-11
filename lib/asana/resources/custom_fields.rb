@@ -8,7 +8,7 @@ module Asana
     # Fields](/developers/documentation/getting-started/custom-fields) developer
     # documentation for more information about how custom fields relate to various
     # resources in Asana.
-    class CustomFields < Resource
+    class CustomField < Resource
 
 
       attr_reader :id

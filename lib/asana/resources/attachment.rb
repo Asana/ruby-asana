@@ -6,7 +6,7 @@ module Asana
     # An _attachment_ object represents any file attached to a task in Asana,
     # whether it's an uploaded file or one associated via a third-party service
     # such as Dropbox or Google Drive.
-    class Attachments < Resource
+    class Attachment < Resource
 
 
       attr_reader :id

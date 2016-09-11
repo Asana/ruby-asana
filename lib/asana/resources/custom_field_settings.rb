@@ -8,7 +8,7 @@ module Asana
     # of the Custom Field and Project as well as stores information that is relevant to that
     # particular pairing; for instance, the `is_important` property determines
     # some possible application-specific handling of that custom field (see below)
-    class CustomFieldSettings < Resource
+    class CustomFieldSetting < Resource
 
 
       attr_reader :id

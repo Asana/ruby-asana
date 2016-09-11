@@ -1,7 +1,7 @@
 require 'support/stub_api'
 require 'support/resources_helper'
 
-RSpec.describe Asana::Resources::Webhooks do
+RSpec.describe Asana::Resources::Webhook do
   let(:api) { StubAPI.new }
   let(:authentication) do
     Asana::Authentication::TokenAuthentication.new('token')

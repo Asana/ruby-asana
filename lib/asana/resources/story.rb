@@ -10,7 +10,7 @@ module Asana
     #
     # Stories are a form of history in the system, and as such they are read-only.
     # Once generated, it is not possible to modify a story.
-    class Stories < Resource
+    class Story < Resource
 
 
       attr_reader :id

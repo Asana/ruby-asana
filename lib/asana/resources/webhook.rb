@@ -47,7 +47,7 @@ module Asana
     #
     # Webhooks themselves contain only the information necessary to deliver the
     # events to the desired target as they are generated.
-    class Webhooks < Resource
+    class Webhook < Resource
 
 
       attr_reader :id

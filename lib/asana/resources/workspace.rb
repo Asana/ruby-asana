@@ -17,7 +17,7 @@ module Asana
     # using workspace-based APIs for organizations. Currently, and until after
     # some reasonable grace period following any further announcements, you can
     # still reference organizations in any `workspace` parameter.
-    class Workspaces < Resource
+    class Workspace < Resource
 
 
       attr_reader :id

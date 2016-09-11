@@ -5,7 +5,7 @@ module Asana
   module Resources
     # A _team_ is used to group related projects and people together within an
     # organization. Each project in an organization is associated with a team.
-    class Teams < Resource
+    class Team < Resource
 
 
       attr_reader :id
