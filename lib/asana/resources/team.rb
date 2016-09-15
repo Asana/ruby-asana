@@ -39,6 +39,20 @@ module Asana
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/organizations/#{organization}/teams", params: params, options: options)), type: self, client: client)
         end
+
+        # Returns the compact records for all teams to which user is assigned.
+        #
+        # user - [String] An identifier for the user. Can be one of an email address,
+        # the globally unique identifier for the user, or the keyword `me`
+        # to indicate the current user making the request.
+        #
+        # organization - [Id] The workspace or organization to filter teams on.
+        # per_page - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_user(client, user: required("user"), organization: nil, per_page: 20, options: {})
+          params = { organization: organization, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/users/#{user}/teams", params: params, options: options)), type: self, client: client)
+        end
       end
 
       # Returns the compact records for all users that are members of the team.

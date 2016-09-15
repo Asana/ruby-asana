@@ -38,14 +38,14 @@ module Asana
 
         # Returns the full user record for the single user with the provided ID.
         #
-        # user - [String] An identifier for the user. Can be one of an email address,
+        # id - [String] An identifier for the user. Can be one of an email address,
         # the globally unique identifier for the user, or the keyword `me`
         # to indicate the current user making the request.
         #
         # options - [Hash] the request I/O options.
-        def find_by_id(client, user: required("user"), options: {})
-          params = { user: user }.reject { |_,v| v.nil? || Array(v).empty? }
-          Resource.new(parse(client.get("/users/%s", params: params, options: options)).first, client: client)
+        def find_by_id(client, id, options: {})
+
+          self.new(parse(client.get("/users/#{id}", options: options)).first, client: client)
         end
 
         # Returns the user records for all users in the specified workspace or
