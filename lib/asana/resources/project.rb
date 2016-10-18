@@ -38,6 +38,8 @@ module Asana
 
       attr_reader :followers
 
+      attr_reader :custom_field_settings
+
       attr_reader :color
 
       attr_reader :notes
@@ -237,6 +239,34 @@ module Asana
       def remove_members(members: required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.post("/projects/#{id}/removeMembers", body: with_params, options: options)).first)
+      end
+
+      # Create a new custom field setting on the project.
+      #
+      # custom_field - [Id] The id of the custom field to associate with this project.
+      # is_important - [Boolean] Whether this field should be considered important to this project.
+      #
+      # insert_before - [Id] An id of a Custom Field Settings on this project, before which the new Custom Field Settings will be added.
+      # `insert_before` and `insert_after` parameters cannot both be specified.
+      #
+      # insert_after - [Id] An id of a Custom Field Settings on this project, after which the new Custom Field Settings will be added.
+      # `insert_before` and `insert_after` parameters cannot both be specified.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_custom_field_setting(custom_field: required("custom_field"), is_important: nil, insert_before: nil, insert_after: nil, options: {}, **data)
+        with_params = data.merge(custom_field: custom_field, is_important: is_important, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/projects/#{id}/addCustomFieldSetting", body: with_params, options: options)).first, client: client)
+      end
+
+      # Remove a custom field setting on the project.
+      #
+      # custom_field - [Id] The id of the custom field to remove from this project.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_custom_field_setting(custom_field: nil, options: {}, **data)
+        with_params = data.merge(custom_field: custom_field).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/projects/#{id}/removeCustomFieldSetting", body: with_params, options: options)).first, client: client)
       end
 
     end
