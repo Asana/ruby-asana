@@ -40,7 +40,7 @@ module Asana
       def size
         to_a.size
       end
-      alias_method :length, :size
+      alias length size
 
       # Public: Returns a String representation of the collection.
       def to_s
@@ -48,8 +48,7 @@ module Asana
           "[#{@elements.map(&:inspect).join(', ')}" +
           (@next_page_data ? ', ...' : '') + ']>'
       end
-
-      alias_method :inspect, :to_s
+      alias inspect to_s
 
       # Public: Returns a new Asana::Resources::Collection with the next page
       # or nil if there are no more pages. Caches the result.

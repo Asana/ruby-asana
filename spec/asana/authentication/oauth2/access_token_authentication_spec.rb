@@ -9,7 +9,7 @@ RSpec.describe Asana::Authentication::OAuth2::AccessTokenAuthentication do
       end
 
       it 'configures Faraday to use OAuth2 with an access token' do
-        expect(token).to_not receive(:refresh!)
+        expect(token).not_to receive(:refresh!)
         conn = Faraday.new do |builder|
           auth.configure(builder)
         end

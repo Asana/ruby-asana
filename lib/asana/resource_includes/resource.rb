@@ -23,11 +23,9 @@ module Asana
 
       # If it has findById, it implements #refresh
       def refresh
-        if self.class.respond_to?(:find_by_id)
-          self.class.find_by_id(client, id)
-        else
-          fail "#{self.class.name} does not respond to #find_by_id"
-        end
+        raise "#{self.class.name} does not respond to #find_by_id" unless \
+          self.class.respond_to?(:find_by_id)
+        self.class.find_by_id(client, id)
       end
 
       # Internal: Proxies method calls to the data, wrapping it accordingly and
@@ -59,8 +57,7 @@ module Asana
         attrs = to_h.map { |k, _| "#{k}: #{public_send(k).inspect}" }.join(', ')
         "#<Asana::#{self.class.name.split('::').last} #{attrs}>"
       end
-
-      alias_method :inspect, :to_s
+      alias inspect to_s
 
       private
 

@@ -26,7 +26,7 @@ module Asana
       def to_s
         "#<Asana::HttpClient::Response status=#{@status} body=#{@body}>"
       end
-      alias_method :inspect, :to_s
+      alias inspect to_s
     end
   end
 end

@@ -9,8 +9,8 @@ group :tools do
   # routinely adds new checks which can cause our build to "break" even when no
   # changes have been made. In this situation it's better to intentionally
   # upgrade Rubocop and fix issues at that time.
-  gem 'rubocop', '~> 0.35.0'
-  gem 'rubocop-rspec', '~> 1.2.0'
+  gem 'rubocop', '~> 0.37.2'
+  gem 'rubocop-rspec', '~> 1.4.0'
 
   gem 'guard'
   gem 'guard-rspec'

@@ -4,7 +4,7 @@ module Asana
     module ResponseHelper
       def parse(response)
         data = response.body.fetch('data') do
-          fail("Unexpected response body: #{response.body}")
+          raise("Unexpected response body: #{response.body}")
         end
         extra = response.body.reject { |k, _| k == 'data' }
         [data, extra]

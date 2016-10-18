@@ -148,7 +148,7 @@ module Asana
       end
 
       def error(msg)
-        fail ArgumentError, msg
+        raise ArgumentError, msg
       end
     end
   end

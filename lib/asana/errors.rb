@@ -55,8 +55,7 @@ module Asana
 
       def to_s
         "There has been an error on Asana's end. Use this unique phrase to "\
-        'identify the problem when contacting developer support: ' +
-        %("#{@phrase}")
+        'identify the problem when contacting support: ' + %("#{@phrase}")
       end
     end
 
