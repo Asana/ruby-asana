@@ -129,12 +129,23 @@ module Asana
           Collection.new(parse(client.get("/tags/#{tag}/tasks", params: params, options: options)), type: self, client: client)
         end
 
+        # <b>Board view only:</b> Returns the compact section records for all tasks within the given section.
+        #
+        # section - [Id] The section in which to search for tasks.
+        # per_page - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_section(client, section: required("section"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/sections/#{section}/tasks", params: params, options: options)), type: self, client: client)
+        end
+
         # Returns the compact task records for some filtered set of tasks. Use one
         # or more of the parameters provided to filter the tasks returned. You must
         # specify a `project` or `tag` if you do not specify `assignee` and `workspace`.
         #
         # assignee - [String] The assignee to filter tasks on.
         # project - [Id] The project to filter tasks on.
+        # section - [Id] The section to filter tasks on.
         # workspace - [Id] The workspace or organization to filter tasks on.
         # completed_since - [String] Only return tasks that are either incomplete or that have been
         # completed since this time.
@@ -147,6 +158,8 @@ module Asana
         #
         # If you specify `assignee`, you must also specify the `workspace` to filter on.
         #
+        # Currently, this is only supported in board views.
+        #
         # If you specify `workspace`, you must also specify the `assignee` to filter on.
         #
         # A task is considered "modified" if any of its properties change,
@@ -155,8 +168,8 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, project: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
-          params = { assignee: assignee, project: project, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, assignee: nil, project: nil, section: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
+          params = { assignee: assignee, project: project, section: section, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
         end
       end

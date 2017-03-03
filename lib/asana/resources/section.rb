@@ -87,14 +87,15 @@ module Asana
       end
 
       # Move sections relative to each other in a board view. One of
-      # before_section or after_section is required (or else the request will
-      # behave as a no-op).
+      # `before_section` or `after_section` is required.
       #
-      # At this point in time, moving sections is not supported in list views.
+      # Sections cannot be moved between projects.
+      #
+      # At this point in time, moving sections is not supported in list views, only board views.
       #
       # Returns an empty data block.
       #
-      # project - [Id] The project in which to reorder this section
+      # project - [Id] The project in which to reorder the given section
       # before_section - [Id] Insert the given section immediately before the section specified by this parameter.
       # after_section - [Id] Insert the given section immediately after the section specified by this parameter.
       # options - [Hash] the request I/O options.
