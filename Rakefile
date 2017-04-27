@@ -78,9 +78,9 @@ task :all do |_t|
     if ENV['BUNDLE_GEMFILE'] =~ /gemfiles/
       appraisal_name = ENV['BUNDLE_GEMFILE'].scan(/faraday\_(.*)\.gemfile/).flatten.first
       command_prefix = "appraisal faraday-#{appraisal_name}"
-      exec("#{command_prefix} bundle install && #{command_prefix} bundle exec rspec && bundle exec rake coveralls:push ")
+      exec("#{command_prefix} bundle install && #{command_prefix} bundle exec rspec ")
     else
-      exec(' bundle exec appraisal install && bundle exec rake appraisal spec && bundle exec rake coveralls:push')
+      exec(' bundle exec appraisal install && bundle exec rake appraisal spec')
     end
   else
     exec('bundle exec appraisal install && bundle exec rake appraisal spec')
