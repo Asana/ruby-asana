@@ -63,4 +63,4 @@ EOS
   end
 end
 
-task default: [:spec, :rubocop, :yard]
+task default: [:spec]
