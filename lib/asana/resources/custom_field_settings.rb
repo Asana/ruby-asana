@@ -32,8 +32,7 @@ module Asana
         # project - [Id] The ID of the project for which to list custom field settings
         # options - [Hash] the request I/O options.
         def find_by_project(client, project: required("project"), options: {})
-
-          Resource.new(parse(client.get("/projects/#{project}/custom_field_settings", options: options)).first, client: client)
+          Collection.new(parse(client.get("/projects/#{project}/custom_field_settings", options: options)).first, client: client)
         end
       end
 

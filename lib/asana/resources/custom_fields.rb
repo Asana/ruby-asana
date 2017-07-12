@@ -45,7 +45,7 @@ module Asana
         # options - [Hash] the request I/O options.
         def find_by_workspace(client, workspace: required("workspace"), options: {})
 
-          Resource.new(parse(client.get("/workspaces/#{workspace}/custom_fields", options: options)).first, client: client)
+          Collection.new(parse(client.get("/workspaces/#{workspace}/custom_fields", options: options)).first, client: client)
         end
       end
 
