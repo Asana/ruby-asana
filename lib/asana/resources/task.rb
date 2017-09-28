@@ -230,10 +230,11 @@ module Asana
       # Returns an empty data block.
       #
       # project - [Id] The project to add the task to.
-      # insert_after - [Id] A task in the project to insert the task after, or `null` to
+      #
+      # insert_after - [Id] A task in the project to insert the task after, or `nil` to
       # insert at the beginning of the list.
       #
-      # insert_before - [Id] A task in the project to insert the task before, or `null` to
+      # insert_before - [Id] A task in the project to insert the task before, or `nil` to
       # insert at the end of the list.
       #
       # section - [Id] A section in the project to insert the task into. The task will be
@@ -241,8 +242,10 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def add_project(project: required("project"), insert_after: nil, insert_before: nil, section: nil, options: {}, **data)
-        with_params = data.merge(project: project, insert_after: insert_after, insert_before: insert_before, section: section).reject { |_,v| v.nil? || Array(v).empty? }
+      def add_project(project: required("project"), insert_after: :not_provided, insert_before: :not_provided, section: nil, options: {}, **data)
+        with_params = data.merge(project: project, insert_after: insert_after, insert_before: insert_before, section: section).reject { |_,v| v.nil? || Array(v).empty? || v == :not_provided }
+        with_params[:insert_after] = nil if insert_after.nil?
+        with_params[:insert_before] = nil if insert_before.nil?
         client.post("/tasks/#{id}/addProject", body: with_params, options: options) && true
       end
 
