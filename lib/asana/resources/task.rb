@@ -317,7 +317,8 @@ module Asana
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
       def set_parent(parent: required("parent"), options: {}, **data)
-        with_params = data.merge(parent: parent).reject { |_,v| v.nil? || Array(v).empty? }
+        with_params = data.merge(project: project, insert_after: insert_after, insert_before: insert_before, section: section).reject { |_,v| v.nil? || Array(v).empty? || v == :not_provided }
+        with_params[:parent] = nil if parent.nil?
         client.post("/tasks/#{id}/setParent", body: with_params, options: options) && true
       end
 
