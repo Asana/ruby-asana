@@ -1,6 +1,9 @@
 language: ruby
 rvm:
-- 2.2.5
+- 2.2.9
+- 2.3.6
+- 2.4.3
+- 2.5.0
 deploy:
   provider: rubygems
   api_key:
@@ -9,3 +12,4 @@ deploy:
   on:
     tags: true
     repo: Asana/ruby-asana
+    ruby: '2.5.0'
