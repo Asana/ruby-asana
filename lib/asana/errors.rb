@@ -24,6 +24,15 @@ module Asana
       end
     end
 
+    # Public: A 402 error. Raised when the user is trying to access a feature
+    # that requires a premium account (Payment Required).
+    PremiumOnly = Class.new(APIError) do
+      def to_s
+        'The endpoint that is being requested is only available to premium '\
+        'users.'
+      end
+    end
+
     # Public: A 403 error. Raised when the user doesn't have permission to
     # access the requested resource or to perform the requested action on it.
     Forbidden = Class.new(APIError) do
