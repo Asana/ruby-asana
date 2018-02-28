@@ -17,6 +17,8 @@ module Asana
 
       attr_reader :name
 
+      attr_reader :description
+
       attr_reader :type
 
       attr_reader :enum_options
@@ -42,10 +44,11 @@ module Asana
         # Returns a list of the compact representation of all of the custom fields in a workspace.
         #
         # workspace - [Id] The workspace or organization to find custom field definitions in.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), options: {})
-
-          Resource.new(parse(client.get("/workspaces/#{workspace}/custom_fields", options: options)).first, client: client)
+        def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/#{workspace}/custom_fields", params: params, options: options)), type: Resource, client: client)
         end
       end
 
