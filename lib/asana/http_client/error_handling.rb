@@ -57,12 +57,11 @@ module Asana
           when 500 then raise server_error(e.response)
           else raise api_error(e.response)
         end
-        rescue Net::ReadTimeout => e
-          if num_timeouts < MAX_TIMEOUTS
-            handle(&request, num_timeouts + 1)
-          else
-            raise e
-          end
+      rescue Net::ReadTimeout => e
+        if num_timeouts < MAX_TIMEOUTS
+          handle(&request, num_timeouts + 1)
+        else
+          raise e
         end
       end
       # rubocop:enable all
