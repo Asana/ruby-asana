@@ -73,7 +73,8 @@ module Asana
       # result set is limited to a single page of results with a maximum size,
       # so you won't be able to fetch large numbers of results.
       #
-      # type - [Enum] The type of values the typeahead should return.
+      # type - [Enum] The type of values the typeahead should return. You can choose from
+      # one of the following: custom_field, project, tag, task, and user.
       # Note that unlike in the names of endpoints, the types listed here are
       # in singular form (e.g. `task`). Using multiple types is not yet supported.
       #

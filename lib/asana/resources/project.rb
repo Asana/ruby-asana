@@ -3,14 +3,15 @@
 
 module Asana
   module Resources
-    # A _project_ represents a prioritized list of tasks in Asana. It exists in a
-    # single workspace or organization and is accessible to a subset of users in
-    # that workspace or organization, depending on its permissions.
+    # A _project_ represents a prioritized list of tasks in Asana or a board with
+    # columns of tasks represented as cards. It exists in a single workspace or
+    # organization and is accessible to a subset of users in that workspace or
+    # organization, depending on its permissions.
     #
     # Projects in organizations are shared with a single team. You cannot currently
     # change the team of a project via the API. Non-organization workspaces do not
-    # have teams and so you should not specify the team of project in a
-    # regular workspace.
+    # have teams and so you should not specify the team of project in a regular
+    # workspace.
     class Project < Resource
 
       include EventSubscription
@@ -25,6 +26,8 @@ module Asana
       attr_reader :current_status
 
       attr_reader :due_date
+
+      attr_reader :start_on
 
       attr_reader :created_at
 
@@ -47,6 +50,8 @@ module Asana
       attr_reader :workspace
 
       attr_reader :team
+
+      attr_reader :layout
 
       class << self
         # Returns the plural name of the resource.
@@ -177,15 +182,6 @@ module Asana
       def delete()
 
         client.delete("/projects/#{id}") && true
-      end
-
-      # Returns compact records for all sections in the specified project.
-      #
-      # per_page - [Integer] the number of records to fetch per page.
-      # options - [Hash] the request I/O options.
-      def sections(per_page: 20, options: {})
-        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/projects/#{id}/sections", params: params, options: options)), type: Resource, client: client)
       end
 
       # Returns the compact task records for all tasks within the given project,

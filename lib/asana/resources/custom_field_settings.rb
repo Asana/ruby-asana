@@ -30,10 +30,11 @@ module Asana
         # Returns a list of all of the custom fields settings on a project, in compact form. Note that, as in all queries to collections which return compact representation, `opt_fields` and `opt_expand` can be used to include more data than is returned in the compact representation. See the getting started guide on [input/output options](/developers/documentation/getting-started/input-output-options) for more information.
         #
         # project - [Id] The ID of the project for which to list custom field settings
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_project(client, project: required("project"), options: {})
-
-          Resource.new(parse(client.get("/projects/#{project}/custom_field_settings", options: options)).first, client: client)
+        def find_by_project(client, project: required("project"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/projects/#{project}/custom_field_settings", params: params, options: options)), type: Resource, client: client)
         end
       end
 

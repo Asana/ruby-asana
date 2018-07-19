@@ -28,6 +28,10 @@ module Asana
 
       attr_reader :custom_fields
 
+      attr_reader :dependencies
+
+      attr_reader :dependents
+
       attr_reader :due_on
 
       attr_reader :due_at
@@ -36,9 +40,9 @@ module Asana
 
       attr_reader :followers
 
-      attr_reader :hearted
+      attr_reader :liked
 
-      attr_reader :hearts
+      attr_reader :likes
 
       attr_reader :modified_at
 
@@ -46,11 +50,13 @@ module Asana
 
       attr_reader :notes
 
-      attr_reader :num_hearts
+      attr_reader :num_likes
 
       attr_reader :projects
 
       attr_reader :parent
+
+      attr_reader :start_on
 
       attr_reader :workspace
 
@@ -129,12 +135,23 @@ module Asana
           Collection.new(parse(client.get("/tags/#{tag}/tasks", params: params, options: options)), type: self, client: client)
         end
 
+        # <b>Board view only:</b> Returns the compact section records for all tasks within the given section.
+        #
+        # section - [Id] The section in which to search for tasks.
+        # per_page - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def find_by_section(client, section: required("section"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/sections/#{section}/tasks", params: params, options: options)), type: self, client: client)
+        end
+
         # Returns the compact task records for some filtered set of tasks. Use one
         # or more of the parameters provided to filter the tasks returned. You must
         # specify a `project` or `tag` if you do not specify `assignee` and `workspace`.
         #
         # assignee - [String] The assignee to filter tasks on.
         # project - [Id] The project to filter tasks on.
+        # section - [Id] The section to filter tasks on.
         # workspace - [Id] The workspace or organization to filter tasks on.
         # completed_since - [String] Only return tasks that are either incomplete or that have been
         # completed since this time.
@@ -147,6 +164,8 @@ module Asana
         #
         # If you specify `assignee`, you must also specify the `workspace` to filter on.
         #
+        # Currently, this is only supported in board views.
+        #
         # If you specify `workspace`, you must also specify the `assignee` to filter on.
         #
         # A task is considered "modified" if any of its properties change,
@@ -155,9 +174,19 @@ module Asana
         # just because another object it is associated with (e.g. a subtask)
         # is modified. Actions that count as modifying the task include
         # assigning, renaming, completing, and adding stories.
-        def find_all(client, assignee: nil, project: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
-          params = { assignee: assignee, project: project, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, assignee: nil, project: nil, section: nil, workspace: nil, completed_since: nil, modified_since: nil, per_page: 20, options: {})
+          params = { assignee: assignee, project: project, section: section, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
+        end
+
+        # The search endpoint allows you to build complex queries to find and fetch exactly the data you need from Asana. For a more comprehensive description of all the query parameters and limitations of this endpoint, see our [long-form documentation](/developers/documentation/getting-started/search-api) for this feature.
+        #
+        # workspace - [Id] The workspace or organization in which to search for tasks.
+        # per_page - [Integer] the number of records to fetch per page.
+        # options - [Hash] the request I/O options.
+        def search(client, workspace: required("workspace"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/workspaces/#{workspace}/tasks/search", params: params, options: options)), type: Resource, client: client)
         end
       end
 
@@ -187,6 +216,64 @@ module Asana
       def delete()
 
         client.delete("/tasks/#{id}") && true
+      end
+
+      # Returns the compact representations of all of the dependencies of a task.
+      #
+      # options - [Hash] the request I/O options.
+      def dependencies(options: {})
+
+        Resource.new(parse(client.get("/tasks/#{id}/dependencies", options: options)).first, client: client)
+      end
+
+      # Returns the compact representations of all of the dependents of a task.
+      #
+      # options - [Hash] the request I/O options.
+      def dependents(options: {})
+
+        Resource.new(parse(client.get("/tasks/#{id}/dependents", options: options)).first, client: client)
+      end
+
+      # Marks a set of tasks as dependencies of this task, if they are not
+      # already dependencies. *A task can have at most 15 dependencies.*
+      #
+      # dependencies - [Array] An array of task IDs that this task should depend on.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_dependencies(dependencies: required("dependencies"), options: {}, **data)
+        with_params = data.merge(dependencies: dependencies).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/tasks/#{id}/addDependencies", body: with_params, options: options)).first, client: client)
+      end
+
+      # Marks a set of tasks as dependents of this task, if they are not already
+      # dependents. *A task can have at most 30 dependents.*
+      #
+      # dependents - [Array] An array of task IDs that should depend on this task.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_dependents(dependents: required("dependents"), options: {}, **data)
+        with_params = data.merge(dependents: dependents).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/tasks/#{id}/addDependents", body: with_params, options: options)).first, client: client)
+      end
+
+      # Unlinks a set of dependencies from this task.
+      #
+      # dependencies - [Array] An array of task IDs to remove as dependencies.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_dependencies(dependencies: required("dependencies"), options: {}, **data)
+        with_params = data.merge(dependencies: dependencies).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/tasks/#{id}/removeDependencies", body: with_params, options: options)).first, client: client)
+      end
+
+      # Unlinks a set of dependents from this task.
+      #
+      # dependents - [Array] An array of task IDs to remove as dependents.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def remove_dependents(dependents: required("dependents"), options: {}, **data)
+        with_params = data.merge(dependents: dependents).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/tasks/#{id}/removeDependents", body: with_params, options: options)).first, client: client)
       end
 
       # Adds each of the specified followers to the task, if they are not already
@@ -222,10 +309,16 @@ module Asana
 
       # Adds the task to the specified project, in the optional location
       # specified. If no location arguments are given, the task will be added to
-      # the beginning of the project.
+      # the end of the project.
       #
-      # `addProject` can also be used to reorder a task within a project that
+      # `addProject` can also be used to reorder a task within a project or section that
       # already contains it.
+      #
+      # At most one of `insert_before`, `insert_after`, or `section` should be
+      # specified. Inserting into a section in an non-order-dependent way can be
+      # done by specifying `section`, otherwise, to insert within a section in a
+      # particular place, specify `insert_before` or `insert_after` and a task
+      # within the section to anchor the position of this task.
       #
       # Returns an empty data block.
       #
@@ -237,7 +330,7 @@ module Asana
       # insert at the end of the list.
       #
       # section - [Id] A section in the project to insert the task into. The task will be
-      # inserted at the top of the section.
+      # inserted at the bottom of the section.
       #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
@@ -308,13 +401,21 @@ module Asana
       end
 
       # Changes the parent of a task. Each task may only be a subtask of a single
-      # parent, or no parent task at all. Returns an empty data block.
+      # parent, or no parent task at all. Returns an empty data block. When using `insert_before` and `insert_after`,
+      # at most one of those two options can be specified, and they must already be subtasks
+      # of the parent.
       #
       # parent - [Id] The new parent of the task, or `null` for no parent.
+      # insert_after - [Id] A subtask of the parent to insert the task after, or `null` to
+      # insert at the beginning of the list.
+      #
+      # insert_before - [Id] A subtask of the parent to insert the task before, or `null` to
+      # insert at the end of the list.
+      #
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def set_parent(parent: required("parent"), options: {}, **data)
-        with_params = data.merge(parent: parent).reject { |_,v| v.nil? || Array(v).empty? }
+      def set_parent(parent: required("parent"), insert_after: nil, insert_before: nil, options: {}, **data)
+        with_params = data.merge(parent: parent, insert_after: insert_after, insert_before: insert_before).reject { |_,v| v.nil? || Array(v).empty? }
         client.post("/tasks/#{id}/setParent", body: with_params, options: options) && true
       end
 
