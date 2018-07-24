@@ -80,7 +80,7 @@ module Asana
         # insert_after - [Id] An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def add_option(client, custom_field: required("custom_field"), name: required("name"), color: nil, insert_before: nil, insert_after: nil, options: {}, **data)
+        def add_enum_option(client, custom_field: required("custom_field"), name: required("name"), color: nil, insert_before: nil, insert_after: nil, options: {}, **data)
           with_params = data.merge(name: name, color: color, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/custom_fields/#{custom_field}/enum_options", body: with_params, options: options)).first, client: client)
         end
@@ -96,7 +96,7 @@ module Asana
         # after_enum_option - [Id] An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def reorder_option(client, custom_field: required("custom_field"), enum_option: required("enum_option"), name: required("name"), color: nil, before_enum_option: nil, after_enum_option: nil, options: {}, **data)
+        def reorder_enum_option(client, custom_field: required("custom_field"), enum_option: required("enum_option"), name: required("name"), color: nil, before_enum_option: nil, after_enum_option: nil, options: {}, **data)
           with_params = data.merge(enum_option: enum_option, name: name, color: color, before_enum_option: before_enum_option, after_enum_option: after_enum_option).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/custom_fields/#{custom_field}/enum_options/insert", body: with_params, options: options)).first, client: client)
         end
@@ -138,7 +138,7 @@ module Asana
       # enabled - [Boolean] Whether or not the enum option is a selectable value for the custom field.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
-      def update_option(enum_option: required("enum_option"), name: required("name"), color: nil, enabled: nil, options: {}, **data)
+      def update_enum_option(enum_option: required("enum_option"), name: required("name"), color: nil, enabled: nil, options: {}, **data)
         with_params = data.merge(name: name, color: color, enabled: enabled).reject { |_,v| v.nil? || Array(v).empty? }
         refresh_with(parse(client.put("/enum_options/#{enum_option}", body: with_params, options: options)).first)
       end
