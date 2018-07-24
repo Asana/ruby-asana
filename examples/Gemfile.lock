@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    asana (0.6.2)
+    asana (0.8.0)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
       faraday_middleware-multi_json (~> 0.0)

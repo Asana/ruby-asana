@@ -11,8 +11,6 @@ module Asana
 
       module_function
 
-      PREMIUM_ONLY_STR = 'not available for free'.freeze
-
       # Public: Perform a request handling any API errors correspondingly.
       #
       # request - [Proc] a block that will execute the request.
@@ -36,19 +34,7 @@ module Asana
           when 400 then raise invalid_request(e.response)
           when 401 then raise not_authorized(e.response)
           when 402 then raise payment_required(e.response)
-          when 403
-            begin
-              body = body(e.response)
-              errors_str = body['errors'].collect {
-                |err| err['message']
-              }.join('; ')
-              if errors_str.include? PREMIUM_ONLY_STR
-                raise payment_required(e.response)
-              end
-            rescue
-              raise forbidden(e.response)
-            end
-            raise forbidden(e.response)
+          when 403 then raise forbidden(e.response)
           when 404 then raise not_found(e.response)
           when 412 then recover_response(e.response)
           when 429 then raise rate_limit_enforced(e.response)
