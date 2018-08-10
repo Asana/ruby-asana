@@ -19,6 +19,15 @@ module Asana
 
       attr_reader :created_by
 
+      # DEPRECATED: prefer "liked"
+      attr_reader :hearted
+
+      # DEPRECATED: prefer "likes"
+      attr_reader :hearts
+
+      # DEPRECATED: prefer "num_likes"
+      attr_reader :num_hearts
+
       attr_reader :liked
 
       attr_reader :likes

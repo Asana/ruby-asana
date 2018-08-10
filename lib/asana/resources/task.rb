@@ -40,6 +40,12 @@ module Asana
 
       attr_reader :followers
 
+      # DEPRECATED: prefer "liked"
+      attr_reader :hearted
+
+      # DEPRECATED: prefer "likes"
+      attr_reader :hearts
+
       attr_reader :liked
 
       attr_reader :likes
@@ -49,6 +55,9 @@ module Asana
       attr_reader :name
 
       attr_reader :notes
+
+      # DEPRECATED: prefer "num_likes"
+      attr_reader :num_hearts
 
       attr_reader :num_likes
 
