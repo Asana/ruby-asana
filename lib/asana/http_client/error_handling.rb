@@ -30,7 +30,7 @@ module Asana
       # Raises [Asana::Errors::APIError] when the API returns an unknown error.
       #
       # rubocop:disable all
-      def handle(&request, num_timeouts=0)
+      def handle(num_timeouts=0, &request)
         request.call
       rescue Faraday::ClientError => e
         raise e unless e.response
@@ -59,7 +59,7 @@ module Asana
         end
       rescue Net::ReadTimeout => e
         if num_timeouts < MAX_TIMEOUTS
-          handle(&request, num_timeouts + 1)
+          handle(num_timeouts + 1, &request)
         else
           raise e
         end
