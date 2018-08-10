@@ -23,8 +23,6 @@ module Asana
 
       attr_reader :color
 
-      attr_reader :notes
-
       attr_reader :workspace
 
       class << self
