@@ -13,6 +13,8 @@ module Asana
 
       PREMIUM_ONLY_STR = 'not available for free'.freeze
 
+      MAX_TIMEOUTS = 5
+
       # Public: Perform a request handling any API errors correspondingly.
       #
       # request - [Proc] a block that will execute the request.
@@ -28,7 +30,7 @@ module Asana
       # Raises [Asana::Errors::APIError] when the API returns an unknown error.
       #
       # rubocop:disable all
-      def handle(&request)
+      def handle(num_timeouts=0, &request)
         request.call
       rescue Faraday::ClientError => e
         raise e unless e.response
@@ -54,6 +56,12 @@ module Asana
           when 429 then raise rate_limit_enforced(e.response)
           when 500 then raise server_error(e.response)
           else raise api_error(e.response)
+        end
+      rescue Net::ReadTimeout => e
+        if num_timeouts < MAX_TIMEOUTS
+          handle(num_timeouts + 1, &request)
+        else
+          raise e
         end
       end
       # rubocop:enable all
