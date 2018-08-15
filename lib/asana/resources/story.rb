@@ -19,17 +19,30 @@ module Asana
 
       attr_reader :created_by
 
+      # DEPRECATED: prefer "liked"
       attr_reader :hearted
 
+      # DEPRECATED: prefer "likes"
       attr_reader :hearts
 
+      # DEPRECATED: prefer "num_likes"
       attr_reader :num_hearts
+
+      attr_reader :liked
+
+      attr_reader :likes
+
+      attr_reader :num_likes
 
       attr_reader :text
 
       attr_reader :html_text
 
       attr_reader :target
+
+      attr_reader :is_pinned
+
+      attr_reader :is_edited
 
       attr_reader :source
 
@@ -77,6 +90,27 @@ module Asana
           with_params = data.merge(text: text).reject { |_,v| v.nil? || Array(v).empty? }
           self.new(parse(client.post("/tasks/#{task}/stories", body: with_params, options: options)).first, client: client)
         end
+      end
+
+      # Updates the story and returns the full record for the updated story.
+      # Only comment stories can have their text updated, and only comment stories and
+      # attachment stories can be pinned. Only one of `text` and `html_text` can be specified.
+      #
+      # text - [String] The plain text with which to update the comment.
+      #
+      # html_text - [String] The rich text with which to update the comment.
+      # is_pinned - [Boolean] Whether the story should be pinned on the resource.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def update(text: nil, html_text: nil, is_pinned: nil, options: {}, **data)
+        with_params = data.merge(text: text, html_text: html_text, is_pinned: is_pinned).reject { |_,v| v.nil? || Array(v).empty? }
+        refresh_with(parse(client.put("/stories/#{id}", body: with_params, options: options)).first)
+      end
+
+      # Deletes a story. A user can only delete stories they have created. Returns an empty data record.
+      def delete()
+
+        client.delete("/stories/#{id}") && true
       end
 
     end
