@@ -19,7 +19,7 @@ module Asana
     # user could not be authenticated.
     NotAuthorized = Class.new(APIError) do
       def to_s
-        'A valid API key was not provided with the request, so the API could '\
+        'Valid credentials were not provided with the request, so the API could '\
         'not associate a user with the request.'
       end
     end
@@ -37,7 +37,7 @@ module Asana
     # access the requested resource or to perform the requested action on it.
     Forbidden = Class.new(APIError) do
       def to_s
-        'The API key and request syntax was valid but the server is refusing '\
+        'The authorization and request syntax was valid but the server is refusing '\
         'to complete the request. This can happen if you try to read or write '\
         'to objects or properties that the user does not have access to.'
       end
