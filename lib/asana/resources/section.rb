@@ -39,10 +39,11 @@ module Asana
         # Returns the compact records for all sections in the specified project.
         #
         # project - [Id] The project to get sections from.
+        # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_project(client, project: required("project"), options: {})
-
-          self.new(parse(client.get("/projects/#{project}/sections", options: options)).first, client: client)
+        def find_by_project(client, project: required("project"), per_page: 20, options: {})
+          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          Collection.new(parse(client.get("/projects/#{project}/sections", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the complete record for a single section.
