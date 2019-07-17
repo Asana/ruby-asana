@@ -21,6 +21,8 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
       attr_reader :created_at
 
       attr_reader :download_url
@@ -37,7 +39,7 @@ module Asana
 
         # Returns details of a previously-requested Organization export.
         #
-        # id - [Id] Globally unique identifier for the Organization export.
+        # id - [Gid] Globally unique identifier for the Organization export.
         #
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
@@ -48,7 +50,7 @@ module Asana
         # This method creates a request to export an Organization. Asana will complete the export at some
         # point after you create the request.
         #
-        # organization - [Id] Globally unique identifier for the workspace or organization.
+        # organization - [Gid] Globally unique identifier for the workspace or organization.
         #
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.

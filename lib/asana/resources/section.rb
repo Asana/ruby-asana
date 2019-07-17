@@ -11,6 +11,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
 
       attr_reader :project
@@ -27,7 +31,7 @@ module Asana
         #
         # Returns the full record of the newly created section.
         #
-        # project - [Id] The project to create the section in
+        # project - [Gid] The project to create the section in
         # name - [String] The text to be displayed as the section name. This cannot be an empty string.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
@@ -38,7 +42,7 @@ module Asana
 
         # Returns the compact records for all sections in the specified project.
         #
-        # project - [Id] The project to get sections from.
+        # project - [Gid] The project to get sections from.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_project(client, project: required("project"), per_page: 20, options: {})
@@ -48,11 +52,27 @@ module Asana
 
         # Returns the complete record for a single section.
         #
-        # id - [Id] The section to get.
+        # id - [Gid] The section to get.
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 
           self.new(parse(client.get("/sections/#{id}", options: options)).first, client: client)
+        end
+
+        # Add a task to a specific, existing section. This will remove the task from other sections of the project.
+        #
+        # The task will be inserted at the top of a section unless an `insert_before` or `insert_after` parameter is declared.
+        #
+        # This does not work for separators (tasks with the `resource_subtype` of section).
+        #
+        # task - [Gid] The task to add to this section
+        # insert_before - [Gid] Insert the given task immediately before the task specified by this parameter. Cannot be provided together with `insert_after`.
+        # insert_after - [Gid] Insert the given task immediately after the task specified by this parameter. Cannot be provided together with `insert_before`.
+        # options - [Hash] the request I/O options.
+        # data - [Hash] the attributes to post.
+        def add_task(client, task: required("task"), insert_before: nil, insert_after: nil, options: {}, **data)
+          with_params = data.merge(insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
+          Task.new(parse(client.post("/sections/#{task}/addTask", body: with_params, options: options)).first, client: client)
         end
       end
 
@@ -96,9 +116,9 @@ module Asana
       #
       # Returns an empty data block.
       #
-      # project - [Id] The project in which to reorder the given section
-      # before_section - [Id] Insert the given section immediately before the section specified by this parameter.
-      # after_section - [Id] Insert the given section immediately after the section specified by this parameter.
+      # project - [Gid] The project in which to reorder the given section
+      # before_section - [Gid] Insert the given section immediately before the section specified by this parameter.
+      # after_section - [Gid] Insert the given section immediately after the section specified by this parameter.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
       def insert_in_project(project: required("project"), before_section: nil, after_section: nil, options: {}, **data)

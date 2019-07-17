@@ -17,15 +17,21 @@ module Asana
       include EventSubscription
 
 
-      attr_reader :name
-
       attr_reader :id
+
+      attr_reader :gid
+
+      attr_reader :resource_type
+
+      attr_reader :name
 
       attr_reader :owner
 
       attr_reader :current_status
 
       attr_reader :due_date
+
+      attr_reader :due_on
 
       attr_reader :start_on
 
@@ -41,11 +47,15 @@ module Asana
 
       attr_reader :followers
 
+      attr_reader :custom_fields
+
       attr_reader :custom_field_settings
 
       attr_reader :color
 
       attr_reader :notes
+
+      attr_reader :html_notes
 
       attr_reader :workspace
 
@@ -71,8 +81,8 @@ module Asana
         #
         # Returns the full record of the newly created project.
         #
-        # workspace - [Id] The workspace or organization to create the project in.
-        # team - [Id] If creating in an organization, the specific team to create the
+        # workspace - [Gid] The workspace or organization to create the project in.
+        # team - [Gid] If creating in an organization, the specific team to create the
         # project in.
         #
         # options - [Hash] the request I/O options.
@@ -87,7 +97,7 @@ module Asana
         #
         # Returns the full record of the newly created project.
         #
-        # workspace - [Id] The workspace or organization to create the project in.
+        # workspace - [Gid] The workspace or organization to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
@@ -99,7 +109,7 @@ module Asana
         #
         # Returns the full record of the newly created project.
         #
-        # team - [Id] The team to create the project in.
+        # team - [Gid] The team to create the project in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create_in_team(client, team: required("team"), options: {}, **data)
@@ -109,7 +119,7 @@ module Asana
 
         # Returns the complete project record for a single project.
         #
-        # id - [Id] The project to get.
+        # id - [Gid] The project to get.
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 
@@ -119,41 +129,49 @@ module Asana
         # Returns the compact project records for some filtered set of projects.
         # Use one or more of the parameters provided to filter the projects returned.
         #
-        # workspace - [Id] The workspace or organization to filter projects on.
-        # team - [Id] The team to filter projects on.
+        # workspace - [Gid] The workspace or organization to filter projects on.
+        # team - [Gid] The team to filter projects on.
+        # is_template - [Boolean] **Note: This parameter can only be included if a team is also defined, or the workspace is not an organization**
+        # Filters results to include only template projects.
+        #
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_all(client, workspace: nil, team: nil, archived: nil, per_page: 20, options: {})
-          params = { workspace: workspace, team: team, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_all(client, workspace: nil, team: nil, is_template: nil, archived: nil, per_page: 20, options: {})
+          params = { workspace: workspace, team: team, is_template: is_template, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the workspace.
         #
-        # workspace - [Id] The workspace or organization to find projects in.
+        # workspace - [Gid] The workspace or organization to find projects in.
+        # is_template - [Boolean] **Note: This parameter can only be included if a team is also defined, or the workspace is not an organization**
+        # Filters results to include only template projects.
+        #
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_workspace(client, workspace: required("workspace"), archived: nil, per_page: 20, options: {})
-          params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_workspace(client, workspace: required("workspace"), is_template: nil, archived: nil, per_page: 20, options: {})
+          params = { is_template: is_template, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/projects", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact project records for all projects in the team.
         #
-        # team - [Id] The team to find projects in.
+        # team - [Gid] The team to find projects in.
+        # is_template - [Boolean] Filters results to include only template projects.
+        #
         # archived - [Boolean] Only return projects whose `archived` field takes on the value of
         # this parameter.
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_team(client, team: required("team"), archived: nil, per_page: 20, options: {})
-          params = { archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        def find_by_team(client, team: required("team"), is_template: nil, archived: nil, per_page: 20, options: {})
+          params = { is_template: is_template, archived: archived, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/teams/#{team}/projects", params: params, options: options)), type: self, client: client)
         end
       end
@@ -182,6 +200,30 @@ module Asana
       def delete()
 
         client.delete("/projects/#{id}") && true
+      end
+
+      # Creates and returns a job that will asynchronously handle the duplication.
+      #
+      # name - [String] The name of the new project.
+      # team - [Gid] Sets the team of the new project. If team is not defined, the new project
+      # will be in the same team as the the original project.
+      #
+      # include - [Array] The elements that will be duplicated to the new project.
+      # Tasks are always included.
+      #
+      # schedule_dates - [String] A dictionary of options to auto-shift dates.
+      # `task_dates` must be included to use this option.
+      # Requires either `start_on` or `due_on`, but not both.
+      # `start_on` will set the first start date of the new
+      # project to the given date, while `due_on` will set the last due date
+      # to the given date. Both will offset the remaining dates by the same amount
+      # of the original project.
+      #
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def duplicate_project(name: required("name"), team: nil, include: nil, schedule_dates: nil, options: {}, **data)
+        with_params = data.merge(name: name, team: team, include: include, schedule_dates: schedule_dates).reject { |_,v| v.nil? || Array(v).empty? }
+        Resource.new(parse(client.post("/projects/#{id}/duplicate", body: with_params, options: options)).first, client: client)
       end
 
       # Returns the compact task records for all tasks within the given project,
@@ -219,7 +261,7 @@ module Asana
 
       # Adds the specified list of users as members of the project. Returns the updated project record.
       #
-      # members - [Array] An array of members to add to the project.
+      # members - [Array] An array of user ids.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
       def add_members(members: required("members"), options: {}, **data)
@@ -229,7 +271,7 @@ module Asana
 
       # Removes the specified list of members from the project. Returns the updated project record.
       #
-      # members - [Array] An array of members to remove from the project.
+      # members - [Array] An array of user ids.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
       def remove_members(members: required("members"), options: {}, **data)
@@ -239,13 +281,13 @@ module Asana
 
       # Create a new custom field setting on the project.
       #
-      # custom_field - [Id] The id of the custom field to associate with this project.
+      # custom_field - [Gid] The id of the custom field to associate with this project.
       # is_important - [Boolean] Whether this field should be considered important to this project.
       #
-      # insert_before - [Id] An id of a Custom Field Settings on this project, before which the new Custom Field Settings will be added.
+      # insert_before - [Gid] An id of a Custom Field Settings on this project, before which the new Custom Field Settings will be added.
       # `insert_before` and `insert_after` parameters cannot both be specified.
       #
-      # insert_after - [Id] An id of a Custom Field Settings on this project, after which the new Custom Field Settings will be added.
+      # insert_after - [Gid] An id of a Custom Field Settings on this project, after which the new Custom Field Settings will be added.
       # `insert_before` and `insert_after` parameters cannot both be specified.
       #
       # options - [Hash] the request I/O options.
@@ -257,7 +299,7 @@ module Asana
 
       # Remove a custom field setting on the project.
       #
-      # custom_field - [Id] The id of the custom field to remove from this project.
+      # custom_field - [Gid] The id of the custom field to remove from this project.
       # options - [Hash] the request I/O options.
       # data - [Hash] the attributes to post.
       def remove_custom_field_setting(custom_field: nil, options: {}, **data)

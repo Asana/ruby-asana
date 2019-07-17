@@ -15,6 +15,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :created_at
 
       attr_reader :followers
@@ -40,7 +44,7 @@ module Asana
         #
         # Returns the full record of the newly created tag.
         #
-        # workspace - [Id] The workspace or organization to create the tag in.
+        # workspace - [Gid] The workspace or organization to create the tag in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create(client, workspace: required("workspace"), options: {}, **data)
@@ -57,7 +61,7 @@ module Asana
         #
         # Returns the full record of the newly created tag.
         #
-        # workspace - [Id] The workspace or organization to create the tag in.
+        # workspace - [Gid] The workspace or organization to create the tag in.
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create_in_workspace(client, workspace: required("workspace"), options: {}, **data)
@@ -67,7 +71,7 @@ module Asana
 
         # Returns the complete tag record for a single tag.
         #
-        # id - [Id] The tag to get.
+        # id - [Gid] The tag to get.
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 
@@ -77,8 +81,8 @@ module Asana
         # Returns the compact tag records for some filtered set of tags.
         # Use one or more of the parameters provided to filter the tags returned.
         #
-        # workspace - [Id] The workspace or organization to filter tags on.
-        # team - [Id] The team to filter tags on.
+        # workspace - [Gid] The workspace or organization to filter tags on.
+        # team - [Gid] The team to filter tags on.
         # archived - [Boolean] Only return tags whose `archived` field takes on the value of
         # this parameter.
         #
@@ -91,7 +95,7 @@ module Asana
 
         # Returns the compact tag records for all tags in the workspace.
         #
-        # workspace - [Id] The workspace or organization to find tags in.
+        # workspace - [Gid] The workspace or organization to find tags in.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_workspace(client, workspace: required("workspace"), per_page: 20, options: {})
@@ -123,16 +127,6 @@ module Asana
       def delete()
 
         client.delete("/tags/#{id}") && true
-      end
-
-      # Returns the compact task records for all tasks with the given tag.
-      # Tasks can have more than one tag at a time.
-      #
-      # per_page - [Integer] the number of records to fetch per page.
-      # options - [Hash] the request I/O options.
-      def get_tasks_with_tag(per_page: 20, options: {})
-        params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/tags/#{id}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end
