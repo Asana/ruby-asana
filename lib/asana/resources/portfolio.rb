@@ -110,7 +110,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_items(options: {})
 
-        Resource.new(parse(client.get("/portfolios/#{id}/items", options: options)).first, client: client)
+        Collection.new(parse(client.get("/portfolios/#{id}/items", options: options)), type: self, client: client)
       end
 
       # Add an item to a portfolio.
@@ -168,7 +168,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def custom_field_settings(options: {})
 
-        Resource.new(parse(client.get("/portfolios/#{id}/custom_field_settings", options: options)).first, client: client)
+        Collection.new(parse(client.get("/portfolios/#{id}/custom_field_settings", options: options)), type: self, client: client)
       end
 
       # Create a new custom field setting on the portfolio. Returns the full

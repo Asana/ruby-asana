@@ -98,6 +98,7 @@ module Asana
           with_params = data.merge(name: name, color: color, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/custom_fields/#{custom_field}/enum_options", body: with_params, options: options)).first, client: client)
         end
+        alias_method :add_enum_option, :create_enum_option
 
         # Moves a particular enum option to be either before or after another specified enum option in the custom field.
         #
@@ -116,6 +117,7 @@ module Asana
           with_params = data.merge(enum_option: enum_option, name: name, color: color, before_enum_option: before_enum_option, after_enum_option: after_enum_option).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/custom_fields/#{custom_field}/enum_options/insert", body: with_params, options: options)).first, client: client)
         end
+        alias_method :reorder_enum_option, :insert_enum_option
       end
 
       # A specific, existing custom field can be updated by making a PUT request on the URL for that custom field. Only the fields provided in the `data` block will be updated; any unspecified fields will remain unchanged

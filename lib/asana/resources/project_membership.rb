@@ -38,6 +38,7 @@ module Asana
           params = { user: user, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects/#{project}/project_memberships", params: params, options: options)), type: Resource, client: client)
         end
+        alias_method :get_many, :find_by_project
 
         # Returns the project membership record.
         #
@@ -48,6 +49,7 @@ module Asana
 
           self.new(parse(client.get("/project_memberships/#{id}", options: options)).first, client: client)
         end
+        alias_method :get_single, :find_by_id
       end
 
     end

@@ -84,7 +84,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_user_favorites(workspace: required("workspace"), resource_type: required("resource_type"), options: {})
         params = { workspace: workspace, resource_type: resource_type }.reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.get("/users/#{id}/favorites", params: params, options: options)).first, client: client)
+        Collection.new(parse(client.get("/users/#{id}/favorites", params: params, options: options)), type: Resource, client: client)
       end
 
     end

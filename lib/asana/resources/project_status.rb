@@ -51,6 +51,7 @@ module Asana
           with_params = data.merge(text: text, color: color).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/projects/#{project}/project_statuses", body: with_params, options: options)).first, client: client)
         end
+        alias_method :create, :create_in_project
 
         # Returns the compact project status update records for all updates on the project.
         #

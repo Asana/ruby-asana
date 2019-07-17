@@ -23,8 +23,10 @@ module Asana
       attr_reader :created_by
 
       attr_reader :liked
+      alias_method :hearted, :liked
 
       attr_reader :likes
+      alias_method :hearts, :likes
 
       attr_reader :num_likes
 
