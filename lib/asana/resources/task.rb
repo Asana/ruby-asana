@@ -223,17 +223,6 @@ module Asana
           Collection.new(parse(client.get("/tasks", params: params, options: options)), type: self, client: client)
         end
 
-        # Returns the compact task records for all tasks with the given tag.
-        # Tasks can have more than one tag at a time.
-        #
-        # tag - [Id] The tag to fetch tasks from.
-        # per_page - [Integer] the number of records to fetch per page.
-        # options - [Hash] the request I/O options.
-        def get_tasks_with_tag(client, tag: required("tag"), per_page: 20, options: {})
-          params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/tags/#{tag}/tasks", params: params, options: options)), type: self, client: client)
-        end
-
         # The search endpoint allows you to build complex queries to find and fetch exactly the data you need from Asana. For a more comprehensive description of all the query parameters and limitations of this endpoint, see our [long-form documentation](/developers/documentation/getting-started/search-api) for this feature.
         #
         # workspace - [Gid] The workspace or organization in which to search for tasks.
