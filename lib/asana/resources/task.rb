@@ -132,9 +132,9 @@ module Asana
         # project - [Gid] The project in which to search for tasks.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def find_by_project(client, project: required("project"), per_page: 20, options: {})
+        def find_by_project(client, project: nil, projectId: nil, per_page: 20, options: {})
           params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-          Collection.new(parse(client.get("/projects/#{project}/tasks", params: params, options: options)), type: self, client: client)
+          Collection.new(parse(client.get("/projects/#{project != nil ? project : projectId}/tasks", params: params, options: options)), type: self, client: client)
         end
 
         # Returns the compact task records for all tasks with the given tag.
