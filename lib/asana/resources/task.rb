@@ -234,6 +234,7 @@ module Asana
           params = { resource_subtype: resource_subtype, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/workspaces/#{workspace}/tasks/search", params: params, options: options)), type: Resource, client: client)
         end
+        alias_method :search, :search_in_workspace
       end
 
       # A specific, existing task can be updated by making a PUT request on the
