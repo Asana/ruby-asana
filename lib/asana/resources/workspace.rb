@@ -94,8 +94,8 @@ module Asana
       #
       # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def typeahead(resource_type: required("resource_type"), type: nil, query: nil, count: nil, per_page: 20, options: {})
-        params = { resource_type: resource_type, type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+      def typeahead(resource_type: nil, type: nil, query: nil, count: nil, per_page: 20, options: {})
+        params = { resource_type: resource_type || type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 

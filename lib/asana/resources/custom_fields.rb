@@ -56,7 +56,7 @@ module Asana
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
         def create(client, workspace: required("workspace"), resource_subtype: nil, type: nil, name: required("name"), description: nil, precision: nil, enum_options: nil, options: {}, **data)
-          with_params = data.merge(workspace: workspace, resource_subtype: resource_subtype, type: type, name: name, description: description, precision: precision, enum_options: enum_options).reject { |_,v| v.nil? || Array(v).empty? }
+          with_params = data.merge(workspace: workspace, resource_subtype: resource_subtype || type, name: name, description: description, precision: precision, enum_options: enum_options).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/custom_fields", body: with_params, options: options)).first, client: client)
         end
 
