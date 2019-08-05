@@ -22,6 +22,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
 
       attr_reader :is_organization
@@ -73,10 +77,12 @@ module Asana
       # result set is limited to a single page of results with a maximum size,
       # so you won't be able to fetch large numbers of results.
       #
-      # type - [Enum] The type of values the typeahead should return. You can choose from
+      # resource_type - [Enum] The type of values the typeahead should return. You can choose from
       # one of the following: custom_field, project, tag, task, and user.
       # Note that unlike in the names of endpoints, the types listed here are
       # in singular form (e.g. `task`). Using multiple types is not yet supported.
+      #
+      # type - [Enum] **Deprecated: new integrations should prefer the resource_type field.**
       #
       # query - [String] The string that will be used to search for relevant objects. If an
       # empty string is passed in, the API will currently return an empty
@@ -88,8 +94,8 @@ module Asana
       #
       # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def typeahead(type: required("type"), query: nil, count: nil, per_page: 20, options: {})
-        params = { type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+      def typeahead(resource_type: nil, type: nil, query: nil, count: nil, per_page: 20, options: {})
+        params = { resource_type: resource_type || type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
         Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 

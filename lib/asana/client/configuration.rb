@@ -16,7 +16,9 @@ module Asana
     class Configuration
       # Public: Initializes an empty configuration object.
       def initialize
-        @configuration = {}
+        @configuration = {
+            :log_asana_change_warnings => true
+        }
       end
 
       # Public: Sets an authentication strategy.
@@ -61,6 +63,20 @@ module Asana
       # Returns nothing.
       def debug_mode
         @configuration[:debug_mode] = true
+      end
+
+      # Public: Configures the client to log Asana-Change warnings on STDERR.
+      #
+      # Returns nothing.
+      def log_asana_change_warnings(value)
+        @configuration[:log_asana_change_warnings] = !!value
+      end
+
+      # Public: Configures the client to always send the given headers
+      #
+      # Returns nothing.
+      def default_headers(value)
+        @configuration[:default_headers] = value
       end
 
       # Public:

@@ -11,6 +11,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :created_at
 
       attr_reader :download_url
@@ -31,7 +35,7 @@ module Asana
 
         # Returns the full record for a single attachment.
         #
-        # id - [Id] Globally unique identifier for the attachment.
+        # id - [Gid] Globally unique identifier for the attachment.
         #
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
@@ -41,7 +45,7 @@ module Asana
 
         # Returns the compact records for all attachments on the task.
         #
-        # task - [Id] Globally unique identifier for the task.
+        # task - [Gid] Globally unique identifier for the task.
         #
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.

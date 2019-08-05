@@ -14,9 +14,15 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :title
 
       attr_reader :text
+
+      attr_reader :html_text
 
       attr_reader :color
 
@@ -34,21 +40,22 @@ module Asana
         #
         # Returns the full record of the newly created project status update.
         #
-        # project - [Id] The project on which to create a status update.
+        # project - [Gid] The project on which to create a status update.
         # text - [String] The text of the project status update.
         #
         # color - [String] The color to associate with the status update. Must be one of `"red"`, `"yellow"`, or `"green"`.
         #
         # options - [Hash] the request I/O options.
         # data - [Hash] the attributes to post.
-        def create(client, project: required("project"), text: required("text"), color: required("color"), options: {}, **data)
+        def create_in_project(client, project: required("project"), text: required("text"), color: required("color"), options: {}, **data)
           with_params = data.merge(text: text, color: color).reject { |_,v| v.nil? || Array(v).empty? }
           Resource.new(parse(client.post("/projects/#{project}/project_statuses", body: with_params, options: options)).first, client: client)
         end
+        alias_method :create, :create_in_project
 
         # Returns the compact project status update records for all updates on the project.
         #
-        # project - [Id] The project to find status updates for.
+        # project - [Gid] The project to find status updates for.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
         def find_by_project(client, project: required("project"), per_page: 20, options: {})
@@ -58,7 +65,7 @@ module Asana
 
         # Returns the complete record for a single status update.
         #
-        # id - [Id] The project status update to get.
+        # id - [Gid] The project status update to get.
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 

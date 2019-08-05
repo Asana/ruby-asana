@@ -12,6 +12,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :user
 
       attr_reader :project
@@ -26,24 +30,26 @@ module Asana
 
         # Returns the compact project membership records for the project.
         #
-        # project - [Id] The project for which to fetch memberships.
+        # project - [Gid] The project for which to fetch memberships.
         # user - [String] If present, the user to filter the memberships to.
         # per_page - [Integer] the number of records to fetch per page.
         # options - [Hash] the request I/O options.
-        def get_many(client, project: required("project"), user: nil, per_page: 20, options: {})
+        def find_by_project(client, project: required("project"), user: nil, per_page: 20, options: {})
           params = { user: user, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/projects/#{project}/project_memberships", params: params, options: options)), type: Resource, client: client)
         end
+        alias_method :get_many, :find_by_project
 
         # Returns the project membership record.
         #
-        # project - [Id] Globally unique identifier for the project membership.
+        # id - [Gid] Globally unique identifier for the project membership.
         #
         # options - [Hash] the request I/O options.
-        def get_single(client, project: required("project"), options: {})
+        def find_by_id(client, id, options: {})
 
-          Resource.new(parse(client.get("/project_memberships/#{project}", options: options)).first, client: client)
+          self.new(parse(client.get("/project_memberships/#{id}", options: options)).first, client: client)
         end
+        alias_method :get_single, :find_by_id
       end
 
     end

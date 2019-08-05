@@ -10,7 +10,17 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
+
+      attr_reader :description
+
+      attr_reader :html_description
+
+      attr_reader :organization
 
       class << self
         # Returns the plural name of the resource.

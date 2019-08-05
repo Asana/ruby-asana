@@ -26,12 +26,16 @@ module Asana
                    adapter: nil,
                    user_agent: nil,
                    debug_mode: false,
+                   log_asana_change_warnings: true,
+                   default_headers: nil,
                    &config)
-      @authentication   = authentication
-      @adapter          = adapter || Faraday.default_adapter
-      @environment_info = EnvironmentInfo.new(user_agent)
-      @debug_mode       = debug_mode
-      @config           = config
+      @authentication             = authentication
+      @adapter                    = adapter || Faraday.default_adapter
+      @environment_info           = EnvironmentInfo.new(user_agent)
+      @debug_mode                 = debug_mode
+      @log_asana_change_warnings  = log_asana_change_warnings
+      @default_headers            = default_headers
+      @config                     = config
     end
 
     # Public: Performs a GET request against the API.
@@ -49,7 +53,7 @@ module Asana
           hash[:"opt_#{k}"] = v.is_a?(Array) ? v.join(',') : v
         end
       end
-      perform_request(:get, resource_uri, params.merge(opts))
+      perform_request(:get, resource_uri, params.merge(opts), options[:headers])
     end
 
     # Public: Performs a PUT request against the API.
@@ -62,8 +66,14 @@ module Asana
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
     def put(resource_uri, body: {}, options: {})
+      opts = options.reduce({}) do |acc, (k, v)|
+        acc.tap do |hash|
+          hash[:"opt_#{k}"] = v.is_a?(Array) ? v.join(',') : v
+        end
+      end
+      options.merge(opts)
       params = { data: body }.merge(options.empty? ? {} : { options: options })
-      perform_request(:put, resource_uri, params)
+      perform_request(:put, resource_uri, params, options[:headers])
     end
 
     # Public: Performs a POST request against the API.
@@ -78,13 +88,19 @@ module Asana
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
     def post(resource_uri, body: {}, upload: nil, options: {})
+      opts = options.reduce({}) do |acc, (k, v)|
+        acc.tap do |hash|
+          hash[:"opt_#{k}"] = v.is_a?(Array) ? v.join(',') : v
+        end
+      end
+      options.merge(opts)
       params = { data: body }.merge(options.empty? ? {} : { options: options })
       if upload
-        perform_request(:post, resource_uri, params.merge(file: upload)) do |c|
+        perform_request(:post, resource_uri, params.merge(file: upload), options[:headers]) do |c|
           c.request :multipart
         end
       else
-        perform_request(:post, resource_uri, params)
+        perform_request(:post, resource_uri, params, options[:headers])
       end
     end
 
@@ -113,11 +129,14 @@ module Asana
       end
     end
 
-    def perform_request(method, resource_uri, body = {}, &request_config)
+    def perform_request(method, resource_uri, body = {}, headers = {}, &request_config)
       handling_errors do
         url = BASE_URI + resource_uri
+        headers = (@default_headers || {}).merge(headers || {})
         log_request(method, url, body) if @debug_mode
-        Response.new(connection(&request_config).public_send(method, url, body))
+        result = Response.new(connection(&request_config).public_send(method, url, body, headers))
+        log_asana_change_headers(headers, result.headers) if @log_asana_change_warnings
+        result
       end
     end
 
@@ -151,5 +170,73 @@ module Asana
                          url,
                          body.inspect)
     end
+
+    def log_asana_change_headers(request_headers, response_headers)
+      change_header_key = nil
+
+      response_headers.each_key do |key|
+        if key.downcase == 'asana-change'
+            change_header_key = key
+        end
+      end
+
+      if change_header_key != nil
+        accounted_for_flags = Array.new
+
+        if request_headers == nil
+          request_headers = {}
+        end
+        # Grab the request's asana-enable flags
+        request_headers.each_key do |req_header|
+          if req_header.downcase == 'asana-enable'
+            request_headers[req_header].split(',').each do |flag|
+              accounted_for_flags.push(flag)
+            end
+          elsif req_header.downcase == 'asana-disable'
+            request_headers[req_header].split(',').each do |flag|
+              accounted_for_flags.push(flag)
+            end
+          end
+        end
+
+        changes = response_headers[change_header_key].split(',')
+
+        changes.each do |unsplit_change|
+          change = unsplit_change.split(';')
+
+          name = nil
+          info = nil
+          affected = nil
+
+          change.each do |unsplit_field|
+            field = unsplit_field.split('=')
+
+            field[0].strip!
+            field[1].strip!
+            if field[0] == 'name'
+                name = field[1]
+            elsif field[0] == 'info'
+                info = field[1]
+            elsif field[0] == 'affected'
+                affected = field[1]
+            end
+
+            # Only show the error if the flag was not in the request's asana-enable header
+            if !(accounted_for_flags.include? name) && (affected == 'true')
+              message1 = 'This request is affected by the "%s"' +
+              ' deprecation. Please visit this url for more info: %s'
+              message2 = 'Adding "%s" to your "Asana-Enable" or ' +
+              '"Asana-Disable" header will opt in/out to this deprecation ' +
+              'and suppress this warning.'
+
+              STDERR.puts format(message1, name, info)
+              STDERR.puts format(message2, name)
+            end
+          end
+        end
+      end
+    end
   end
 end
+
+
