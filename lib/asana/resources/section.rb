@@ -91,7 +91,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/sections/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/sections/#{gid}", body: data, options: options)).first)
       end
 
       # A specific, existing section can be deleted by making a DELETE request
@@ -104,7 +104,7 @@ module Asana
       # Returns an empty data block.
       def delete()
 
-        client.delete("/sections/#{id}") && true
+        client.delete("/sections/#{gid}") && true
       end
 
       # Move sections relative to each other in a board view. One of

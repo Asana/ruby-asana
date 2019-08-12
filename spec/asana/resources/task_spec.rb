@@ -17,7 +17,7 @@ RSpec.describe Asana::Resources::Task do
     id = 15
     checks = 0
 
-    api.on(:get, "/projects/#{id}/tasks") do |response|
+    api.on(:get, "/projects/#{gid}/tasks") do |response|
       response.body = { data: [] }
       checks = checks + 1
     end

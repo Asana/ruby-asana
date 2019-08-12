@@ -135,7 +135,7 @@ module Asana
       # webhook, but no further requests will be issued.
       def delete_by_id()
 
-        self.class.new(parse(client.delete("/webhooks/#{id}")).first, client: client)
+        self.class.new(parse(client.delete("/webhooks/#{gid}")).first, client: client)
       end
 
     end

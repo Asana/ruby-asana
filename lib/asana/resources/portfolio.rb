@@ -93,7 +93,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/portfolios/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/portfolios/#{gid}", body: data, options: options)).first)
       end
 
       # An existing portfolio can be deleted by making a DELETE request
@@ -102,7 +102,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/portfolios/#{id}") && true
+        client.delete("/portfolios/#{gid}") && true
       end
 
       # Get a list of the items in compact form in a portfolio.
@@ -110,7 +110,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_items(options: {})
 
-        Collection.new(parse(client.get("/portfolios/#{id}/items", options: options)), type: self, client: client)
+        Collection.new(parse(client.get("/portfolios/#{gid}/items", options: options)), type: self, client: client)
       end
 
       # Add an item to a portfolio.
@@ -128,7 +128,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_item(item: required("item"), insert_before: nil, insert_after: nil, options: {}, **data)
         with_params = data.merge(item: item, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/portfolios/#{id}/addItem", body: with_params, options: options) && true
+        client.post("/portfolios/#{gid}/addItem", body: with_params, options: options) && true
       end
 
       # Remove an item to a portfolio.
@@ -140,7 +140,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_item(item: required("item"), options: {}, **data)
         with_params = data.merge(item: item).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/portfolios/#{id}/removeItem", body: with_params, options: options) && true
+        client.post("/portfolios/#{gid}/removeItem", body: with_params, options: options) && true
       end
 
       # Adds the specified list of users as members of the portfolio. Returns the updated portfolio record.
@@ -150,7 +150,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_members(members: required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/portfolios/#{id}/addMembers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/portfolios/#{gid}/addMembers", body: with_params, options: options)).first)
       end
 
       # Removes the specified list of members from the portfolio. Returns the updated portfolio record.
@@ -160,7 +160,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_members(members: required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/portfolios/#{id}/removeMembers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/portfolios/#{gid}/removeMembers", body: with_params, options: options)).first)
       end
 
       # Get the custom field settings on a portfolio.
@@ -168,7 +168,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def custom_field_settings(options: {})
 
-        Collection.new(parse(client.get("/portfolios/#{id}/custom_field_settings", options: options)), type: self, client: client)
+        Collection.new(parse(client.get("/portfolios/#{gid}/custom_field_settings", options: options)), type: self, client: client)
       end
 
       # Create a new custom field setting on the portfolio. Returns the full
@@ -187,7 +187,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_custom_field_setting(custom_field: required("custom_field"), is_important: nil, insert_before: nil, insert_after: nil, options: {}, **data)
         with_params = data.merge(custom_field: custom_field, is_important: is_important, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.post("/portfolios/#{id}/addCustomFieldSetting", body: with_params, options: options)).first, client: client)
+        Resource.new(parse(client.post("/portfolios/#{gid}/addCustomFieldSetting", body: with_params, options: options)).first, client: client)
       end
 
       # Remove a custom field setting on the portfolio. Returns an empty data
@@ -198,7 +198,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_custom_field_setting(custom_field: required("custom_field"), options: {}, **data)
         with_params = data.merge(custom_field: custom_field).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/portfolios/#{id}/removeCustomFieldSetting", body: with_params, options: options) && true
+        client.post("/portfolios/#{gid}/removeCustomFieldSetting", body: with_params, options: options) && true
       end
 
     end

@@ -20,7 +20,7 @@ module Asana
           raise ArgumentError, "file #{filename} doesn't exist"
         end
         upload = Faraday::UploadIO.new(path, mime)
-        response = client.post("/#{self.class.plural_name}/#{id}/attachments",
+        response = client.post("/#{self.class.plural_name}/#{gid}/attachments",
                                body: data,
                                upload: upload,
                                options: options)

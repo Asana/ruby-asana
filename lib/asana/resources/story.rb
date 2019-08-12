@@ -100,13 +100,13 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(text: nil, html_text: nil, is_pinned: nil, options: {}, **data)
         with_params = data.merge(text: text, html_text: html_text, is_pinned: is_pinned).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.put("/stories/#{id}", body: with_params, options: options)).first)
+        refresh_with(parse(client.put("/stories/#{gid}", body: with_params, options: options)).first)
       end
 
       # Deletes a story. A user can only delete stories they have created. Returns an empty data record.
       def delete()
 
-        client.delete("/stories/#{id}") && true
+        client.delete("/stories/#{gid}") && true
       end
 
     end

@@ -68,7 +68,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/workspaces/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/workspaces/#{gid}", body: data, options: options)).first)
       end
 
       # Retrieves objects in the workspace based on an auto-completion/typeahead
@@ -96,7 +96,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def typeahead(resource_type: nil, type: nil, query: nil, count: nil, per_page: 20, options: {})
         params = { resource_type: resource_type || type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
+        Collection.new(parse(client.get("/workspaces/#{gid}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 
       # The user can be referenced by their globally unique user ID or their email address.
@@ -110,7 +110,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        User.new(parse(client.post("/workspaces/#{id}/addUser", body: with_params, options: options)).first, client: client)
+        User.new(parse(client.post("/workspaces/#{gid}/addUser", body: with_params, options: options)).first, client: client)
       end
 
       # The user making this call must be an admin in the workspace.
@@ -124,7 +124,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/workspaces/#{id}/removeUser", body: with_params, options: options) && true
+        client.post("/workspaces/#{gid}/removeUser", body: with_params, options: options) && true
       end
 
     end
