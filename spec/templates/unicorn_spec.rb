@@ -7,18 +7,18 @@ RSpec.describe Asana::Resources::Unicorn do
   RSpec::Matchers.define :be_john do
     match do |unicorn|
       unicorn.class == described_class &&
-        unicorn.id == 1 &&
+        unicorn.gid == "1" &&
         unicorn.name == 'John' &&
-        unicorn.world == 123
+        unicorn.world == "123"
     end
   end
 
   RSpec::Matchers.define :be_laura do
     match do |unicorn|
       unicorn.class == described_class &&
-        unicorn.id == 2 &&
+        unicorn.gid == "2" &&
         unicorn.name == 'Laura' &&
-        unicorn.world == 184
+        unicorn.world == "184"
     end
   end
 
@@ -28,8 +28,8 @@ RSpec.describe Asana::Resources::Unicorn do
     Asana::HttpClient.new(authentication: auth, adapter: api.to_proc)
   end
 
-  let(:john_data) { { 'id' => 1, 'name' => 'John', 'world' => 123 } }
-  let(:laura_data) { { 'id' => 2, 'name' => 'Laura', 'world' => 184 } }
+  let(:john_data) { { 'gid' => "1", 'name' => 'John', 'world' => "123" } }
+  let(:laura_data) { { 'gid' => "2", 'name' => 'Laura', 'world' => "184" } }
 
   describe '.plural_name' do
     it 'returns the resource plural name' do
@@ -40,10 +40,10 @@ RSpec.describe Asana::Resources::Unicorn do
   describe '.create' do
     it 'creates a new unicorn, with the world passed in as a param' do
       api.on(:post, '/unicorns', data: { name: 'John',
-                                         world: 123 }) do |response|
+                                         world: "123" }) do |response|
         response.body = { data: john_data }
       end
-      john = described_class.create(client, name: 'John', world: 123)
+      john = described_class.create(client, name: 'John', world: "123")
       expect(john).to be_john
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe Asana::Resources::Unicorn do
              data: { name: 'John' }) do |response|
         response.body = { data: john_data }
       end
-      john = described_class.create_in_world(client, name: 'John', world: 123)
+      john = described_class.create_in_world(client, name: 'John', world: "123")
       expect(john).to be_john
     end
   end
@@ -90,7 +90,7 @@ RSpec.describe Asana::Resources::Unicorn do
         response.body = { data: [john_data] }
       end
 
-      unicorns = described_class.find_all(client, world: 123)
+      unicorns = described_class.find_all(client, world: "123")
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
       expect(unicorns.first).to be_john
@@ -142,7 +142,7 @@ RSpec.describe Asana::Resources::Unicorn do
         response.body = { data: [john_data] }
       end
 
-      unicorns = described_class.find_by_world(client, world: 123)
+      unicorns = described_class.find_by_world(client, world: "123")
       expect(unicorns).to be_a(Asana::Resources::Collection)
       expect(unicorns.size).to eq(1)
       expect(unicorns.first).to be_john
@@ -157,9 +157,9 @@ RSpec.describe Asana::Resources::Unicorn do
 
       john = described_class.new(john_data, client: client)
       jan = john.update(name: 'Jan')
-      expect(jan.id).to eq(1)
+      expect(jan.gid).to eq("1")
       expect(jan.name).to eq('Jan')
-      expect(jan.world).to eq(123)
+      expect(jan.world).to eq("123")
     end
   end
 
@@ -181,7 +181,7 @@ RSpec.describe Asana::Resources::Unicorn do
 
   describe '#add_paw' do
     it 'adds an existing paw to a unicorn' do
-      paw_data = { id: 9, size: 4 }
+      paw_data = { gid: 9, size: 4 }
       api.on(:post, '/unicorns/1/paws', data: { paw: 9 }) do |response|
         response.body = { data: paw_data }
       end
@@ -206,13 +206,13 @@ RSpec.describe Asana::Resources::Unicorn do
   describe '#get_world' do
     it 'returns the world of the unicorn, with its inferred type' do
       api.on(:get, '/unicorns/1/getWorld') do |response|
-        response.body = { data: { id: 123 } }
+        response.body = { data: { gid: "123" } }
       end
 
       john = described_class.new(john_data, client: client)
       world = john.get_world
       expect(world).to be_a(Asana::Resources::World)
-      expect(world.id).to eq(123)
+      expect(world.gid).to eq("123")
     end
   end
 

@@ -14,7 +14,7 @@ RSpec.describe Asana::Resources::Task do
   include ResourcesHelper
 
   it 'contains backwards compatable method' do
-    id = 15
+    gid = "15"
     checks = 0
 
     api.on(:get, "/projects/#{gid}/tasks") do |response|
@@ -22,10 +22,10 @@ RSpec.describe Asana::Resources::Task do
       checks = checks + 1
     end
 
-    client.tasks.find_by_project({:project => id})
-    client.tasks.find_by_project({:projectId => id})
-    client.tasks.find_by_project({:project => nil, :projectId => id})
-    client.tasks.find_by_project({:project => id, :projectId => nil})
+    client.tasks.find_by_project({:project => gid})
+    client.tasks.find_by_project({:projectId => gid})
+    client.tasks.find_by_project({:project => nil, :projectId => gid})
+    client.tasks.find_by_project({:project => gid, :projectId => nil})
 
     expect(checks == 4)
   end

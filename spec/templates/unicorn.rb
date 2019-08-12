@@ -9,6 +9,8 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
       attr_reader :name
 
       class << self

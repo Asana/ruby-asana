@@ -8,6 +8,9 @@ properties:
   - name: id
     type: Id
 
+  - name: gid
+    type: Gid
+
   - name: name
     type: String
 
@@ -18,7 +21,7 @@ actions:
     path: "/unicorns"
     params:
       - name: world
-        type: Id
+        type: Gid
         required: true
         comment: The world to create the unicorn in.
     comment: |
@@ -31,7 +34,7 @@ actions:
     path: "/worlds/%d/unicorns"
     params:
       - name: world
-        type: Id
+        type: Gid
         required: true
         comment: The world to create the unicorn in.
     comment: |
@@ -44,7 +47,7 @@ actions:
     path: "/unicorns/%d"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to get.
     comment: |
@@ -55,7 +58,7 @@ actions:
     path: "/unicorns/%d"
     params:
       - name: tag
-        type: Id
+        type: Gid
         required: true
         comment: The tag to update.
     comment: |
@@ -73,7 +76,7 @@ actions:
     path: "/unicorns/%d/paws"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to get the paws of.
     collection: true
@@ -85,11 +88,11 @@ actions:
     path: "/unicorns/%d/paws"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to add paws to.
       - name: paw
-        type: Id
+        type: Gid
         required: true
         comment: The paw to add.
     comment: |
@@ -100,22 +103,22 @@ actions:
     path: "/unicorns/%d/friends"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to add friends to.
       - name: friends
-        type: Array.Id
+        type: Array.Gid
         required: true
         comment: The friend IDs to add.
     comment: |
       Returns the updated unicorn record.
- 
+
   - name: getWorld
     method: GET
     path: "/unicorns/%d/getWorld"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to get the world of
     comment: |
@@ -126,7 +129,7 @@ actions:
     path: "/unicorns/%d"
     params:
       - name: unicorn
-        type: Id
+        type: Gid
         required: true
         comment: The unicorn to delete.
     comment: |
@@ -144,10 +147,10 @@ actions:
       Use one or more of the parameters provided to filter the unicorns returned.
     params:
       - name: world
-        type: Id
+        type: Gid
         comment: The world to filter unicorns on.
       - name: breed
-        type: Id
+        type: Gid
         comment: The breed to filter unicorns on.
 
   - name: findByWorld
@@ -155,7 +158,7 @@ actions:
     path: "/worlds/%d/unicorns"
     params:
       - name: world
-        type: Id
+        type: Gid
         required: true
         comment: The world to find unicorns in.
     collection: true
