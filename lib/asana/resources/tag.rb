@@ -117,7 +117,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/tags/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/tags/#{gid}", body: data, options: options)).first)
       end
 
       # A specific, existing tag can be deleted by making a DELETE request
@@ -126,7 +126,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/tags/#{id}") && true
+        client.delete("/tags/#{gid}") && true
       end
 
       # Returns the compact task records for all tasks with the given tag.
@@ -136,7 +136,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_tasks_with_tag(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/tags/#{id}/tasks", params: params, options: options)), type: Task, client: client)
+        Collection.new(parse(client.get("/tags/#{gid}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end

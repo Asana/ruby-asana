@@ -9,6 +9,8 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
       class << self
         # Returns the plural name of the resource.
         def plural_name

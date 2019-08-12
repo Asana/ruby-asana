@@ -190,7 +190,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/projects/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/projects/#{gid}", body: data, options: options)).first)
       end
 
       # A specific, existing project can be deleted by making a DELETE request
@@ -199,7 +199,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/projects/#{id}") && true
+        client.delete("/projects/#{gid}") && true
       end
 
       # Creates and returns a job that will asynchronously handle the duplication.
@@ -223,7 +223,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def duplicate_project(name: required("name"), team: nil, include: nil, schedule_dates: nil, options: {}, **data)
         with_params = data.merge(name: name, team: team, include: include, schedule_dates: schedule_dates).reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.post("/projects/#{id}/duplicate", body: with_params, options: options)).first, client: client)
+        Resource.new(parse(client.post("/projects/#{gid}/duplicate", body: with_params, options: options)).first, client: client)
       end
 
       # Returns the compact task records for all tasks within the given project,
@@ -233,7 +233,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def tasks(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/projects/#{id}/tasks", params: params, options: options)), type: Task, client: client)
+        Collection.new(parse(client.get("/projects/#{gid}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
       # Adds the specified list of users as followers to the project. Followers are a subset of members, therefore if
@@ -245,7 +245,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_followers(followers: required("followers"), options: {}, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/projects/#{id}/addFollowers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/projects/#{gid}/addFollowers", body: with_params, options: options)).first)
       end
 
       # Removes the specified list of users from following the project, this will not affect project membership status.
@@ -256,7 +256,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_followers(followers: required("followers"), options: {}, **data)
         with_params = data.merge(followers: followers).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/projects/#{id}/removeFollowers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/projects/#{gid}/removeFollowers", body: with_params, options: options)).first)
       end
 
       # Adds the specified list of users as members of the project. Returns the updated project record.
@@ -266,7 +266,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_members(members: required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/projects/#{id}/addMembers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/projects/#{gid}/addMembers", body: with_params, options: options)).first)
       end
 
       # Removes the specified list of members from the project. Returns the updated project record.
@@ -276,7 +276,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_members(members: required("members"), options: {}, **data)
         with_params = data.merge(members: members).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/projects/#{id}/removeMembers", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/projects/#{gid}/removeMembers", body: with_params, options: options)).first)
       end
 
       # Create a new custom field setting on the project.
@@ -294,7 +294,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_custom_field_setting(custom_field: required("custom_field"), is_important: nil, insert_before: nil, insert_after: nil, options: {}, **data)
         with_params = data.merge(custom_field: custom_field, is_important: is_important, insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.post("/projects/#{id}/addCustomFieldSetting", body: with_params, options: options)).first, client: client)
+        Resource.new(parse(client.post("/projects/#{gid}/addCustomFieldSetting", body: with_params, options: options)).first, client: client)
       end
 
       # Remove a custom field setting on the project.
@@ -304,7 +304,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_custom_field_setting(custom_field: nil, options: {}, **data)
         with_params = data.merge(custom_field: custom_field).reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.post("/projects/#{id}/removeCustomFieldSetting", body: with_params, options: options)).first, client: client)
+        Resource.new(parse(client.post("/projects/#{gid}/removeCustomFieldSetting", body: with_params, options: options)).first, client: client)
       end
 
     end

@@ -17,7 +17,7 @@ RSpec.describe Asana::Resources::AttachmentUploading do
     defresource 'Unicorn' do
       include mod
 
-      attr_reader :id
+      attr_reader :gid
 
       def self.plural_name
         'unicorns'
@@ -29,14 +29,14 @@ RSpec.describe Asana::Resources::AttachmentUploading do
     it 'uploads an attachment to a unicorn' do
       arg_matcher = ->(body) { body.is_a?(Faraday::CompositeReadIO) }
       api.on(:post, '/unicorns/1/attachments', arg_matcher) do |response|
-        response.body = { data: { id: 10 } }
+        response.body = { data: { gid: "10" } }
       end
-      unicorn = unicorn_class.new({ id: 1 }, client: client)
+      unicorn = unicorn_class.new({ gid: "1" }, client: client)
       attachment = unicorn.attach(filename: __FILE__,
                                   mime: 'image/jpg',
                                   name: 'file')
       expect(attachment).to be_a(Asana::Resources::Attachment)
-      expect(attachment.id).to eq(10)
+      expect(attachment.gid).to eq("10")
     end
   end
 end

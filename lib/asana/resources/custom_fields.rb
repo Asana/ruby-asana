@@ -134,7 +134,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/custom_fields/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/custom_fields/#{gid}", body: data, options: options)).first)
       end
 
       # A specific, existing custom field can be deleted by making a DELETE request on the URL for that custom field.
@@ -144,7 +144,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/custom_fields/#{id}") && true
+        client.delete("/custom_fields/#{gid}") && true
       end
 
       # Updates an existing enum option. Enum custom fields require at least one enabled enum option.

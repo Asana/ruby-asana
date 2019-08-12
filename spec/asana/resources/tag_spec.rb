@@ -14,9 +14,9 @@ RSpec.describe Asana::Resources::Tag do
   include ResourcesHelper
 
   it 'contains backwards compatable method' do
-    tag = Asana::Resources::Tag.new({:id => 15}, {:client => client})
+    tag = Asana::Resources::Tag.new({:gid => 15}, {:client => client})
 
-    api.on(:get, "/tags/#{tag.id}/tasks") do |response|
+    api.on(:get, "/tags/#{tag.gid}/tasks") do |response|
       response.body = { data: [{foo: "bar"}] }
     end
 

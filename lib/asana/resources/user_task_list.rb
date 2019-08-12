@@ -85,7 +85,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def tasks(completed_since: nil, per_page: 20, options: {})
         params = { completed_since: completed_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/user_task_lists/#{id}/tasks", params: params, options: options)), type: Task, client: client)
+        Collection.new(parse(client.get("/user_task_lists/#{gid}/tasks", params: params, options: options)), type: Task, client: client)
       end
 
     end

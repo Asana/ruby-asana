@@ -9,6 +9,8 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
       attr_reader :name
 
       class << self
@@ -86,7 +88,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/unicorns/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/unicorns/#{gid}", body: data, options: options)).first)
       end
 
       # Returns a collection of paws belonging to the unicorn.
@@ -95,7 +97,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def paws(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/unicorns/#{id}/paws", params: params, options: options)), type: Resource, client: client)
+        Collection.new(parse(client.get("/unicorns/#{gid}/paws", params: params, options: options)), type: Resource, client: client)
       end
 
       # Returns the newly added paw.
@@ -105,7 +107,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_paw(paw: required("paw"), options: {}, **data)
         with_params = data.merge(paw: paw).reject { |_,v| v.nil? || Array(v).empty? }
-        Resource.new(parse(client.post("/unicorns/#{id}/paws", body: with_params, options: options)).first, client: client)
+        Resource.new(parse(client.post("/unicorns/#{gid}/paws", body: with_params, options: options)).first, client: client)
       end
 
       # Returns the updated unicorn record.
@@ -115,7 +117,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_friends(friends: required("friends"), options: {}, **data)
         with_params = data.merge(friends: friends).reject { |_,v| v.nil? || Array(v).empty? }
-        refresh_with(parse(client.post("/unicorns/#{id}/friends", body: with_params, options: options)).first)
+        refresh_with(parse(client.post("/unicorns/#{gid}/friends", body: with_params, options: options)).first)
       end
 
       # Returns the world of the unicorn.
@@ -123,7 +125,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def get_world(options: {})
 
-        World.new(parse(client.get("/unicorns/#{id}/getWorld", options: options)).first, client: client)
+        World.new(parse(client.get("/unicorns/#{gid}/getWorld", options: options)).first, client: client)
       end
 
       # A specific, existing unicorn can be deleted by making a DELETE request
@@ -132,7 +134,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/unicorns/#{id}") && true
+        client.delete("/unicorns/#{gid}") && true
       end
 
     end

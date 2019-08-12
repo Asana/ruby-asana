@@ -15,12 +15,12 @@ RSpec.describe Asana::Resources::Events do
   let!(:unicorn_class) do
     defresource 'Unicorn' do
       include Asana::Resources::EventSubscription
-      attr_reader :id
+      attr_reader :gid
     end
   end
 
   let(:unicorn) do
-    unicorn_class.new({ id: 1 }, client: client)
+    unicorn_class.new({ gid: "1" }, client: client)
   end
 
   let(:first_batch) do
@@ -37,22 +37,22 @@ RSpec.describe Asana::Resources::Events do
   end
 
   it 'is an infinite collection of events on a resource' do
-    api.on(:get, '/events', resource: 1) do |response|
+    api.on(:get, '/events', resource: "1") do |response|
       response.body = { sync: 'firstsynctoken',
                         data: first_batch }
     end
 
-    api.on(:get, '/events', resource: 1, sync: 'firstsynctoken') do |response|
+    api.on(:get, '/events', resource: "1", sync: 'firstsynctoken') do |response|
       response.body = { sync: 'secondsynctoken',
                         data: second_batch }
     end
 
-    api.on(:get, '/events', resource: 1, sync: 'secondsynctoken') do |response|
+    api.on(:get, '/events', resource: "1", sync: 'secondsynctoken') do |response|
       response.body = { sync: 'thirdsynctoken',
                         data: third_batch }
     end
 
-    events = described_class.new(resource: unicorn.id,
+    events = described_class.new(resource: unicorn.gid,
                                  client: client,
                                  wait: 0).take(3)
     expect(events.all? { |e| e.is_a?(Asana::Resources::Event) }).to eq(true)

@@ -78,7 +78,7 @@ module Asana
       # Returns an empty data record.
       def delete()
 
-        client.delete("/project_statuses/#{id}") && true
+        client.delete("/project_statuses/#{gid}") && true
       end
 
     end
