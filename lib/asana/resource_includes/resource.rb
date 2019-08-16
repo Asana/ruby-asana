@@ -93,7 +93,7 @@ module Asana
       end
 
       def refresh_with(data)
-        self.class.new(data, client: @client)
+        self.class.new(data, client: @_client)
       end
     end
   end
