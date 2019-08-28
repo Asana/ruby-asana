@@ -3,7 +3,6 @@
 [![Gem Version](https://badge.fury.io/rb/asana.svg)](http://badge.fury.io/rb/asana)
 [![Build Status](https://travis-ci.org/Asana/ruby-asana.svg?branch=master)](https://travis-ci.org/Asana/ruby-asana)
 [![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
-[![Dependency Status](https://gemnasium.com/Asana/ruby-asana.svg)](https://gemnasium.com/Asana/ruby-asana)
 
 
 A Ruby client for the 1.0 version of the Asana API.
@@ -340,6 +339,25 @@ Thread.new do
   end
 end
 ```
+
+### Asana Change Warnings
+
+You will receive warning logs if performing requests that may be affected by a deprecation. The warning contains a link that explains the deprecation.
+
+If you receive one of these warnings, you should:
+* Read about the deprecation.
+* Resolve sections of your code that would be affected by the deprecation.
+* Add the deprecation flag to your "asana-enable" header.
+
+You can add global headers, by setting default_headers
+
+    c.default_headers "asana-enable" => "string_ids"
+    
+Or you can add a header field to the options of each request.
+
+If you would rather suppress these warnings, you can set
+
+    c.log_asana_change_warnings false
 
 ## Development
 

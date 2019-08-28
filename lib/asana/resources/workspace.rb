@@ -22,6 +22,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
 
       attr_reader :is_organization
@@ -64,7 +68,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def update(options: {}, **data)
 
-        refresh_with(parse(client.put("/workspaces/#{id}", body: data, options: options)).first)
+        refresh_with(parse(client.put("/workspaces/#{gid}", body: data, options: options)).first)
       end
 
       # Retrieves objects in the workspace based on an auto-completion/typeahead
@@ -73,9 +77,12 @@ module Asana
       # result set is limited to a single page of results with a maximum size,
       # so you won't be able to fetch large numbers of results.
       #
-      # type - [Enum] The type of values the typeahead should return.
+      # resource_type - [Enum] The type of values the typeahead should return. You can choose from
+      # one of the following: custom_field, project, tag, task, and user.
       # Note that unlike in the names of endpoints, the types listed here are
       # in singular form (e.g. `task`). Using multiple types is not yet supported.
+      #
+      # type - [Enum] **Deprecated: new integrations should prefer the resource_type field.**
       #
       # query - [String] The string that will be used to search for relevant objects. If an
       # empty string is passed in, the API will currently return an empty
@@ -87,9 +94,9 @@ module Asana
       #
       # per_page - [Integer] the number of records to fetch per page.
       # options - [Hash] the request I/O options.
-      def typeahead(type: required("type"), query: nil, count: nil, per_page: 20, options: {})
-        params = { type: type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/workspaces/#{id}/typeahead", params: params, options: options)), type: Resource, client: client)
+      def typeahead(resource_type: nil, type: nil, query: nil, count: nil, per_page: 20, options: {})
+        params = { resource_type: resource_type || type, query: query, count: count, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/workspaces/#{gid}/typeahead", params: params, options: options)), type: Resource, client: client)
       end
 
       # The user can be referenced by their globally unique user ID or their email address.
@@ -103,7 +110,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        User.new(parse(client.post("/workspaces/#{id}/addUser", body: with_params, options: options)).first, client: client)
+        User.new(parse(client.post("/workspaces/#{gid}/addUser", body: with_params, options: options)).first, client: client)
       end
 
       # The user making this call must be an admin in the workspace.
@@ -117,7 +124,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/workspaces/#{id}/removeUser", body: with_params, options: options) && true
+        client.post("/workspaces/#{gid}/removeUser", body: with_params, options: options) && true
       end
 
     end

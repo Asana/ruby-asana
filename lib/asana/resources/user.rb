@@ -14,6 +14,10 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
 
       attr_reader :email
@@ -70,6 +74,17 @@ module Asana
           params = { workspace: workspace, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get("/users", params: params, options: options)), type: self, client: client)
         end
+      end
+
+      # Returns all of a user's favorites in the given workspace, of the given type.
+      # Results are given in order (The same order as Asana's sidebar).
+      #
+      # workspace - [Id] The workspace in which to get favorites.
+      # resource_type - [Enum] The resource type of favorites to be returned.
+      # options - [Hash] the request I/O options.
+      def get_user_favorites(workspace: required("workspace"), resource_type: required("resource_type"), options: {})
+        params = { workspace: workspace, resource_type: resource_type }.reject { |_,v| v.nil? || Array(v).empty? }
+        Collection.new(parse(client.get("/users/#{gid}/favorites", params: params, options: options)), type: Resource, client: client)
       end
 
     end

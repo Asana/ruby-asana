@@ -11,6 +11,8 @@ module Asana
 
       module_function
 
+      MAX_TIMEOUTS = 5
+
       # Public: Perform a request handling any API errors correspondingly.
       #
       # request - [Proc] a block that will execute the request.
@@ -26,19 +28,26 @@ module Asana
       # Raises [Asana::Errors::APIError] when the API returns an unknown error.
       #
       # rubocop:disable all
-      def handle(&request)
+      def handle(num_timeouts=0, &request)
         request.call
       rescue Faraday::ClientError => e
         raise e unless e.response
         case e.response[:status]
-        when 400 then raise invalid_request(e.response)
-        when 401 then raise not_authorized(e.response)
-        when 403 then raise forbidden(e.response)
-        when 404 then raise not_found(e.response)
-        when 412 then recover_response(e.response)
-        when 429 then raise rate_limit_enforced(e.response)
-        when 500 then raise server_error(e.response)
-        else raise api_error(e.response)
+          when 400 then raise invalid_request(e.response)
+          when 401 then raise not_authorized(e.response)
+          when 402 then raise payment_required(e.response)
+          when 403 then raise forbidden(e.response)
+          when 404 then raise not_found(e.response)
+          when 412 then recover_response(e.response)
+          when 429 then raise rate_limit_enforced(e.response)
+          when 500 then raise server_error(e.response)
+          else raise api_error(e.response)
+        end
+      rescue Net::ReadTimeout => e
+        if num_timeouts < MAX_TIMEOUTS
+          handle(num_timeouts + 1, &request)
+        else
+          raise e
         end
       end
       # rubocop:enable all
@@ -55,6 +64,11 @@ module Asana
       # Internal: Returns a NotAuthorized exception.
       def not_authorized(response)
         NotAuthorized.new.tap { |exception| exception.response = response }
+      end
+
+      # Internal: Returns a PremiumOnly exception.
+      def payment_required(response)
+        PremiumOnly.new.tap { |exception| exception.response = response }
       end
 
       # Internal: Returns a Forbidden exception.

@@ -12,11 +12,11 @@ RSpec.describe Asana::Resources::Collection do
 
   let!(:unicorn_class) do
     defresource 'Unicorn' do
-      attr_reader :id
+      attr_reader :gid
     end
   end
 
-  let(:unicorns) { (1..20).to_a.map { |id| { 'id' => id } } }
+  let(:unicorns) { (1..20).to_a.map { |gid| { 'gid' => gid } } }
 
   describe '#each' do
     context 'if there is more than one page' do
@@ -41,7 +41,7 @@ RSpec.describe Asana::Resources::Collection do
                                          type: unicorn_class,
                                          client: client)
 
-        expect(collection.to_a.map(&:id)).to eq((1..20).to_a)
+        expect(collection.to_a.map(&:gid)).to eq((1..20).to_a)
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe Asana::Resources::Collection do
                                          type: unicorn_class,
                                          client: client)
 
-        expect(collection.to_a.map(&:id)).to eq((1..5).to_a)
+        expect(collection.to_a.map(&:gid)).to eq((1..5).to_a)
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe Asana::Resources::Collection do
                                    type: unicorn_class,
                                    client: client).lazy
 
-        expect(lazy.drop(6).take(6).map(&:id).to_a).to eq((7..12).to_a)
+        expect(lazy.drop(6).take(6).map(&:gid).to_a).to eq((7..12).to_a)
       end
     end
   end
@@ -83,7 +83,7 @@ RSpec.describe Asana::Resources::Collection do
       collection = described_class.new([unicorns.take(5), {}],
                                        type: unicorn_class,
                                        client: client)
-      expect(collection.elements.map(&:id)).to eq((1..5).to_a)
+      expect(collection.elements.map(&:gid)).to eq((1..5).to_a)
     end
   end
 
@@ -99,7 +99,7 @@ RSpec.describe Asana::Resources::Collection do
                                        type: unicorn_class,
                                        client: client)
       nxt = collection.next_page
-      expect(nxt.elements.map(&:id)).to eq((6..10).to_a)
+      expect(nxt.elements.map(&:gid)).to eq((6..10).to_a)
     end
   end
 end

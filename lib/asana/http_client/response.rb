@@ -11,6 +11,9 @@ module Asana
       # Public:
       # Returns the [Hash] representing the parsed JSON body.
       attr_reader :body
+      # Public:
+      # Returns the [Hash] of attribute headers.
+      attr_reader :headers
 
       # Public: Wraps a Faraday response.
       #
@@ -19,6 +22,7 @@ module Asana
         @faraday_env = faraday_response.env
         @status      = faraday_env.status
         @body        = faraday_env.body
+        @headers     = faraday_response.headers
       end
 
       # Public:

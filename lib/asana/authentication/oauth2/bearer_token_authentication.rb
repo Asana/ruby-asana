@@ -24,7 +24,8 @@ module Asana
         #
         # Returns nothing.
         def configure(connection)
-          connection.request :oauth2, @token
+          connection.authorization :Bearer, @token
+          connection.request :oauth2, token_type: 'bearer'
         end
       end
     end

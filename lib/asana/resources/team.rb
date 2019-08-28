@@ -10,7 +10,17 @@ module Asana
 
       attr_reader :id
 
+      attr_reader :gid
+
+      attr_reader :resource_type
+
       attr_reader :name
+
+      attr_reader :description
+
+      attr_reader :html_description
+
+      attr_reader :organization
 
       class << self
         # Returns the plural name of the resource.
@@ -61,7 +71,7 @@ module Asana
       # options - [Hash] the request I/O options.
       def users(per_page: 20, options: {})
         params = { limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
-        Collection.new(parse(client.get("/teams/#{id}/users", params: params, options: options)), type: User, client: client)
+        Collection.new(parse(client.get("/teams/#{gid}/users", params: params, options: options)), type: User, client: client)
       end
 
       # The user making this call must be a member of the team in order to add others.
@@ -77,7 +87,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def add_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        User.new(parse(client.post("/teams/#{id}/addUser", body: with_params, options: options)).first, client: client)
+        User.new(parse(client.post("/teams/#{gid}/addUser", body: with_params, options: options)).first, client: client)
       end
 
       # The user to remove can be referenced by their globally unique user ID or their email address.
@@ -91,7 +101,7 @@ module Asana
       # data - [Hash] the attributes to post.
       def remove_user(user: required("user"), options: {}, **data)
         with_params = data.merge(user: user).reject { |_,v| v.nil? || Array(v).empty? }
-        client.post("/teams/#{id}/removeUser", body: with_params, options: options) && true
+        client.post("/teams/#{gid}/removeUser", body: with_params, options: options) && true
       end
 
     end

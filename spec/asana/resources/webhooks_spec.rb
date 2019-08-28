@@ -14,9 +14,9 @@ RSpec.describe Asana::Resources::Webhook do
 
   let(:webhook_data) do
     {
-      id: 222,
+      gid: "222",
       resource: {
-        id: 111,
+        gid: "111",
         name: 'the resource'
       },
       target: 'https://foo/123',
@@ -26,8 +26,8 @@ RSpec.describe Asana::Resources::Webhook do
 
   # rubocop:disable Metrics/AbcSize
   def verify_webhook_data(webhook)
-    expect(webhook.id).to eq(webhook_data[:id])
-    expect(webhook.resource['id']).to eq(webhook_data[:resource][:id])
+    expect(webhook.gid).to eq(webhook_data[:gid])
+    expect(webhook.resource['gid']).to eq(webhook_data[:resource][:gid])
     expect(webhook.resource['name']).to eq(webhook_data[:resource][:name])
     expect(webhook.target).to eq(webhook_data[:target])
     expect(webhook.active).to eq(webhook_data[:active])
@@ -37,7 +37,7 @@ RSpec.describe Asana::Resources::Webhook do
   it 'creates and deletes a webhook' do
     req = {
       data: {
-        resource: 111,
+        resource: "111",
         target: 'https://foo/123'
       }
     }
@@ -50,7 +50,7 @@ RSpec.describe Asana::Resources::Webhook do
     end
 
     webhook = described_class.create(client,
-                                     resource: 111,
+                                     resource: "111",
                                      target: 'https://foo/123')
     verify_webhook_data(webhook)
 
@@ -58,21 +58,21 @@ RSpec.describe Asana::Resources::Webhook do
   end
 
   it 'gets all webhooks' do
-    api.on(:get, '/webhooks', workspace: 1337, per_page: 20) do |response|
+    api.on(:get, '/webhooks', workspace: "1337", per_page: 20) do |response|
       response.body = { data: [webhook_data] }
     end
 
-    webhooks = described_class.get_all(client, workspace: 1337)
+    webhooks = described_class.get_all(client, workspace: "1337")
     verify_webhook_data(webhooks.first)
     expect(webhooks.length).to eq(1)
   end
 
-  it 'gets a webhook by id' do
+  it 'gets a webhook by gid' do
     api.on(:get, '/webhooks/222') do |response|
       response.body = { data: webhook_data }
     end
 
-    webhook = described_class.get_by_id(client, 222)
+    webhook = described_class.get_by_id(client, "222")
     verify_webhook_data(webhook)
   end
 end

@@ -1,6 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'omniauth'
-gem 'omniauth-asana'
-gem 'sinatra'
 gem 'asana', path: '../'

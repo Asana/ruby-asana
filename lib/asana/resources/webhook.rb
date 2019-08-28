@@ -22,12 +22,14 @@ module Asana
     #     {\
     #       "resource": {\
     #         "id": 1337,\
+    #         "resource_type": "task",\
     #         "name": "My Task"\
     #       },\
     #       "parent": null,\
     #       "created_at": "2013-08-21T18:20:37.972Z",\
     #       "user": {\
     #         "id": 1123,\
+    #         "resource_type": "user",\
     #         "name": "Tom Bizarro"\
     #       },\
     #       "action": "changed",\
@@ -51,6 +53,10 @@ module Asana
 
 
       attr_reader :id
+
+      attr_reader :gid
+
+      attr_reader :resource_type
 
       attr_reader :resource
 
@@ -129,7 +135,7 @@ module Asana
       # webhook, but no further requests will be issued.
       def delete_by_id()
 
-        self.class.new(parse(client.delete("/webhooks/#{id}")).first, client: client)
+        self.class.new(parse(client.delete("/webhooks/#{gid}")).first, client: client)
       end
 
     end

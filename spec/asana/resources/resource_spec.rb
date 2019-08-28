@@ -15,7 +15,7 @@ RSpec.describe Asana::Resources::Resource do
   let!(:unicorn_class) do
     defresource 'Unicorn' do
       def self.find_by_id(client, id)
-        new({ 'id' => id }, client: client)
+        new({ 'gid' => id }, client: client)
       end
     end
   end
@@ -30,23 +30,23 @@ RSpec.describe Asana::Resources::Resource do
   end
 
   it 'wraps hash values into Resources' do
-    unicorn = unicorn_class.new({ 'friend' => { 'id' => 1 } }, client: client)
+    unicorn = unicorn_class.new({ 'friend' => { 'gid' => "1" } }, client: client)
     expect(unicorn.friend).to be_a(described_class)
-    expect(unicorn.friend.id).to eq(1)
+    expect(unicorn.friend.gid).to eq("1")
   end
 
   it 'wraps array values into arrays of Resources' do
-    unicorn = unicorn_class.new({ 'friends' => [{ 'id' => 1 }] },
+    unicorn = unicorn_class.new({ 'friends' => [{ 'gid' => "1" }] },
                                 client: client)
     expect(unicorn.friends.first).to be_a(described_class)
-    expect(unicorn.friends.first.id).to eq(1)
+    expect(unicorn.friends.first.gid).to eq("1")
   end
 
   describe '#refresh' do
     describe 'when the class responds to find_by_id' do
       it 'refetches itself' do
-        unicorn = unicorn_class.new({ 'id' => 5 }, client: client)
-        expect(unicorn.refresh.id).to eq(5)
+        unicorn = unicorn_class.new({ 'gid' => "5" }, client: client)
+        expect(unicorn.refresh.gid).to eq("5")
       end
     end
   end

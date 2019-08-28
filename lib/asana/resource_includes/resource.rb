@@ -25,7 +25,7 @@ module Asana
       def refresh
         raise "#{self.class.name} does not respond to #find_by_id" unless \
           self.class.respond_to?(:find_by_id)
-        self.class.find_by_id(client, id)
+        self.class.find_by_id(client, gid)
       end
 
       # Internal: Proxies method calls to the data, wrapping it accordingly and
@@ -93,7 +93,7 @@ module Asana
       end
 
       def refresh_with(data)
-        self.class.new(data, client: @client)
+        self.class.new(data, client: @_client)
       end
     end
   end

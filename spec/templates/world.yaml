@@ -8,6 +8,9 @@ properties:
   - name: id
     type: Id
 
+  - name: gid
+    type: Gid
+
 actions:
 
   - name: findById
@@ -15,7 +18,7 @@ actions:
     path: "/worlds/%d"
     params:
       - name: world
-        type: Id
+        type: Gid
         required: true
         comment: The world to get.
     comment: |
