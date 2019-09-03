@@ -232,6 +232,9 @@ module Asana
         # options - [Hash] the request I/O options.
         def search_in_workspace(client, workspace: required("workspace"), resource_subtype: nil, per_page: 20, options: {})
           params = { resource_subtype: resource_subtype, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
+          if options[:params]
+            params.merge!(options[:params])
+          end
           Collection.new(parse(client.get("/workspaces/#{workspace}/tasks/search", params: params, options: options)), type: Resource, client: client)
         end
         alias_method :search, :search_in_workspace
