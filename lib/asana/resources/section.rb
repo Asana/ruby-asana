@@ -56,23 +56,7 @@ module Asana
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/sections/#{id}", options: options)).first, client: client)
-        end
-
-        # Add a task to a specific, existing section. This will remove the task from other sections of the project.
-        #
-        # The task will be inserted at the top of a section unless an `insert_before` or `insert_after` parameter is declared.
-        #
-        # This does not work for separators (tasks with the `resource_subtype` of section).
-        #
-        # task - [Gid] The task to add to this section
-        # insert_before - [Gid] Insert the given task immediately before the task specified by this parameter. Cannot be provided together with `insert_after`.
-        # insert_after - [Gid] Insert the given task immediately after the task specified by this parameter. Cannot be provided together with `insert_before`.
-        # options - [Hash] the request I/O options.
-        # data - [Hash] the attributes to post.
-        def add_task(client, task: required("task"), insert_before: nil, insert_after: nil, options: {}, **data)
-          with_params = data.merge(insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
-          Task.new(parse(client.post("/sections/#{task}/addTask", body: with_params, options: options)).first, client: client)
+          self.new(parse(client.get("/sections/#{gid}", options: options)).first, client: client)
         end
       end
 
@@ -105,6 +89,21 @@ module Asana
       def delete()
 
         client.delete("/sections/#{gid}") && true
+      end
+
+      # Add a task to a specific, existing section. This will remove the task from other sections of the project.
+      #
+      # The task will be inserted at the top of a section unless an `insert_before` or `insert_after` parameter is declared.
+      #
+      # This does not work for separators (tasks with the `resource_subtype` of section).
+      #
+      # insert_before - [Gid] Insert the given task immediately before the task specified by this parameter. Cannot be provided together with `insert_after`.
+      # insert_after - [Gid] Insert the given task immediately after the task specified by this parameter. Cannot be provided together with `insert_before`.
+      # options - [Hash] the request I/O options.
+      # data - [Hash] the attributes to post.
+      def add_task(insert_before: nil, insert_after: nil, options: {}, **data)
+        with_params = data.merge(insert_before: insert_before, insert_after: insert_after).reject { |_,v| v.nil? || Array(v).empty? }
+        Task.new(parse(client.post("/sections/#{gid}/addTask", body: with_params, options: options)).first, client: client)
       end
 
       # Move sections relative to each other in a board view. One of
