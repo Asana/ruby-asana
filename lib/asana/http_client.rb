@@ -108,11 +108,17 @@ module Asana
     #
     # resource_uri - [String] the resource URI relative to the base Asana API
     #                URL, e.g "/tags".
+    # options      - [Hash] the request I/O options
     #
     # Returns an [Asana::HttpClient::Response] if everything went well.
     # Raises [Asana::Errors::APIError] if anything went wrong.
-    def delete(resource_uri)
-      perform_request(:delete, resource_uri)
+    def delete(resource_uri, params: {}, options: {})
+      opts = options.reduce({}) do |acc, (k, v)|
+        acc.tap do |hash|
+          hash[:"opt_#{k}"] = v.is_a?(Array) ? v.join(',') : v
+        end
+      end
+      perform_request(:delete, resource_uri, params.merge(opts), options[:headers])
     end
 
     private

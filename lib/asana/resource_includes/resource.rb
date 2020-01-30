@@ -9,10 +9,6 @@ module Asana
       include ResponseHelper
       extend ResponseHelper
 
-      def self.inherited(base)
-        Registry.register(base)
-      end
-
       def initialize(data, client: required('client'))
         @_client = client
         @_data   = data

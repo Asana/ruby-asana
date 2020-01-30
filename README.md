@@ -413,7 +413,7 @@ to make a release, as they'll need to run a release script from the
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-[apidocs]: https://asana.com/developers
-[io]: https://asana.com/developers/documentation/getting-started/input-output-options
+[apidocs]: https://developers.asana.com/docs
+[io]: https://developers.asana.com/docs/#input-output-options
 [docs]: http://www.rubydoc.info/github/Asana/ruby-asana/master
 [meta]: https://github.com/asana/asana-api-meta
