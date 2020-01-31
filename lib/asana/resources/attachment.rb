@@ -8,8 +8,6 @@ module Asana
     class Attachment < AttachmentsBase
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :resource_type

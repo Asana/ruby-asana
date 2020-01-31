@@ -15,8 +15,6 @@ module Asana
     class CustomField < CustomFieldsBase
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :resource_type

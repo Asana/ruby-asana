@@ -18,8 +18,6 @@ module Asana
     class OrganizationExport < OrganizationExportsBase
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :created_at

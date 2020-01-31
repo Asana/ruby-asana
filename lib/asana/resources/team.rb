@@ -7,8 +7,6 @@ module Asana
     class Team < TeamsBase
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :resource_type

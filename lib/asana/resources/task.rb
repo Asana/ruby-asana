@@ -13,8 +13,6 @@ module Asana
       include EventSubscription
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :resource_type

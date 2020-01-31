@@ -7,8 +7,6 @@ module Asana
     class Unicorn < Resource
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       attr_reader :name
