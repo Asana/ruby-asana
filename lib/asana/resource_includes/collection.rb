@@ -36,6 +36,11 @@ module Asana
         end
       end
 
+      # Public: Returns the last item in the collection.
+      def last
+        @elements.last
+      end
+      
       # Public: Returns the size of the collection.
       def size
         to_a.size
