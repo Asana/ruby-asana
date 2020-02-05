@@ -14,7 +14,7 @@ module Asana
       class << self
         # Get a user's favorites
         #
-        # user_gid - [str]  (required) Globally unique identifier for the user.
+        # user_gid - [str]  (required) A string identifying a user. This can either be the string \"me\", an email, or the gid of a user.
         # resource_type - [str]  (required) The resource type of favorites to be returned.
         # workspace - [str]  (required) The workspace in which to get favorites.
         # options - [Hash] the request I/O options
@@ -29,7 +29,7 @@ module Asana
 
         # Get a user
         #
-        # user_gid - [str]  (required) Globally unique identifier for the user.
+        # user_gid - [str]  (required) A string identifying a user. This can either be the string \"me\", an email, or the gid of a user.
         # options - [Hash] the request I/O options
         # > opt_fields - [list[str]]  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
         # > opt_pretty - [bool]  Provides “pretty” output. Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.

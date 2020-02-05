@@ -24,7 +24,7 @@ module Asana
           parse(client.post(path, body: data, options: options)).first
         end
 
-        # Add users to a project
+        # Add followers to a project
         #
         # project_gid - [str]  (required) Globally unique identifier for the project.
         # options - [Hash] the request I/O options

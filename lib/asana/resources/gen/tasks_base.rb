@@ -269,7 +269,7 @@ module Asana
         def remove_dependencies_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/removeDependencies"
           path["{task_gid}"] = task_gid
-          Collection.new(parse(client.post(path, body: data, options: options)), type: Task, client: client)
+          Collection.new(parse(client.post(path, body: data, options: options)), type: Resource, client: client)
         end
 
         # Unlink dependents from a task
@@ -282,7 +282,7 @@ module Asana
         def remove_dependents_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/removeDependents"
           path["{task_gid}"] = task_gid
-          Collection.new(parse(client.post(path, body: data, options: options)), type: Task, client: client)
+          Collection.new(parse(client.post(path, body: data, options: options)), type: Resource, client: client)
         end
 
         # Remove followers from a task

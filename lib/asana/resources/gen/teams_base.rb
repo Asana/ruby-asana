@@ -55,7 +55,7 @@ module Asana
 
         # Get teams for a user
         #
-        # user_gid - [str]  (required) Globally unique identifier for the user.
+        # user_gid - [str]  (required) A string identifying a user. This can either be the string \"me\", an email, or the gid of a user.
         # organization - [str]  (required) The workspace or organization to filter teams on.
         # options - [Hash] the request I/O options
         # > offset - [str]  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'

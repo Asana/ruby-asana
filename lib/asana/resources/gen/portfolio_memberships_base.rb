@@ -29,7 +29,7 @@ module Asana
 
         # portfolio - [str]  The portfolio to filter results on.
         # workspace - [str]  The workspace to filter results on.
-        # user - [str]  The user to filter results on.
+        # user - [str]  A string identifying a user. This can either be the string \"me\", an email, or the gid of a user.
         # options - [Hash] the request I/O options
         # > offset - [str]  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
         # > limit - [int]  Results per page. The number of objects to return per page. The value must be between 1 and 100.
@@ -44,7 +44,7 @@ module Asana
         # Get memberships from a portfolio
         #
         # portfolio_gid - [str]  (required) Globally unique identifier for the portfolio.
-        # user - [str]  The user to filter results on.
+        # user - [str]  A string identifying a user. This can either be the string \"me\", an email, or the gid of a user.
         # options - [Hash] the request I/O options
         # > offset - [str]  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
         # > limit - [int]  Results per page. The number of objects to return per page. The value must be between 1 and 100.
