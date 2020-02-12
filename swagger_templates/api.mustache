@@ -13,7 +13,7 @@ module Asana
       end
 
       class << self
-{{#operation}}
+{{#operation}}{{^formParams}}
 {{#contents}}
         # {{#summary}}{{{.}}}{{/summary}}{{^summary}}{{operationId}}{{/summary}}
         #
@@ -33,7 +33,7 @@ module Asana
         end
 
 {{/contents}}
-{{/operation}}
+{{/formParams}}{{/operation}}
       end
     end
   end
