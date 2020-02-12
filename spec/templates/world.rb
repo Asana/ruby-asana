@@ -7,8 +7,6 @@ module Asana
     class World < Resource
 
 
-      attr_reader :id
-
       attr_reader :gid
 
       class << self
