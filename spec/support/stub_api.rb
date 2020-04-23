@@ -42,7 +42,7 @@ class StubAPI
   # Public: Returns a function that takes a Faraday builder and configures it to
   # return stubbed responses.
   def to_proc
-    ->(builder) { builder.use Faraday::Adapter::Test, @stubs }
+    ->(builder) { builder.adapter Faraday::Adapter::Test, @stubs }
   end
   alias adapter to_proc
 

@@ -355,8 +355,7 @@ If you wish to make changes on the code generation script:
    spec/templates/unicorn_spec.rb`
 
 Once you're sure your code works, submit a pull request and ask the maintainer
-to make a release, as they'll need to run a release script from the
-[asana-api-meta][meta] repository.
+to make a release, as they'll need to run a release script.
 
 ## Contributing
 
