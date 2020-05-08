@@ -60,7 +60,6 @@ module Asana
       end
 
       def method_missing(m, *args, **kwargs, &block)
-        puts(([@client] + args))
         @resource.public_send(m, *([@client] + args), **kwargs, &block)
       end
 
