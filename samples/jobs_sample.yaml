@@ -1,0 +1,11 @@
+jobs: 
+    get_job: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.jobs.get_job(job_gid: 'job_gid', param: "value", param: "value", options: {pretty: true})

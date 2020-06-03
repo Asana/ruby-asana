@@ -1,0 +1,41 @@
+teammemberships: 
+    get_team_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.team_memberships.get_team_membership(team_membership_gid: 'team_membership_gid', param: "value", param: "value", options: {pretty: true})
+    get_team_memberships: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.team_memberships.get_team_memberships(param: "value", param: "value", options: {pretty: true})
+    get_team_memberships_for_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.team_memberships.get_team_memberships_for_team(team_gid: 'team_gid', param: "value", param: "value", options: {pretty: true})
+    get_team_memberships_for_user: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.team_memberships.get_team_memberships_for_user(user_gid: 'user_gid', workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})

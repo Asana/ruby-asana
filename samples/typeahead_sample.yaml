@@ -1,0 +1,11 @@
+typeahead: 
+    typeahead_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.typeahead.typeahead_for_workspace(workspace_gid: 'workspace_gid', resource_type: '&#x27;resource_type_example&#x27;', param: "value", param: "value", options: {pretty: true})

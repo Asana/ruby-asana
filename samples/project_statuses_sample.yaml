@@ -1,0 +1,41 @@
+projectstatuses: 
+    create_project_status_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_statuses.create_project_status_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    delete_project_status: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_statuses.delete_project_status(project_status_gid: 'project_status_gid', options: {pretty: true})
+    get_project_status: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_statuses.get_project_status(project_status_gid: 'project_status_gid', param: "value", param: "value", options: {pretty: true})
+    get_project_statuses_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_statuses.get_project_statuses_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})

@@ -1,0 +1,31 @@
+workspacememberships: 
+    get_workspace_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspace_memberships.get_workspace_membership(workspace_membership_gid: 'workspace_membership_gid', param: "value", param: "value", options: {pretty: true})
+    get_workspace_memberships_for_user: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspace_memberships.get_workspace_memberships_for_user(user_gid: 'user_gid', param: "value", param: "value", options: {pretty: true})
+    get_workspace_memberships_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspace_memberships.get_workspace_memberships_for_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})

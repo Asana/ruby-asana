@@ -1,0 +1,21 @@
+organizationexports: 
+    create_organization_export: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.organization_exports.create_organization_export(field: "value", field: "value", options: {pretty: true})
+    get_organization_export: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.organization_exports.get_organization_export(organization_export_gid: 'organization_export_gid', param: "value", param: "value", options: {pretty: true})

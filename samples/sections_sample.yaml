@@ -1,0 +1,71 @@
+sections: 
+    add_task_for_section: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.add_task_for_section(section_gid: 'section_gid', field: "value", field: "value", options: {pretty: true})
+    create_section_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.create_section_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    delete_section: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.delete_section(section_gid: 'section_gid', options: {pretty: true})
+    get_section: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.get_section(section_gid: 'section_gid', param: "value", param: "value", options: {pretty: true})
+    get_sections_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.get_sections_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})
+    insert_section_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.insert_section_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    update_section: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.sections.update_section(section_gid: 'section_gid', field: "value", field: "value", options: {pretty: true})
