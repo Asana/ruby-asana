@@ -21,7 +21,7 @@ module Asana
         def add_custom_field_setting_for_project(client, project_gid: required("project_gid"), options: {}, **data)
           path = "/projects/{project_gid}/addCustomFieldSetting"
           path["{project_gid}"] = project_gid
-          parse(client.post(path, body: data, options: options)).first
+          CustomFieldSetting.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Add followers to a project
