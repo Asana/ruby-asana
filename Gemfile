@@ -23,4 +23,6 @@ group :tools do
   gem 'byebug'
 
   gem 'simplecov', require: false
+
+  gem "rack-protection", "1.5.5"
 end
