@@ -1,0 +1,81 @@
+tags: 
+    create_tag: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.create_tag(field: "value", field: "value", options: {pretty: true})
+    create_tag_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.create_tag_for_workspace(workspace_gid: 'workspace_gid', field: "value", field: "value", options: {pretty: true})
+    delete_tag: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.delete_tag(tag_gid: 'tag_gid', options: {pretty: true})
+    get_tag: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.get_tag(tag_gid: 'tag_gid', param: "value", param: "value", options: {pretty: true})
+    get_tags: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.get_tags(param: "value", param: "value", options: {pretty: true})
+    get_tags_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.get_tags_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_tags_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.get_tags_for_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})
+    update_tag: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tags.update_tag(tag_gid: 'tag_gid', field: "value", field: "value", options: {pretty: true})

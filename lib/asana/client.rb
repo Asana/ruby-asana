@@ -59,8 +59,8 @@ module Asana
         @resource = resource
       end
 
-      def method_missing(m, *args, &block)
-        @resource.public_send(m, *([@client] + args), &block)
+      def method_missing(m, *args, **kwargs, &block)
+        @resource.public_send(m, *([@client] + args), **kwargs, &block)
       end
 
       def respond_to_missing?(m, *)
@@ -87,29 +87,29 @@ module Asana
     # Public: Performs a GET request against an arbitrary Asana URL. Allows for
     # the user to interact with the API in ways that haven't been
     # reflected/foreseen in this library.
-    def get(url, *args)
-      @http_client.get(url, *args)
+    def get(url, **args)
+      @http_client.get(url, **args)
     end
 
     # Public: Performs a POST request against an arbitrary Asana URL. Allows for
     # the user to interact with the API in ways that haven't been
     # reflected/foreseen in this library.
-    def post(url, *args)
-      @http_client.post(url, *args)
+    def post(url, **args)
+      @http_client.post(url, **args)
     end
 
     # Public: Performs a PUT request against an arbitrary Asana URL. Allows for
     # the user to interact with the API in ways that haven't been
     # reflected/foreseen in this library.
-    def put(url, *args)
-      @http_client.put(url, *args)
+    def put(url, **args)
+      @http_client.put(url, **args)
     end
 
     # Public: Performs a DELETE request against an arbitrary Asana URL. Allows
     # for the user to interact with the API in ways that haven't been
     # reflected/foreseen in this library.
-    def delete(url, *args)
-      @http_client.delete(url, *args)
+    def delete(url, **args)
+      @http_client.delete(url, **args)
     end
 
     # Public: Exposes queries for all top-evel endpoints.

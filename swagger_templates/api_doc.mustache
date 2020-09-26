@@ -1,0 +1,12 @@
+{{#operations}}{{toLowerCase classname}}: {{#operation}}{{#contents}}
+    {{operationId}}: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.{{toLowerCase baseName}}.{{operationId}}({{#pathParams}}{{paramName}}: '{{paramName}}', {{/pathParams}}{{#queryParams}}{{#eq required true}}{{paramName}}: '{{example}}', {{/eq}}{{/queryParams}}{{#eq httpMethod 'GET'}}param: "value", param: "value", {{/eq}}{{#eq httpMethod 'POST' 'PUT'}}field: "value", field: "value", {{/eq}}options: {pretty: true}){{/contents}}{{/operation}}
+{{/operations}}

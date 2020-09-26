@@ -1,0 +1,11 @@
+events: 
+    get_events: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.events.get_events(resource: '&#x27;resource_example&#x27;', param: "value", param: "value", options: {pretty: true})

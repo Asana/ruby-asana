@@ -1,0 +1,51 @@
+stories: 
+    create_story_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.stories.create_story_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    delete_story: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.stories.delete_story(story_gid: 'story_gid', options: {pretty: true})
+    get_stories_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.stories.get_stories_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_story: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.stories.get_story(story_gid: 'story_gid', param: "value", param: "value", options: {pretty: true})
+    update_story: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.stories.update_story(story_gid: 'story_gid', field: "value", field: "value", options: {pretty: true})

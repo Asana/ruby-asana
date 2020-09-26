@@ -1,0 +1,41 @@
+webhooks: 
+    create_webhook: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.webhooks.create_webhook(field: "value", field: "value", options: {pretty: true})
+    delete_webhook: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.webhooks.delete_webhook(webhook_gid: 'webhook_gid', options: {pretty: true})
+    get_webhook: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.webhooks.get_webhook(webhook_gid: 'webhook_gid', param: "value", param: "value", options: {pretty: true})
+    get_webhooks: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.webhooks.get_webhooks(workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})

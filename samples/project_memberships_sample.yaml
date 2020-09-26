@@ -1,0 +1,21 @@
+projectmemberships: 
+    get_project_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_memberships.get_project_membership(project_membership_gid: 'project_membership_gid', param: "value", param: "value", options: {pretty: true})
+    get_project_memberships_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_memberships.get_project_memberships_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})

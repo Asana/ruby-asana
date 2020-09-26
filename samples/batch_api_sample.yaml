@@ -1,0 +1,11 @@
+batchapi: 
+    create_batch_request: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.batch_api.create_batch_request(field: "value", field: "value", options: {pretty: true})

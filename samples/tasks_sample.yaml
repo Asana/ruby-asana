@@ -1,0 +1,261 @@
+tasks: 
+    add_dependencies_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.add_dependencies_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    add_dependents_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.add_dependents_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    add_followers_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.add_followers_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    add_project_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.add_project_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    add_tag_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.add_tag_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    create_subtask_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.create_subtask_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    create_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.create_task(field: "value", field: "value", options: {pretty: true})
+    delete_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.delete_task(task_gid: 'task_gid', options: {pretty: true})
+    duplicate_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.duplicate_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    get_dependencies_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_dependencies_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_dependents_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_dependents_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_subtasks_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_subtasks_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_tasks: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_tasks(param: "value", param: "value", options: {pretty: true})
+    get_tasks_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_tasks_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})
+    get_tasks_for_section: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_tasks_for_section(section_gid: 'section_gid', param: "value", param: "value", options: {pretty: true})
+    get_tasks_for_tag: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_tasks_for_tag(tag_gid: 'tag_gid', param: "value", param: "value", options: {pretty: true})
+    get_tasks_for_user_task_list: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.get_tasks_for_user_task_list(user_task_list_gid: 'user_task_list_gid', param: "value", param: "value", options: {pretty: true})
+    remove_dependencies_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.remove_dependencies_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    remove_dependents_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.remove_dependents_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    remove_follower_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.remove_follower_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    remove_project_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.remove_project_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    remove_tag_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.remove_tag_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    search_tasks_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.search_tasks_for_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})
+    set_parent_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.set_parent_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+    update_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.tasks.update_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})

@@ -1,0 +1,31 @@
+portfoliomemberships: 
+    get_portfolio_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.portfolio_memberships.get_portfolio_membership(portfolio_membership_gid: 'portfolio_membership_gid', param: "value", param: "value", options: {pretty: true})
+    get_portfolio_memberships: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.portfolio_memberships.get_portfolio_memberships(param: "value", param: "value", options: {pretty: true})
+    get_portfolio_memberships_for_portfolio: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.portfolio_memberships.get_portfolio_memberships_for_portfolio(portfolio_gid: 'portfolio_gid', param: "value", param: "value", options: {pretty: true})

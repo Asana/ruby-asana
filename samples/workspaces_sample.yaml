@@ -1,0 +1,51 @@
+workspaces: 
+    add_user_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspaces.add_user_for_workspace(workspace_gid: 'workspace_gid', field: "value", field: "value", options: {pretty: true})
+    get_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspaces.get_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})
+    get_workspaces: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspaces.get_workspaces(param: "value", param: "value", options: {pretty: true})
+    remove_user_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspaces.remove_user_for_workspace(workspace_gid: 'workspace_gid', field: "value", field: "value", options: {pretty: true})
+    update_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.workspaces.update_workspace(workspace_gid: 'workspace_gid', field: "value", field: "value", options: {pretty: true})

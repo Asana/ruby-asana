@@ -1,0 +1,21 @@
+usertasklists: 
+    get_user_task_list: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.user_task_lists.get_user_task_list(user_task_list_gid: 'user_task_list_gid', param: "value", param: "value", options: {pretty: true})
+    get_user_task_list_for_user: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.user_task_lists.get_user_task_list_for_user(user_gid: 'user_gid', workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})

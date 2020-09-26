@@ -1,0 +1,21 @@
+customfieldsettings: 
+    get_custom_field_settings_for_portfolio: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.custom_field_settings.get_custom_field_settings_for_portfolio(portfolio_gid: 'portfolio_gid', param: "value", param: "value", options: {pretty: true})
+    get_custom_field_settings_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.custom_field_settings.get_custom_field_settings_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})

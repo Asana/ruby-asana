@@ -1,0 +1,51 @@
+users: 
+    get_favorites_for_user: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.users.get_favorites_for_user(user_gid: 'user_gid', resource_type: '&#x27;resource_type_example&#x27;', workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})
+    get_user: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.users.get_user(user_gid: 'user_gid', param: "value", param: "value", options: {pretty: true})
+    get_users: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.users.get_users(param: "value", param: "value", options: {pretty: true})
+    get_users_for_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.users.get_users_for_team(team_gid: 'team_gid', param: "value", param: "value", options: {pretty: true})
+    get_users_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.users.get_users_for_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})

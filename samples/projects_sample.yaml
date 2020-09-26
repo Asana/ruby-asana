@@ -1,0 +1,181 @@
+projects: 
+    add_custom_field_setting_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.add_custom_field_setting_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    add_followers_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.add_followers_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    add_members_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.add_members_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    create_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.create_project(field: "value", field: "value", options: {pretty: true})
+    create_project_for_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.create_project_for_team(team_gid: 'team_gid', field: "value", field: "value", options: {pretty: true})
+    create_project_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.create_project_for_workspace(workspace_gid: 'workspace_gid', field: "value", field: "value", options: {pretty: true})
+    delete_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.delete_project(project_gid: 'project_gid', options: {pretty: true})
+    duplicate_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.duplicate_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    get_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})
+    get_projects: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_projects(param: "value", param: "value", options: {pretty: true})
+    get_projects_for_task: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_projects_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+    get_projects_for_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_projects_for_team(team_gid: 'team_gid', param: "value", param: "value", options: {pretty: true})
+    get_projects_for_workspace: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_projects_for_workspace(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})
+    get_task_counts_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.get_task_counts_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})
+    remove_custom_field_setting_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.remove_custom_field_setting_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    remove_followers_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.remove_followers_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    remove_members_for_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.remove_members_for_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    update_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.update_project(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
