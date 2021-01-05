@@ -22,10 +22,10 @@ RSpec.describe Asana::Resources::Task do
       checks = checks + 1
     end
 
-    client.tasks.find_by_project({:project => gid})
-    client.tasks.find_by_project({:projectId => gid})
-    client.tasks.find_by_project({:project => nil, :projectId => gid})
-    client.tasks.find_by_project({:project => gid, :projectId => nil})
+    client.tasks.find_by_project(**{:project => gid})
+    client.tasks.find_by_project(**{:projectId => gid})
+    client.tasks.find_by_project(**{:project => nil, :projectId => gid})
+    client.tasks.find_by_project(**{:project => gid, :projectId => nil})
 
     expect(checks == 4)
   end
