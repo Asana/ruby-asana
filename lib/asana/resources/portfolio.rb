@@ -164,8 +164,7 @@ module Asana
       #
       # options - [Hash] the request I/O options.
       def custom_field_settings(options: {})
-
-        Collection.new(parse(client.get("/portfolios/#{gid}/custom_field_settings", options: options)), type: self, client: client)
+        Collection.new(parse(client.get("/portfolios/#{gid}/custom_field_settings", options: options)), type: CustomFieldSetting, client: client)
       end
 
       # Create a new custom field setting on the portfolio. Returns the full
