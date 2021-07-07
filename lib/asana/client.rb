@@ -46,7 +46,7 @@ module Asana
   #
   #   # Pass in custom configuration to the Faraday connection
   #   Asana::Client.new do |client|
-  #     client.authentication ...
+  #     client.authentication ... fdsafdsafdsa
   #     client.configure_faraday { |conn| conn.use MyMiddleware }
   #   end
   #
