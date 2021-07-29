@@ -190,14 +190,13 @@ module Asana
         # workspace - [str]  The workspace to filter tasks on. *Note: If you specify `workspace`, you must also specify the `assignee` to filter on.*
         # completed_since - [datetime]  Only return tasks that are either incomplete or that have been completed since this time.
         # modified_since - [datetime]  Only return tasks that have been modified since the given time.  *Note: A task is considered “modified” if any of its properties change, or associations between it and other objects are modified (e.g.  a task being added to a project). A task is not considered modified just because another object it is associated with (e.g. a subtask) is modified. Actions that count as modifying the task include assigning, renaming, completing, and adding stories.*
+        # per_page - [Integer] the number of records to fetch per page.  Defaults to 20.
         # options - [Hash] the request I/O options
-        # > offset - [str]  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
-        # > limit - [int]  Results per page. The number of objects to return per page. The value must be between 1 and 100.
         # > opt_fields - [list[str]]  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
         # > opt_pretty - [bool]  Provides “pretty” output. Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
-        def get_tasks(client, assignee: nil, project: nil, section: nil, workspace: nil, completed_since: nil, modified_since: nil, options: {})
+        def get_tasks(client, assignee: nil, project: nil, section: nil, workspace: nil, completed_since: nil, per_page: 20, modified_since: nil, options: {})
           path = "/tasks"
-          params = { assignee: assignee, project: project, section: section, workspace: workspace, completed_since: completed_since, modified_since: modified_since }.reject { |_,v| v.nil? || Array(v).empty? }
+          params = { assignee: assignee, project: project, section: section, workspace: workspace, completed_since: completed_since, modified_since: modified_since, limit: per_page }.reject { |_,v| v.nil? || Array(v).empty? }
           Collection.new(parse(client.get(path, params: params, options: options)), type: Task, client: client)
         end
 
