@@ -1,0 +1,151 @@
+goals: 
+    add_followers: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.add_followers(field: "value", field: "value", options: {pretty: true})
+    add_subgoal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.add_subgoal(field: "value", field: "value", options: {pretty: true})
+    add_supporting_work_for_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.add_supporting_work_for_goal(field: "value", field: "value", options: {pretty: true})
+    create_goal_metric: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.create_goal_metric(field: "value", field: "value", options: {pretty: true})
+    delete_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.delete_goal(goal_gid: 'goal_gid', options: {pretty: true})
+    get_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.get_goal(goal_gid: 'goal_gid', param: "value", param: "value", options: {pretty: true})
+    get_goals: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.get_goals(param: "value", param: "value", options: {pretty: true})
+    get_parent_goals_for_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.get_parent_goals_for_goal(param: "value", param: "value", options: {pretty: true})
+    get_subgoals_for_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.get_subgoals_for_goal(param: "value", param: "value", options: {pretty: true})
+    remove_followers: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.remove_followers(field: "value", field: "value", options: {pretty: true})
+    remove_subgoal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.remove_subgoal(field: "value", field: "value", options: {pretty: true})
+    remove_supporting_work_for_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.remove_supporting_work_for_goal(field: "value", field: "value", options: {pretty: true})
+    supporting_work: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.supporting_work(param: "value", param: "value", options: {pretty: true})
+    update_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.update_goal(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
+    update_goal_metric: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.update_goal_metric(field: "value", field: "value", options: {pretty: true})
