@@ -29,6 +29,16 @@ goals:
 
 
         result = client.goals.add_supporting_work_for_goal(field: "value", field: "value", options: {pretty: true})
+    create_goal: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.goals.create_goal(field: "value", field: "value", options: {pretty: true})
     create_goal_metric: >-
         require 'asana'
 

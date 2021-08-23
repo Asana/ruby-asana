@@ -1,0 +1,21 @@
+timeperiods: 
+    get_time_period: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.time_periods.get_time_period(time_period_gid: 'time_period_gid', param: "value", param: "value", options: {pretty: true})
+    get_time_periods: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.time_periods.get_time_periods(workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})
