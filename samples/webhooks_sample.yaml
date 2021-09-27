@@ -39,3 +39,13 @@ webhooks:
 
 
         result = client.webhooks.get_webhooks(workspace: '&#x27;workspace_example&#x27;', param: "value", param: "value", options: {pretty: true})
+    update_webhook: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.webhooks.update_webhook(webhook_gid: 'webhook_gid', field: "value", field: "value", options: {pretty: true})
