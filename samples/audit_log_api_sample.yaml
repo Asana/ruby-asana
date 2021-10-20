@@ -1,0 +1,11 @@
+auditlogapi: 
+    get_audit_log_events: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.audit_log_api.get_audit_log_events(workspace_gid: 'workspace_gid', param: "value", param: "value", options: {pretty: true})
