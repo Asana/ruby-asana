@@ -11,7 +11,7 @@ module Asana
 
       module_function
 
-      MAX_TIMEOUTS = 5
+      MAX_RETRIES = 5
 
       # Public: Perform a request handling any API errors correspondingly.
       #
@@ -28,7 +28,7 @@ module Asana
       # Raises [Asana::Errors::APIError] when the API returns an unknown error.
       #
       # rubocop:disable all
-      def handle(num_timeouts=0, &request)
+      def handle(num_retries=0, &request)
         request.call
       rescue Faraday::ClientError => e
         raise e unless e.response
@@ -40,12 +40,18 @@ module Asana
           when 404 then raise not_found(e.response)
           when 412 then recover_response(e.response)
           when 429 then raise rate_limit_enforced(e.response)
-          when 500 then raise server_error(e.response)
           else raise api_error(e.response)
         end
+      # Retry for timeouts or 500s from Asana
+      rescue Faraday::ServerError => e
+        if num_retries < MAX_RETRIES
+          handle(num_retries + 1, &request)
+        else
+          raise server_error(e.response)
+        end
       rescue Net::ReadTimeout => e
-        if num_timeouts < MAX_TIMEOUTS
-          handle(num_timeouts + 1, &request)
+        if num_retries < MAX_RETRIES
+          handle(num_retries + 1, &request)
         else
           raise e
         end

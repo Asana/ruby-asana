@@ -132,7 +132,7 @@ get '/auth/:name/callback' do
   $client = Asana::Client.new do |c|
     c.authentication :oauth2, access_token
   end
- 
+
   redirect '/'
 end
 ```
@@ -214,8 +214,10 @@ In any request against the Asana API, there a number of errors that could
 arise. Those are well documented in the [Asana API Documentation][apidocs], and
 are represented as exceptions under the namespace `Asana::Errors`.
 
-All errors are subclasses of `Asana::Errors::APIError`, so make sure to rescue
-instances of this class if you want to handle them yourself.
+The Asana client automatically handles and retries requests upon receipt of
+500 (Internal Server Error) responses from the Asana API. If you want to handle
+any 4xx errors, you will have to do that yourself; you can do this by rescuing
+`Asana::Errors::APIError`, the parent class of all Asana API errors.
 
 ### I/O options
 
@@ -305,7 +307,7 @@ If you receive one of these warnings, you should:
 You can add global headers, by setting default_headers
 
     c.default_headers "asana-enable" => "string_ids"
-    
+
 Or you can add a header field to the options of each request.
 
 If you would rather suppress these warnings, you can set
