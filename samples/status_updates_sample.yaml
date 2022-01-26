@@ -1,0 +1,41 @@
+statusupdates: 
+    create_status_for_object: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.status_updates.create_status_for_object(field: "value", field: "value", options: {pretty: true})
+    delete_status: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.status_updates.delete_status(status_gid: 'status_gid', options: {pretty: true})
+    get_status: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.status_updates.get_status(status_gid: 'status_gid', param: "value", param: "value", options: {pretty: true})
+    get_statuses_for_object: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.status_updates.get_statuses_for_object(parent: '&#x27;parent_example&#x27;', param: "value", param: "value", options: {pretty: true})

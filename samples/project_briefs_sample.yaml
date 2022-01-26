@@ -1,0 +1,41 @@
+projectbriefs: 
+    create_project_brief: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_briefs.create_project_brief(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
+    delete_project_brief: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_briefs.delete_project_brief(project_brief_gid: 'project_brief_gid', options: {pretty: true})
+    get_project_brief: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_briefs.get_project_brief(project_brief_gid: 'project_brief_gid', param: "value", param: "value", options: {pretty: true})
+    update_project_brief: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_briefs.update_project_brief(project_brief_gid: 'project_brief_gid', field: "value", field: "value", options: {pretty: true})

@@ -22,7 +22,7 @@ module Asana
         def add_user_for_team(client, team_gid: required("team_gid"), options: {}, **data)
           path = "/teams/{team_gid}/addUser"
           path["{team_gid}"] = team_gid
-          User.new(parse(client.post(path, body: data, options: options)).first, client: client)
+          parse(client.post(path, body: data, options: options)).first
         end
 
         # Create a team
