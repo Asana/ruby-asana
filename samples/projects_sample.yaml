@@ -139,6 +139,16 @@ projects:
 
 
         result = client.projects.get_task_counts_for_project(project_gid: 'project_gid', param: "value", param: "value", options: {pretty: true})
+    project_save_as_template: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.projects.project_save_as_template(project_gid: 'project_gid', field: "value", field: "value", options: {pretty: true})
     remove_custom_field_setting_for_project: >-
         require 'asana'
 
