@@ -1,0 +1,41 @@
+projecttemplates: 
+    get_project_template: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_templates.get_project_template(project_template_gid: 'project_template_gid', param: "value", param: "value", options: {pretty: true})
+    get_project_templates: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_templates.get_project_templates(param: "value", param: "value", options: {pretty: true})
+    get_project_templates_for_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_templates.get_project_templates_for_team(team_gid: 'team_gid', param: "value", param: "value", options: {pretty: true})
+    instantiate_project: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.project_templates.instantiate_project(project_template_gid: 'project_template_gid', field: "value", field: "value", options: {pretty: true})
