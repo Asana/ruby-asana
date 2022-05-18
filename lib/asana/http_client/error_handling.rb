@@ -40,6 +40,7 @@ module Asana
           when 404 then raise not_found(e.response)
           when 412 then recover_response(e.response)
           when 429 then raise rate_limit_enforced(e.response)
+          when 500 then raise server_error(e.response)
           else raise api_error(e.response)
         end
       # Retry for timeouts or 500s from Asana
