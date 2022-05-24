@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday_middleware", "~> 1.0"
   spec.add_dependency "faraday_middleware-multi_json", "~> 0.0"
 
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.2"
   spec.add_development_dependency 'appraisal', '~> 2.1', '>= 2.1'
 end
