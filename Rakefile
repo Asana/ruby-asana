@@ -29,6 +29,11 @@ namespace :bump do
 
   # rubocop:disable Metrics/MethodLength
   def write_version(major, minor, patch)
+
+    File.open('VERSION', 'w') do |f|
+      f.write "#{major}.#{minor}.#{patch}"
+    end
+
     str = <<-EOS
 #:nodoc:
 module Asana
@@ -41,10 +46,13 @@ EOS
     end
 
     new_version = "#{major}.#{minor}.#{patch}"
+    system('bundle lock --update')
+    system('git add Gemfile.lock')
+    system('git add VERSION')
     system('git add lib/asana/version.rb')
     system(%(git commit -m "Bumped to #{new_version}" && ) +
            %(git tag -a v#{new_version} -m "Version #{new_version}"))
-    puts "\nRun git push --tags to release."
+    puts "\nRun git push --tags origin master:master to release."
   end
 
   desc 'Bumps a patch version'

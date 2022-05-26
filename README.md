@@ -335,11 +335,11 @@ To release a new version, run either of these commands:
     rake bump:minor
     rake bump:major
 
-This will: update `lib/asana/version.rb`, commit and tag the commit. Then you
+This will: update `lib/asana/version.rb` and `VERSION`, commit and tag the commit. Then you
 just need to `push --tags` to let Travis build and release the new version to
 Rubygems:
 
-    git push --tags
+    git push --tags origin master:master
 
 ### Code generation
 
