@@ -1,7 +1,7 @@
 # Asana
 
 [![Gem Version](https://badge.fury.io/rb/asana.svg)](http://badge.fury.io/rb/asana)
-[![Build Status](https://travis-ci.org/Asana/ruby-asana.svg?branch=master)](https://travis-ci.org/Asana/ruby-asana)
+[![Build Status](https://github.com/Asana/ruby-asana/workflows/Build/badge.svg)](https://github.com/Asana/ruby-asana/actions)
 [![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
 
 
@@ -336,10 +336,21 @@ To release a new version, run either of these commands:
     rake bump:major
 
 This will: update `lib/asana/version.rb` and `VERSION`, commit and tag the commit. Then you
-just need to `push --tags` to let Travis build and release the new version to
+just need to `push --tags` to let GitHub Actions build and release the new version to
 Rubygems:
 
     git push --tags origin master:master
+
+### Manual Deployment
+
+  1. Merge in the desired changes into the `master` branch and commit them.
+  2. Clone the repo, work on master.
+  3. Edit package version in `lib/asana/version.rb` and `VERSION` to indicate the [semantic version](http://semver.org/) change.
+  4. Commit the change
+  5. Tag the commit with `v` plus the same version number you set in the file.
+     `git tag v1.2.3`
+  6. Push changes to origin, including tags:
+     `git push --tags origin master:master`
 
 ### Code generation
 

@@ -80,17 +80,5 @@ task default: [:all, :rubocop, :yard]
 
 desc 'Test the plugin under all supported Rails versions.'
 task :all do |_t|
-  if ENV['TRAVIS']
-    # require 'json'
-    # puts JSON.pretty_generate(ENV.to_hash)
-    if ENV['BUNDLE_GEMFILE'] =~ /gemfiles/
-      appraisal_name = ENV['BUNDLE_GEMFILE'].scan(/faraday\_(.*)\.gemfile/).flatten.first
-      command_prefix = "appraisal faraday-#{appraisal_name}"
-      exec("#{command_prefix} bundle install && #{command_prefix} bundle exec rspec")
-    else
-      exec(' bundle exec appraisal install && bundle exec rake appraisal spec')
-    end
-  else
-    exec('bundle exec appraisal install && bundle exec rake appraisal spec')
-  end
+  exec('bundle exec appraisal install && bundle exec rake appraisal spec')
 end
