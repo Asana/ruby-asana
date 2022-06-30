@@ -8,7 +8,7 @@ goals:
         end
 
 
-        result = client.goals.add_followers(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.add_followers(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     add_subgoal: >-
         require 'asana'
 
@@ -18,7 +18,7 @@ goals:
         end
 
 
-        result = client.goals.add_subgoal(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.add_subgoal(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     add_supporting_work_for_goal: >-
         require 'asana'
 
@@ -28,7 +28,7 @@ goals:
         end
 
 
-        result = client.goals.add_supporting_work_for_goal(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.add_supporting_work_for_goal(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     create_goal: >-
         require 'asana'
 
@@ -48,7 +48,7 @@ goals:
         end
 
 
-        result = client.goals.create_goal_metric(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.create_goal_metric(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     delete_goal: >-
         require 'asana'
 
@@ -88,7 +88,7 @@ goals:
         end
 
 
-        result = client.goals.get_parent_goals_for_goal(param: "value", param: "value", options: {pretty: true})
+        result = client.goals.get_parent_goals_for_goal(goal_gid: 'goal_gid', param: "value", param: "value", options: {pretty: true})
     get_subgoals_for_goal: >-
         require 'asana'
 
@@ -98,7 +98,7 @@ goals:
         end
 
 
-        result = client.goals.get_subgoals_for_goal(param: "value", param: "value", options: {pretty: true})
+        result = client.goals.get_subgoals_for_goal(goal_gid: 'goal_gid', param: "value", param: "value", options: {pretty: true})
     remove_followers: >-
         require 'asana'
 
@@ -108,7 +108,7 @@ goals:
         end
 
 
-        result = client.goals.remove_followers(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.remove_followers(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     remove_subgoal: >-
         require 'asana'
 
@@ -118,7 +118,7 @@ goals:
         end
 
 
-        result = client.goals.remove_subgoal(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.remove_subgoal(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     remove_supporting_work_for_goal: >-
         require 'asana'
 
@@ -128,7 +128,7 @@ goals:
         end
 
 
-        result = client.goals.remove_supporting_work_for_goal(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.remove_supporting_work_for_goal(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})
     supporting_work: >-
         require 'asana'
 
@@ -138,7 +138,7 @@ goals:
         end
 
 
-        result = client.goals.supporting_work(param: "value", param: "value", options: {pretty: true})
+        result = client.goals.supporting_work(goal_gid: 'goal_gid', param: "value", param: "value", options: {pretty: true})
     update_goal: >-
         require 'asana'
 
@@ -158,4 +158,4 @@ goals:
         end
 
 
-        result = client.goals.update_goal_metric(field: "value", field: "value", options: {pretty: true})
+        result = client.goals.update_goal_metric(goal_gid: 'goal_gid', field: "value", field: "value", options: {pretty: true})

@@ -22,7 +22,7 @@ module Asana
         def add_user_for_workspace(client, workspace_gid: required("workspace_gid"), options: {}, **data)
           path = "/workspaces/{workspace_gid}/addUser"
           path["{workspace_gid}"] = workspace_gid
-          User.new(parse(client.post(path, body: data, options: options)).first, client: client)
+          parse(client.post(path, body: data, options: options)).first
         end
 
         # Get a workspace

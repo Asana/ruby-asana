@@ -8,7 +8,7 @@ attachments:
         end
 
 
-        result = client.attachments.create_attachment_for_task(task_gid: 'task_gid', field: "value", field: "value", options: {pretty: true})
+        result = client.attachments.create_attachment_for_task(field: "value", field: "value", options: {pretty: true})
     delete_attachment: >-
         require 'asana'
 
@@ -29,7 +29,7 @@ attachments:
 
 
         result = client.attachments.get_attachment(attachment_gid: 'attachment_gid', param: "value", param: "value", options: {pretty: true})
-    get_attachments_for_task: >-
+    get_attachments_for_object: >-
         require 'asana'
 
 
@@ -38,4 +38,4 @@ attachments:
         end
 
 
-        result = client.attachments.get_attachments_for_task(task_gid: 'task_gid', param: "value", param: "value", options: {pretty: true})
+        result = client.attachments.get_attachments_for_object(parent: '&#x27;parent_example&#x27;', param: "value", param: "value", options: {pretty: true})
