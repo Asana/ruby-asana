@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    asana (0.10.13)
+    asana (1.0.0)
       faraday (~> 1.0)
       faraday_middleware (~> 1.0)
       faraday_middleware-multi_json (~> 0.0)
@@ -83,7 +83,7 @@ GEM
     notiffany (0.1.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    oauth2 (2.0.0)
+    oauth2 (2.0.3)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
       multi_xml (~> 0.5)
@@ -141,7 +141,7 @@ GEM
     thor (1.2.1)
     tomparse (0.4.2)
     unicode-display_width (1.8.0)
-    version_gem (1.0.0)
+    version_gem (1.1.0)
     webrick (1.7.0)
     yard (0.9.28)
       webrick (~> 1.7.0)
