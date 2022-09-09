@@ -316,7 +316,7 @@ If you would rather suppress these warnings, you can set
 
 ## Development
 
-You'll need Ruby 2.5+ and Node v0.10.26+ / NPM 1.4.3+ installed.
+You'll need Ruby 2.7+ and Node v0.10.26+ / NPM 1.4.3+ installed.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `bin/console` for an interactive prompt that will allow you to experiment.
@@ -351,6 +351,9 @@ Rubygems:
      `git tag v1.2.3`
   6. Push changes to origin, including tags:
      `git push --tags origin master:master`
+
+
+Note: Make sure you have ruby version `2.7` installed
 
 ### Code generation
 
