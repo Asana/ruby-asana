@@ -12,6 +12,8 @@ group :tools do
   gem 'rubocop', '~> 0.52.1'
   gem 'rubocop-rspec', '~> 1.22.2'
 
+  gem 'oauth2', '~> 2.0.3'
+
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-rubocop'
