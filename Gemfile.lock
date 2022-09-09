@@ -161,6 +161,7 @@ DEPENDENCIES
   guard-rspec
   guard-rubocop
   guard-yard
+  oauth2 (~> 2.0.3)
   rack-protection (= 1.5.5)
   rake (~> 13.0)
   rspec (~> 3.2)
