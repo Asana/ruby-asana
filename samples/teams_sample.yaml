@@ -59,3 +59,13 @@ teams:
 
 
         result = client.teams.remove_user_for_team(team_gid: 'team_gid', field: "value", field: "value", options: {pretty: true})
+    update_team: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.teams.update_team(field: "value", field: "value", options: {pretty: true})

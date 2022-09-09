@@ -1,5 +1,5 @@
 attachments: 
-    create_attachment_for_task: >-
+    create_attachment_for_object: >-
         require 'asana'
 
 
@@ -8,7 +8,7 @@ attachments:
         end
 
 
-        result = client.attachments.create_attachment_for_task(field: "value", field: "value", options: {pretty: true})
+        result = client.attachments.create_attachment_for_object(field: "value", field: "value", options: {pretty: true})
     delete_attachment: >-
         require 'asana'
 

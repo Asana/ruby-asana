@@ -35,7 +35,7 @@ module Asana
         def add_dependents_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/addDependents"
           path["{task_gid}"] = task_gid
-          Collection.new(parse(client.post(path, body: data, options: options)), type: Task, client: client)
+          parse(client.post(path, body: data, options: options)).first
         end
 
         # Add followers to a task
@@ -48,7 +48,7 @@ module Asana
         def add_followers_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/addFollowers"
           path["{task_gid}"] = task_gid
-          parse(client.post(path, body: data, options: options)).first
+          Task.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Add a project to a task
@@ -271,7 +271,7 @@ module Asana
         def remove_dependencies_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/removeDependencies"
           path["{task_gid}"] = task_gid
-          Collection.new(parse(client.post(path, body: data, options: options)), type: Resource, client: client)
+          parse(client.post(path, body: data, options: options)).first
         end
 
         # Unlink dependents from a task
@@ -284,7 +284,7 @@ module Asana
         def remove_dependents_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/removeDependents"
           path["{task_gid}"] = task_gid
-          Collection.new(parse(client.post(path, body: data, options: options)), type: Resource, client: client)
+          parse(client.post(path, body: data, options: options)).first
         end
 
         # Remove followers from a task
@@ -297,7 +297,7 @@ module Asana
         def remove_follower_for_task(client, task_gid: required("task_gid"), options: {}, **data)
           path = "/tasks/{task_gid}/removeFollowers"
           path["{task_gid}"] = task_gid
-          parse(client.post(path, body: data, options: options)).first
+          Task.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Remove a project from a task

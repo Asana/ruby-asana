@@ -34,7 +34,7 @@ module Asana
         def add_followers_for_project(client, project_gid: required("project_gid"), options: {}, **data)
           path = "/projects/{project_gid}/addFollowers"
           path["{project_gid}"] = project_gid
-          parse(client.post(path, body: data, options: options)).first
+          Project.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Add users to a project
@@ -47,7 +47,7 @@ module Asana
         def add_members_for_project(client, project_gid: required("project_gid"), options: {}, **data)
           path = "/projects/{project_gid}/addMembers"
           path["{project_gid}"] = project_gid
-          parse(client.post(path, body: data, options: options)).first
+          Project.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Create a project
@@ -237,7 +237,7 @@ module Asana
         def remove_followers_for_project(client, project_gid: required("project_gid"), options: {}, **data)
           path = "/projects/{project_gid}/removeFollowers"
           path["{project_gid}"] = project_gid
-          parse(client.post(path, body: data, options: options)).first
+          Project.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Remove users from a project
@@ -250,7 +250,7 @@ module Asana
         def remove_members_for_project(client, project_gid: required("project_gid"), options: {}, **data)
           path = "/projects/{project_gid}/removeMembers"
           path["{project_gid}"] = project_gid
-          parse(client.post(path, body: data, options: options)).first
+          Project.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Update a project

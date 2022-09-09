@@ -21,7 +21,7 @@ module Asana
         def add_custom_field_setting_for_portfolio(client, portfolio_gid: required("portfolio_gid"), options: {}, **data)
           path = "/portfolios/{portfolio_gid}/addCustomFieldSetting"
           path["{portfolio_gid}"] = portfolio_gid
-          parse(client.post(path, body: data, options: options)).first
+          CustomFieldSetting.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Add a portfolio item
@@ -47,7 +47,7 @@ module Asana
         def add_members_for_portfolio(client, portfolio_gid: required("portfolio_gid"), options: {}, **data)
           path = "/portfolios/{portfolio_gid}/addMembers"
           path["{portfolio_gid}"] = portfolio_gid
-          parse(client.post(path, body: data, options: options)).first
+          Portfolio.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Create a portfolio
@@ -151,7 +151,7 @@ module Asana
         def remove_members_for_portfolio(client, portfolio_gid: required("portfolio_gid"), options: {}, **data)
           path = "/portfolios/{portfolio_gid}/removeMembers"
           path["{portfolio_gid}"] = portfolio_gid
-          parse(client.post(path, body: data, options: options)).first
+          Portfolio.new(parse(client.post(path, body: data, options: options)).first, client: client)
         end
 
         # Update a portfolio

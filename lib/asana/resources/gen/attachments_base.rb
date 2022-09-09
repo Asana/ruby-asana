@@ -39,7 +39,7 @@ module Asana
         # Get attachments from an object
         #
 
-        # parent - [str]  (required) Globally unique identifier for object to fetch statuses from. Must be a GID for a task or project_brief.
+        # parent - [str]  (required) Globally unique identifier for object to fetch statuses from. Must be a GID for a task, project, or project_brief.
         # options - [Hash] the request I/O options
         # > offset - [str]  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
         # > limit - [int]  Results per page. The number of objects to return per page. The value must be between 1 and 100.
