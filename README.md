@@ -329,7 +329,17 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 
 ## Releasing a new version
 
-To release a new version, run either of these commands:
+Prerequisite: Before deployment, make sure you have Ruby version `2.7` installed
+
+### Automatic Deployment
+
+First, install dependencies:
+
+```
+bundle install
+```
+
+Then, to release a new version, run one of these commands:
 
     rake bump:patch
     rake bump:minor
@@ -351,9 +361,6 @@ Rubygems:
      `git tag v1.2.3`
   6. Push changes to origin, including tags:
      `git push --tags origin master:master`
-
-
-Note: Make sure you have ruby version `2.7` installed
 
 ### Code generation
 
