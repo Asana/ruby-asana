@@ -41,7 +41,7 @@ client = Asana::Client.new do |c|
   c.authentication :access_token, 'personal_access_token'
 end
 
-client.workspaces.find_all.first
+client.workspaces.get_workspaces.first
 ```
 
 A full-blown customized client using OAuth2 wih a previously obtained refresh
@@ -61,7 +61,7 @@ client = Asana::Client.new do |c|
   c.configure_faraday { |conn| conn.use SomeFaradayMiddleware }
 end
 
-workspace = client.workspaces.find_by_id(12)
+workspace = client.workspaces.get_workspace(12)
 workspace.users
 # => #<Asana::Collection<User> ...>
 client.tags.create_in_workspace(workspace: workspace.id, name: 'foo')
@@ -152,7 +152,7 @@ client = Asana::Client.new do |c|
   c.authentication :oauth2, access_token
 end
 
-client.tasks.find_by_id(12)
+client.tasks.get_task(12)
 ```
 
 This will print an authorization URL on STDOUT, and block until you paste in the
@@ -166,7 +166,7 @@ results per page to fetch, between 1 and 100. If you don't provide any, it
 defaults to 20.
 
 ```ruby
-my_tasks = client.tasks.find_by_tag(tag: tag_id, per_page: 5)
+my_tasks = client.tasks.get_tasks_for_tag(tag: tag_id, per_page: 5)
 # => #<Asana::Collection<Task> ...>
 ```
 
@@ -226,7 +226,7 @@ All requests (except `DELETE`) accept extra I/O options
 request:
 
 ```ruby
-client.tasks.find_by_id(12, options: { expand: ['workspace'] })
+client.tasks.get_task(12, options: { expand: ['workspace'] })
 ```
 
 ### Attachment uploading
@@ -235,7 +235,7 @@ To attach a file to a task or a project, you just need its absolute path on your
 filesystem and its MIME type, and the file will be uploaded for you:
 
 ```ruby
-task = client.tasks.find_by_id(12)
+task = client.tasks.get_task(12)
 attachment = task.attach(filename: '/absolute/path/to/my/file.png',
                          mime: 'image/png')
 attachment.name # => 'file.png'
@@ -247,7 +247,7 @@ To subscribe to an event stream of a task or a project, just call `#events` on
 it:
 
 ```ruby
-task = client.tasks.find_by_id(12)
+task = client.tasks.get_task(12)
 task.events # => #<Asana::Events ...>
 
 # You can do the same with only the task id:
@@ -272,7 +272,7 @@ normal Ruby Enumerable. Read below to get some ideas.
 
 ```ruby
 # Run this in another thread so that we don't block forever
-events = client.tasks.find_by_id(12).events(wait: 2)
+events = client.tasks.get_task(12).events(wait: 2)
 Thread.new do
   events.each do |event|
     notify_someone "New event arrived! #{event}"
@@ -286,7 +286,7 @@ To do that we need to call `#lazy` on the `Events` instance, just like with any
 other `Enumerable`.
 
 ```ruby
-events = client.tasks.find_by_id(12).events
+events = client.tasks.get_task(12).events
 only_change_events = events.lazy.select { |event| event.action == 'changed' }
 Thread.new do
   only_change_events.each do |event|

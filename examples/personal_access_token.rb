@@ -13,9 +13,9 @@ client = Asana::Client.new do |c|
 end
 
 puts "My Workspaces:"
-client.workspaces.find_all.each do |workspace|
+client.workspaces.get_workspaces.each do |workspace|
   puts "\t* #{workspace.name} - tags:"
-  client.tags.find_by_workspace(workspace: workspace.id).each do |tag|
+  client.tags.get_tags_for_workspace(workspace: workspace.id).each do |tag|
     puts "\t\t- #{tag.name}"
   end
 end
