@@ -13,10 +13,10 @@ client = Asana::Client.new do |c|
   c.authentication :access_token, access_token
 end
 
-workspace = client.workspaces.find_all.first
-task = client.tasks.find_all(assignee: "me", workspace: workspace.id).first
+workspace = client.workspaces.get_workspaces.first
+task = client.tasks.get_tasks(assignee: "me", workspace: workspace.id).first
 unless task
-  task = client.tasks.create(workspace: workspace.id, name: "Hello world!", assignee: "me")
+  task = client.tasks.create_task(workspace: workspace.id, name: "Hello world!", assignee: "me")
 end
 
 Thread.abort_on_exception = true
