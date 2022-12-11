@@ -53,7 +53,7 @@ module Asana
         # options - [Hash] the request I/O options.
         def find_by_id(client, id, options: {})
 
-          self.new(parse(client.get("/sections/#{gid}", options: options)).first, client: client)
+          self.new(parse(client.get("/sections/#{id}", options: options)).first, client: client)
         end
       end
 
