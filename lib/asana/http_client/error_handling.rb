@@ -1,5 +1,3 @@
-require 'multi_json'
-
 require_relative '../errors'
 
 module Asana
@@ -112,7 +110,7 @@ module Asana
 
       # Internal: Parser a response body from JSON.
       def body(response)
-        MultiJson.load(response[:body])
+        JSON.load(response[:body])
       end
 
       def recover_response(response)

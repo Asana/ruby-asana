@@ -43,7 +43,8 @@ module Asana
         # Returns nothing.
         def configure(connection)
           @token = @token.refresh! if @token.expired?
-          connection.request :oauth2, @token.token
+
+          connection.request :authorization, 'Bearer', @token.token
         end
       end
     end

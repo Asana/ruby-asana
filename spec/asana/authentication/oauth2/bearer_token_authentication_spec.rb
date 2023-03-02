@@ -9,11 +9,7 @@ RSpec.describe Asana::Authentication::OAuth2::BearerTokenAuthentication do
   end
 
   it 'configures Faraday to use OAuth2 authentication with a bearer token' do
-    expect(conn.builder.handlers.first).to eq(FaradayMiddleware::OAuth2)
-  end
-
-  it 'configures Faraday to use OAuth2 authentication with a bearer token' do
-    expect(conn.headers['Authorization']).to eq("Bearer #{token}")
+    expect(conn.builder.handlers).to include(Faraday::Request::Authorization)
   end
 end
 # rubocop:enable RSpec/FilePath

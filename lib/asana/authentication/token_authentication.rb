@@ -13,7 +13,7 @@ module Asana
       #
       # Returns nothing.
       def configure(connection)
-        connection.basic_auth(@token, '')
+        connection.request :authorization, :basic, @token, ''
       end
     end
   end

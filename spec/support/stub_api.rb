@@ -1,5 +1,3 @@
-require 'multi_json'
-
 # Internal: Represents a stub of the Asana API for testing purposes. Plays
 # nicely with Asana::HttpClient, being convertible to an adapter.
 #
@@ -27,7 +25,7 @@ class StubAPI
       [
         status || 200,
         { 'Content-Type' => 'application/json' }.merge(headers || {}),
-        MultiJson.dump(body)
+        JSON.dump(body)
       ]
     end
   end
@@ -76,7 +74,7 @@ class StubAPI
   def parse_args(method, resource_uri, body)
     [BASE_URI + resource_uri].tap do |as|
       if [:post, :put, :patch].include?(method) && !body.is_a?(Proc)
-        as.push MultiJson.dump(body)
+        as.push JSON.dump(body)
       end
     end
   end
