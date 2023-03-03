@@ -1,3 +1,5 @@
+require 'faraday/multipart'
+
 module Asana
   module Resources
     # Internal: Mixin to add the ability to upload an attachment to a specific
@@ -21,9 +23,9 @@ module Asana
                    path = File.expand_path(filename)
                    raise ArgumentError, "file #{filename} doesn't exist" unless File.exist?(path)
 
-                   Faraday::FilePart.new(path, mime)
+                   Faraday::Multipart::FilePart.new(path, mime)
                  else
-                   Faraday::FilePart.new(io, mime, filename)
+                   Faraday::Multipart::FilePart.new(io, mime, filename)
                  end
 
         response = client.post("/#{self.class.plural_name}/#{gid}/attachments",

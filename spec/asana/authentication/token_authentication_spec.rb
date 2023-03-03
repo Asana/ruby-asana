@@ -6,7 +6,7 @@ RSpec.describe Asana::Authentication::TokenAuthentication do
       conn = Faraday.new do |builder|
         auth.configure(builder)
       end
-      expect(conn.headers['Authorization']).to eq('Basic TVlUT0tFTjo=')
+      expect(conn.builder.handlers).to include(Faraday::Request::Authorization)
     end
   end
 end

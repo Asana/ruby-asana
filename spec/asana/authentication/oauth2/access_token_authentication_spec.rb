@@ -13,7 +13,7 @@ RSpec.describe Asana::Authentication::OAuth2::AccessTokenAuthentication do
         conn = Faraday.new do |builder|
           auth.configure(builder)
         end
-        expect(conn.builder.handlers.first).to eq(FaradayMiddleware::OAuth2)
+        expect(conn.builder.handlers).to include(Faraday::Request::Authorization)
       end
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Asana::Authentication::OAuth2::AccessTokenAuthentication do
         conn = Faraday.new do |builder|
           auth.configure(builder)
         end
-        expect(conn.builder.handlers.first).to eq(FaradayMiddleware::OAuth2)
+        expect(conn.builder.handlers).to include(Faraday::Request::Authorization)
       end
     end
   end

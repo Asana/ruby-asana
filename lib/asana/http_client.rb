@@ -1,6 +1,5 @@
 require 'faraday'
-require 'faraday_middleware'
-require 'faraday_middleware/multi_json'
+require 'faraday/follow_redirects'
 
 require_relative 'http_client/error_handling'
 require_relative 'http_client/environment_info'
@@ -130,6 +129,7 @@ module Asana
         yield builder if request_config
         configure_format(builder)
         add_middleware(builder)
+        configure_redirects(builder)
         @config.call(builder) if @config
         use_adapter(builder, @adapter)
       end
@@ -147,13 +147,16 @@ module Asana
     end
 
     def configure_format(builder)
-      builder.request :multi_json
-      builder.response :multi_json
+      builder.request :json
+      builder.response :json
     end
 
     def add_middleware(builder)
       builder.use Faraday::Response::RaiseError
-      builder.use FaradayMiddleware::FollowRedirects
+    end
+
+    def configure_redirects(builder)
+      builder.response :follow_redirects
     end
 
     def use_adapter(builder, adapter)

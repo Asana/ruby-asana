@@ -1,4 +1,8 @@
 
-  appraise "faraday-1.0.0" do
-    gem "faraday", "1.0.0"
+  appraise "faraday-2.7.0" do
+    gem "faraday", "2.7.0"
+  end
+
+  appraise "faraday-2.6.0" do
+    gem "faraday", "2.6.0"
   end

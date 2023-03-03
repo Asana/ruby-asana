@@ -1,11 +1,9 @@
-require 'multi_json'
-
 RSpec.describe Asana::HttpClient::ErrorHandling do
   describe '.handle' do
     def failed_response(status, headers: {}, body: {})
       lambda do
         raise Faraday::ClientError.new(nil, status: status,
-                                            body: MultiJson.dump(body),
+                                            body: JSON.dump(body),
                                             headers: headers)
       end
     end
