@@ -1,14 +1,49 @@
+require: rubocop-rspec
+
 AllCops:
-  Include:
-    - '**/Rakefile'
+  TargetRubyVersion: 2.7
+  NewCops: enable
   Exclude:
     - 'bin/**/*'
     - 'examples/**/*'
     - 'lib/asana/resources/*'
+    - 'lib/asana/resources/gen/**/*'
     - 'spec/templates/unicorn.rb'
     - 'spec/templates/world.rb'
     - 'test.rb'
 
 LineLength:
   Max: 120
-require: rubocop-rspec
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Metrics/PerceivedComplexity:
+  Max: 20
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/FilePath:
+  CustomTransform: {'OAuth2': 'oauth2'}
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false

@@ -1,8 +1,21 @@
+# frozen_string_literal: true
+
 require 'support/stub_api'
 require 'support/resources_helper'
 
 RSpec.describe Asana::Resources::Webhook do
   let(:api) { StubAPI.new }
+  let(:webhook_data) do
+    {
+      gid: '222',
+      resource: {
+        gid: '111',
+        name: 'the resource'
+      },
+      target: 'https://foo/123',
+      active: true
+    }
+  end
   let(:authentication) do
     Asana::Authentication::TokenAuthentication.new('token')
   end
@@ -11,18 +24,6 @@ RSpec.describe Asana::Resources::Webhook do
   end
 
   include ResourcesHelper
-
-  let(:webhook_data) do
-    {
-      gid: "222",
-      resource: {
-        gid: "111",
-        name: 'the resource'
-      },
-      target: 'https://foo/123',
-      active: true
-    }
-  end
 
   # rubocop:disable Metrics/AbcSize
   def verify_webhook_data(webhook)
@@ -34,10 +35,11 @@ RSpec.describe Asana::Resources::Webhook do
   end
   # rubocop:enable Metrics/AbcSize
 
+  # rubocop:disable RSpec/NoExpectationExample
   it 'creates and deletes a webhook' do
     req = {
       data: {
-        resource: "111",
+        resource: '111',
         target: 'https://foo/123'
       }
     }
@@ -50,29 +52,32 @@ RSpec.describe Asana::Resources::Webhook do
     end
 
     webhook = described_class.create(client,
-                                     resource: "111",
+                                     resource: '111',
                                      target: 'https://foo/123')
     verify_webhook_data(webhook)
 
     webhook.delete_by_id
   end
+  # rubocop:enable RSpec/NoExpectationExample
 
   it 'gets all webhooks' do
-    api.on(:get, '/webhooks', workspace: "1337", per_page: 20) do |response|
+    api.on(:get, '/webhooks', workspace: '1337', per_page: 20) do |response|
       response.body = { data: [webhook_data] }
     end
 
-    webhooks = described_class.get_all(client, workspace: "1337")
+    webhooks = described_class.get_all(client, workspace: '1337')
     verify_webhook_data(webhooks.first)
     expect(webhooks.length).to eq(1)
   end
 
+  # rubocop:disable RSpec/NoExpectationExample
   it 'gets a webhook by gid' do
     api.on(:get, '/webhooks/222') do |response|
       response.body = { data: webhook_data }
     end
 
-    webhook = described_class.get_by_id(client, "222")
+    webhook = described_class.get_by_id(client, '222')
     verify_webhook_data(webhook)
   end
+  # rubocop:enable RSpec/NoExpectationExample
 end

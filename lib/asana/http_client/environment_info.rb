@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../version'
 require 'openssl'
 
@@ -6,7 +8,7 @@ module Asana
     # Internal: Adds environment information to a Faraday request.
     class EnvironmentInfo
       # Internal: The default user agent to use in all requests to the API.
-      USER_AGENT = "ruby-asana v#{Asana::VERSION}".freeze
+      USER_AGENT = "ruby-asana v#{Asana::VERSION}"
 
       def initialize(user_agent = nil)
         @user_agent = user_agent || USER_AGENT
@@ -19,7 +21,7 @@ module Asana
       # environment.
       def configure(builder)
         builder.headers[:user_agent] = @user_agent
-        builder.headers[:"X-Asana-Client-Lib"] = header
+        builder.headers[:'X-Asana-Client-Lib'] = header
       end
 
       private
@@ -33,21 +35,20 @@ module Asana
           .map { |k, v| "#{k}=#{v}" }.join('&')
       end
 
-      # rubocop:disable Metrics/MethodLength
       def os
-        if RUBY_PLATFORM =~ /win32/ || RUBY_PLATFORM =~ /mingw/
+        case RUBY_PLATFORM
+        when /win32/, /mingw/
           'windows'
-        elsif RUBY_PLATFORM =~ /linux/
+        when /linux/
           'linux'
-        elsif RUBY_PLATFORM =~ /darwin/
+        when /darwin/
           'darwin'
-        elsif RUBY_PLATFORM =~ /freebsd/
+        when /freebsd/
           'freebsd'
         else
           'unknown'
         end
       end
-      # rubocop:enable Metrics/MethodLength
     end
   end
 end

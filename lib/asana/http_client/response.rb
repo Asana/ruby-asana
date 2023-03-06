@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Asana
   class HttpClient
     # Internal: Represents a response from the Asana API.

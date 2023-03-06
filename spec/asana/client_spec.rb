@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/stub_api'
 
 RSpec.describe Asana::Client do

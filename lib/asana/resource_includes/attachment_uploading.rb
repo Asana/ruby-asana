@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday/multipart'
 
 module Asana
@@ -13,8 +15,6 @@ module Asana
       # options  - [Hash] the request I/O options
       # data     - [Hash] extra attributes to post
       #
-      # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/MethodLength
       def attach(filename: required('filename'),
                  mime: required('mime'),
                  io: nil, options: {}, **data)
@@ -35,8 +35,6 @@ module Asana
 
         Attachment.new(parse(response).first, client: client)
       end
-      # rubocop:enable Metrics/MethodLength
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end

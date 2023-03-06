@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'oauth2/bearer_token_authentication'
 require_relative 'oauth2/access_token_authentication'
 require_relative 'oauth2/client'
@@ -31,10 +33,10 @@ module Asana
         client = Client.new(client_id: client_id,
                             client_secret: client_secret,
                             redirect_uri: 'urn:ietf:wg:oauth:2.0:oob')
-        STDOUT.puts '1. Go to the following URL to authorize the ' \
-          " application: #{client.authorize_url}"
-        STDOUT.puts '2. Paste the authorization code here: '
-        auth_code = STDIN.gets.chomp
+        $stdout.puts '1. Go to the following URL to authorize the  ' \
+                     "application: #{client.authorize_url}"
+        $stdout.puts '2. Paste the authorization code here: '
+        auth_code = $stdin.gets.chomp
         client.token_from_auth_code(auth_code)
       end
     end

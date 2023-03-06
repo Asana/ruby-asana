@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'asana/ruby2_0_0_compatibility'
 require 'asana/authentication'
 require 'asana/resources'

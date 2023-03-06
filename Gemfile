@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in asana.gemspec
@@ -9,8 +11,8 @@ group :tools do
   # routinely adds new checks which can cause our build to "break" even when no
   # changes have been made. In this situation it's better to intentionally
   # upgrade Rubocop and fix issues at that time.
-  gem 'rubocop', '~> 0.52.1'
-  gem 'rubocop-rspec', '~> 1.22.2'
+  gem 'rubocop', '~> 1.47.0'
+  gem 'rubocop-rspec', '~> 2.18.1'
 
   gem 'oauth2', '~> 2.0.3'
 
@@ -26,5 +28,5 @@ group :tools do
 
   gem 'simplecov', require: false
 
-  gem "rack-protection", "1.5.5"
+  gem 'rack-protection', '1.5.5'
 end

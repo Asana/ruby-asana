@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Asana
   class Client
     # Internal: Represents a configuration DSL for an Asana::Client.
@@ -17,7 +19,7 @@ module Asana
       # Public: Initializes an empty configuration object.
       def initialize
         @configuration = {
-            :log_asana_change_warnings => true
+          log_asana_change_warnings: true
         }
       end
 
@@ -100,7 +102,6 @@ module Asana
       #
       # Raises ArgumentError if the OAuth2 configuration arguments are invalid.
       #
-      # rubocop:disable Metrics/MethodLength
       def oauth2(value)
         case value
         when ::OAuth2::AccessToken
@@ -111,8 +112,8 @@ module Asana
           from_bearer_token(value[:bearer_token])
         else
           error 'Invalid OAuth2 configuration: pass in either an ' \
-            '::OAuth2::AccessToken object of your own or a hash ' \
-            'containing :refresh_token or :bearer_token.'
+                '::OAuth2::AccessToken object of your own or a hash ' \
+                'containing :refresh_token or :bearer_token.'
         end
       end
 
@@ -158,7 +159,7 @@ module Asana
       end
 
       def requiring(hash, *keys)
-        missing_keys = keys.select { |k| !hash.key?(k) }
+        missing_keys = keys.reject { |k| hash.key?(k) }
         missing_keys.any? && error("Missing keys: #{missing_keys.join(', ')}")
         keys.map { |k| hash[k] }
       end

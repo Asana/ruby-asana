@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'authentication/oauth2'
 require_relative 'authentication/token_authentication'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Asana::HttpClient::ErrorHandling do
   describe '.handle' do
     def failed_response(status, headers: {}, body: {})

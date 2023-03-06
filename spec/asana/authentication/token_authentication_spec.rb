@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Asana::Authentication::TokenAuthentication do
   describe described_class do
     let(:auth) { described_class.new('MYTOKEN') }

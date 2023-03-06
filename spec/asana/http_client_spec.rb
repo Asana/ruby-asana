@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/stub_api'
 
 RSpec.describe Asana::HttpClient do
@@ -36,7 +38,7 @@ RSpec.describe Asana::HttpClient do
       end
 
       client.get('/users/me',
-                 options: { fields: %w(foo bar) }).tap do |response|
+                 options: { fields: %w[foo bar] }).tap do |response|
         expect(response.status).to eq(200)
         expect(response.body).to eq('user' => 'foo')
       end
@@ -58,13 +60,13 @@ RSpec.describe Asana::HttpClient do
     it 'accepts I/O options' do
       api.on(:put, '/users/me',
              'data' => { 'name' => 'John' },
-             'options' => { 'fields' => %w(foo bar) }) do |response|
+             'options' => { 'fields' => %w[foo bar] }) do |response|
         response.body = { user: 'foo' }
       end
 
       client.put('/users/me',
                  body: { 'name' => 'John' },
-                 options: { fields: %w(foo bar) }).tap do |response|
+                 options: { fields: %w[foo bar] }).tap do |response|
         expect(response.status).to eq(200)
         expect(response.body).to eq('user' => 'foo')
       end
@@ -86,13 +88,13 @@ RSpec.describe Asana::HttpClient do
     it 'accepts I/O options' do
       api.on(:post, '/users/me',
              'data' => { 'name' => 'John' },
-             'options' => { 'fields' => %w(foo bar) }) do |response|
+             'options' => { 'fields' => %w[foo bar] }) do |response|
         response.body = { user: 'foo' }
       end
 
       client.post('/users/me',
                   body: { 'name' => 'John' },
-                  options: { fields: %w(foo bar) }).tap do |response|
+                  options: { fields: %w[foo bar] }).tap do |response|
         expect(response.status).to eq(200)
         expect(response.body).to eq('user' => 'foo')
       end
