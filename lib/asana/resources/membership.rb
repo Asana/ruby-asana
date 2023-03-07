@@ -1,20 +1,18 @@
-require_relative 'gen/typeahead_base'
+require_relative 'gen/memberships_base'
 
 module Asana
   module Resources
-    class Typeahead < TypeaheadBase
+    class Membership < MembershipsBase
 
 
       attr_reader :gid
 
       attr_reader :resource_type
 
-      attr_reader :name
-
       class << self
         # Returns the plural name of the resource.
         def plural_name
-          'typeahead'
+          'memberships'
         end
       end
     end
