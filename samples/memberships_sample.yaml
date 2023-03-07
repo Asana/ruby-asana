@@ -1,0 +1,41 @@
+memberships: 
+    create_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.memberships.create_membership(field: "value", field: "value", options: {pretty: true})
+    delete_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.memberships.delete_membership(membership_gid: 'membership_gid', options: {pretty: true})
+    get_memberships: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.memberships.get_memberships(parent: '&#x27;parent_example&#x27;', param: "value", param: "value", options: {pretty: true})
+    update_membership: >-
+        require 'asana'
+
+
+        client = Asana::Client.new do |c|
+            c.authentication :access_token, 'PERSONAL_ACCESS_TOKEN'
+        end
+
+
+        result = client.memberships.update_membership(membership_gid: 'membership_gid', field: "value", field: "value", options: {pretty: true})
