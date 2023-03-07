@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
-# :nodoc:
+#:nodoc:
 module Asana
   # Public: Version of the gem.
-  VERSION = '2.0.1'
+  VERSION = '2.0.2'
 end

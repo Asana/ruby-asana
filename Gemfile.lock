@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    asana (2.0.1)
+    asana (2.0.2)
       faraday (~> 2.0)
       faraday-follow_redirects
       faraday-multipart
