@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'registry'
 require_relative 'response_helper'
 
@@ -21,6 +23,7 @@ module Asana
       def refresh
         raise "#{self.class.name} does not respond to #find_by_id" unless \
           self.class.respond_to?(:find_by_id)
+
         self.class.find_by_id(client, gid)
       end
 
@@ -30,17 +33,17 @@ module Asana
       # Returns the value for the requested property.
       #
       # Raises a NoMethodError if the property doesn't exist.
-      def method_missing(m, *args)
-        super unless respond_to_missing?(m, *args)
-        cache(m, wrapped(to_h[m.to_s]))
+      def method_missing(method_name, *args)
+        super unless respond_to_missing?(method_name, *args)
+        cache(method_name, wrapped(to_h[method_name.to_s]))
       end
 
       # Internal: Guard for the method_missing proxy. Checks if the resource
       # actually has a specific piece of data at all.
       #
       # Returns true if the resource has the property, false otherwise.
-      def respond_to_missing?(m, *)
-        to_h.key?(m.to_s)
+      def respond_to_missing?(method_name, *)
+        to_h.key?(method_name.to_s)
       end
 
       # Public:

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Asana::Client::Configuration do
   describe '#authentication' do
     context 'with :oauth2' do
@@ -5,7 +7,7 @@ RSpec.describe Asana::Client::Configuration do
         it 'sets authentication with an OAuth2 access token' do
           auth = described_class.new.tap do |config|
             config.authentication :oauth2,
-                                  ::OAuth2::AccessToken.new(nil, 'token')
+                                  OAuth2::AccessToken.new(nil, 'token')
           end.to_h[:authentication]
 
           expect(auth)
@@ -15,17 +17,15 @@ RSpec.describe Asana::Client::Configuration do
 
       context 'and a hash with a :refresh_token' do
         context 'and valid client credentials' do
-          before do
+          it 'sets authentication with an OAuth2 access token' do
             # rubocop:disable RSpec/AnyInstance
             expect_any_instance_of(Asana::Authentication::OAuth2::Client)
               .to receive(:token_from_refresh_token)
               .with('refresh_token') do
-                ::OAuth2::AccessToken.new(nil, 'token')
+                OAuth2::AccessToken.new(nil, 'token')
               end
             # rubocop:enable RSpec/AnyInstance
-          end
 
-          it 'sets authentication with an OAuth2 access token' do
             auth = described_class.new.tap do |config|
               config.authentication :oauth2,
                                     refresh_token: 'refresh_token',
@@ -100,7 +100,7 @@ RSpec.describe Asana::Client::Configuration do
   describe '#debug_mode' do
     it 'configures the client to be more verbose' do
       debug_mode = described_class.new.tap(&:debug_mode).to_h[:debug_mode]
-      expect(debug_mode).to eq(true)
+      expect(debug_mode).to be(true)
     end
   end
 end

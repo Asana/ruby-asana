@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'response_helper'
 
 module Asana
@@ -40,7 +42,7 @@ module Asana
       def last
         @elements.last
       end
-      
+
       # Public: Returns the size of the collection.
       def size
         to_a.size
@@ -49,9 +51,7 @@ module Asana
 
       # Public: Returns a String representation of the collection.
       def to_s
-        "#<Asana::Collection<#{@type}> " \
-          "[#{@elements.map(&:inspect).join(', ')}" +
-          (@next_page_data ? ', ...' : '') + ']>'
+        "#<Asana::Collection<#{@type}> [#{@elements.map(&:inspect).join(', ')}#{@next_page_data ? ', ...' : ''}]>"
       end
       alias inspect to_s
 

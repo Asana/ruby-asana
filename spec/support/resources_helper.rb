@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Internal: Helpeer to define resource classes in tests.
 module ResourcesHelper
   # Public: Defines a new resource.

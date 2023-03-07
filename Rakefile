@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 require 'bundler/gem_tasks'
 require 'appraisal'
@@ -19,6 +21,7 @@ task :codegen do
   `node spec/support/codegen.js`
 end
 
+# rubocop:disable Metrics/BlockLength
 namespace :bump do
   def read_version
     File.readlines('./lib/asana/version.rb')
@@ -27,23 +30,17 @@ namespace :bump do
         .map { |n| Integer(n) }
   end
 
-  # rubocop:disable Metrics/MethodLength
   def write_version(major, minor, patch)
+    File.write('VERSION', "#{major}.#{minor}.#{patch}")
 
-    File.open('VERSION', 'w') do |f|
-      f.write "#{major}.#{minor}.#{patch}"
-    end
-
-    str = <<-EOS
-#:nodoc:
-module Asana
-  # Public: Version of the gem.
-  VERSION = '#{major}.#{minor}.#{patch}'
-end
-EOS
-    File.open('./lib/asana/version.rb', 'w') do |f|
-      f.write str
-    end
+    str = <<~RUBY
+      #:nodoc:
+      module Asana
+        # Public: Version of the gem.
+        VERSION = '#{major}.#{minor}.#{patch}'
+      end
+    RUBY
+    File.write('./lib/asana/version.rb', str)
 
     new_version = "#{major}.#{minor}.#{patch}"
     system('bundle lock --update')
@@ -73,10 +70,10 @@ EOS
     write_version major + 1, 0, 0
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 desc 'Default: run the unit tests.'
-task default: [:all, :rubocop, :yard]
-
+task default: %i[all rubocop yard]
 
 desc 'Test the plugin under all supported Rails versions.'
 task :all do |_t|

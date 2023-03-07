@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Internal: Represents a stub of the Asana API for testing purposes. Plays
 # nicely with Asana::HttpClient, being convertible to an adapter.
 #
@@ -16,6 +18,7 @@ class StubAPI
   # Internal: Represents a stubbed response.
   class Response
     attr_accessor :env, :status, :headers, :body
+
     def initialize(env)
       @env = env
     end
@@ -61,21 +64,19 @@ class StubAPI
   #     ...
   #   }
   #
-  def on(method, resource_uri, body = nil)
+  def on(method, resource_uri, body = nil, &block)
     @stubs.send(method, *parse_args(method, resource_uri, body)) do |env|
       if body.is_a?(Proc) && !body.call(env.body)
         raise "Stubbed #{method.upcase} #{resource_uri} did not fulfill the " \
-          'argument validation block'
+              'argument validation block'
       end
-      Response.new(env).tap { |response| yield response }.to_rack
+      Response.new(env).tap(&block).to_rack
     end
   end
 
   def parse_args(method, resource_uri, body)
     [BASE_URI + resource_uri].tap do |as|
-      if [:post, :put, :patch].include?(method) && !body.is_a?(Proc)
-        as.push JSON.dump(body)
-      end
+      as.push JSON.dump(body) if %i[post put patch].include?(method) && !body.is_a?(Proc)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../errors'
 
 module Asana
@@ -25,37 +27,34 @@ module Asana
       # Raises [Asana::Errors::ServerError] when there's a server problem.
       # Raises [Asana::Errors::APIError] when the API returns an unknown error.
       #
-      # rubocop:disable all
-      def handle(num_retries=0, &request)
+      # rubocop:disable Metrics/AbcSize
+      def handle(num_retries = 0, &request)
         request.call
       rescue Faraday::ClientError => e
         raise e unless e.response
+
         case e.response[:status]
-          when 400 then raise invalid_request(e.response)
-          when 401 then raise not_authorized(e.response)
-          when 402 then raise payment_required(e.response)
-          when 403 then raise forbidden(e.response)
-          when 404 then raise not_found(e.response)
-          when 412 then recover_response(e.response)
-          when 429 then raise rate_limit_enforced(e.response)
-          when 500 then raise server_error(e.response)
-          else raise api_error(e.response)
+        when 400 then raise invalid_request(e.response)
+        when 401 then raise not_authorized(e.response)
+        when 402 then raise payment_required(e.response)
+        when 403 then raise forbidden(e.response)
+        when 404 then raise not_found(e.response)
+        when 412 then recover_response(e.response)
+        when 429 then raise rate_limit_enforced(e.response)
+        when 500 then raise server_error(e.response)
+        else raise api_error(e.response)
         end
       # Retry for timeouts or 500s from Asana
       rescue Faraday::ServerError => e
-        if num_retries < MAX_RETRIES
-          handle(num_retries + 1, &request)
-        else
-          raise server_error(e.response)
-        end
+        raise server_error(e.response) unless num_retries < MAX_RETRIES
+
+        handle(num_retries + 1, &request)
       rescue Net::ReadTimeout => e
-        if num_retries < MAX_RETRIES
-          handle(num_retries + 1, &request)
-        else
-          raise e
-        end
+        raise e unless num_retries < MAX_RETRIES
+
+        handle(num_retries + 1, &request)
       end
-      # rubocop:enable all
+      # rubocop:enable Metrics/AbcSize
 
       # Internal: Returns an InvalidRequest exception including a list of
       # errors.
@@ -110,13 +109,15 @@ module Asana
 
       # Internal: Parser a response body from JSON.
       def body(response)
-        JSON.load(response[:body])
+        JSON.parse(response[:body])
       end
 
+      # rubocop:disable Style/OpenStructUse
       def recover_response(response)
         r = response.dup.tap { |res| res[:body] = body(response) }
         Response.new(OpenStruct.new(env: OpenStruct.new(r)))
       end
+      # rubocop:enable Style/OpenStructUse
     end
   end
 end

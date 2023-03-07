@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday'
 require 'faraday/follow_redirects'
 
@@ -10,7 +12,7 @@ module Asana
   # parsing and common options.
   class HttpClient
     # Internal: The API base URI.
-    BASE_URI = 'https://app.asana.com/api/1.0'.freeze
+    BASE_URI = 'https://app.asana.com/api/1.0'
 
     # Public: Initializes an HttpClient to make requests to the Asana API.
     #
@@ -130,7 +132,7 @@ module Asana
         configure_format(builder)
         add_middleware(builder)
         configure_redirects(builder)
-        @config.call(builder) if @config
+        @config&.call(builder)
         use_adapter(builder, @adapter)
       end
     end
@@ -173,79 +175,75 @@ module Asana
     end
 
     def log_request(method, url, body)
-      STDERR.puts format('[%s] %s %s (%s)',
-                         self.class,
-                         method.to_s.upcase,
-                         url,
-                         body.inspect)
+      warn format('[%<klass>s] %<method>s %<url>s (%<bodt>s)',
+                  klass: self.class,
+                  method: method.to_s.upcase,
+                  url: url,
+                  body: body.inspect)
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def log_asana_change_headers(request_headers, response_headers)
       change_header_key = nil
 
       response_headers.each_key do |key|
-        if key.downcase == 'asana-change'
-            change_header_key = key
+        change_header_key = key if key.downcase == 'asana-change'
+      end
+
+      return if change_header_key.nil?
+
+      accounted_for_flags = []
+
+      request_headers = {} if request_headers.nil?
+      # Grab the request's asana-enable flags
+      request_headers.each_key do |req_header|
+        case req_header.downcase
+        when 'asana-enable', 'asana-disable'
+          request_headers[req_header].split(',').each do |flag|
+            accounted_for_flags.push(flag)
+          end
         end
       end
 
-      if change_header_key != nil
-        accounted_for_flags = Array.new
+      changes = response_headers[change_header_key].split(',')
 
-        if request_headers == nil
-          request_headers = {}
-        end
-        # Grab the request's asana-enable flags
-        request_headers.each_key do |req_header|
-          if req_header.downcase == 'asana-enable'
-            request_headers[req_header].split(',').each do |flag|
-              accounted_for_flags.push(flag)
-            end
-          elsif req_header.downcase == 'asana-disable'
-            request_headers[req_header].split(',').each do |flag|
-              accounted_for_flags.push(flag)
-            end
+      changes.each do |unsplit_change|
+        change = unsplit_change.split(';')
+
+        name = nil
+        info = nil
+        affected = nil
+
+        change.each do |unsplit_field|
+          field = unsplit_field.split('=')
+
+          field[0].strip!
+          field[1].strip!
+          case field[0]
+          when 'name'
+            name = field[1]
+          when 'info'
+            info = field[1]
+          when 'affected'
+            affected = field[1]
           end
-        end
 
-        changes = response_headers[change_header_key].split(',')
+          # Only show the error if the flag was not in the request's asana-enable header
+          next unless !(accounted_for_flags.include? name) && (affected == 'true')
 
-        changes.each do |unsplit_change|
-          change = unsplit_change.split(';')
+          message1 = 'This request is affected by the "%s" ' \
+                     'deprecation. Please visit this url for more info: %s'
+          message2 = 'Adding "%s" to your "Asana-Enable" or ' \
+                     '"Asana-Disable" header will opt in/out to this deprecation ' \
+                     'and suppress this warning.'
 
-          name = nil
-          info = nil
-          affected = nil
-
-          change.each do |unsplit_field|
-            field = unsplit_field.split('=')
-
-            field[0].strip!
-            field[1].strip!
-            if field[0] == 'name'
-                name = field[1]
-            elsif field[0] == 'info'
-                info = field[1]
-            elsif field[0] == 'affected'
-                affected = field[1]
-            end
-
-            # Only show the error if the flag was not in the request's asana-enable header
-            if !(accounted_for_flags.include? name) && (affected == 'true')
-              message1 = 'This request is affected by the "%s"' +
-              ' deprecation. Please visit this url for more info: %s'
-              message2 = 'Adding "%s" to your "Asana-Enable" or ' +
-              '"Asana-Disable" header will opt in/out to this deprecation ' +
-              'and suppress this warning.'
-
-              STDERR.puts format(message1, name, info)
-              STDERR.puts format(message2, name)
-            end
-          end
+          warn format(message1, name, info)
+          warn format(message2, name)
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
   end
 end
-
-

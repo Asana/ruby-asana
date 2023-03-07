@@ -4,17 +4,9 @@ require 'support/stub_api'
 require 'support/resources_helper'
 
 RSpec.describe Asana::Resources::AttachmentUploading do
-  let(:api) { StubAPI.new }
-  let(:authentication) do
-    Asana::Authentication::TokenAuthentication.new('token')
-  end
-  let(:client) do
-    Asana::HttpClient.new(authentication: authentication, adapter: api.adapter)
-  end
-
-  include ResourcesHelper
-
   mod = described_class
+
+  let(:api) { StubAPI.new }
   let!(:unicorn_class) do
     defresource 'Unicorn' do
       include mod
@@ -26,6 +18,14 @@ RSpec.describe Asana::Resources::AttachmentUploading do
       end
     end
   end
+  let(:authentication) do
+    Asana::Authentication::TokenAuthentication.new('token')
+  end
+  let(:client) do
+    Asana::HttpClient.new(authentication: authentication, adapter: api.adapter)
+  end
+
+  include ResourcesHelper
 
   describe '#attach' do
     let(:arg_matcher) { ->(body) { body.is_a?(Faraday::CompositeReadIO) } }
@@ -49,7 +49,7 @@ RSpec.describe Asana::Resources::AttachmentUploading do
 
     context 'with an IO' do
       let(:io) do
-        ::StringIO.new(<<~CSV)
+        StringIO.new(<<~CSV)
           Employee;Salary
           "Bill Lumbergh";70000
           "Peter Gibbons";40000

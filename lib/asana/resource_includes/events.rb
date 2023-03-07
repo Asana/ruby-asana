@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'event'
 
 module Asana
@@ -89,13 +91,14 @@ module Asana
 
       # Internal: Returns the formatted params for the poll request.
       def params
-        { resource: @resource, sync: @sync }.reject { |_, v| v.nil? }
+        { resource: @resource, sync: @sync }.compact
       end
 
       # Internal: Executes a block if at least @wait seconds have passed since
       # @last_poll.
       def rate_limiting
         return if @last_poll && Time.now - @last_poll <= @wait
+
         yield.tap { @last_poll = Time.now }
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'authentication'
 require_relative 'client/configuration'
 require_relative 'resources'
@@ -59,12 +61,12 @@ module Asana
         @resource = resource
       end
 
-      def method_missing(m, *args, **kwargs, &block)
-        @resource.public_send(m, *([@client] + args), **kwargs, &block)
+      def method_missing(method_name, *args, **kwargs, &block)
+        @resource.public_send(method_name, *([@client] + args), **kwargs, &block)
       end
 
-      def respond_to_missing?(m, *)
-        @resource.respond_to?(m)
+      def respond_to_missing?(method_name, *)
+        @resource.respond_to?(method_name)
       end
     end
 
@@ -72,15 +74,15 @@ module Asana
     #
     # Yields a {Asana::Client::Configuration} object as a configuration
     # DSL. See {Asana::Client} for usage examples.
-    def initialize
-      config = Configuration.new.tap { |c| yield c }.to_h
+    def initialize(&block)
+      config = Configuration.new.tap(&block).to_h
       @http_client =
-        HttpClient.new(authentication:            config.fetch(:authentication),
-                       adapter:                   config[:faraday_adapter],
-                       user_agent:                config[:user_agent],
-                       debug_mode:                config[:debug_mode],
+        HttpClient.new(authentication: config.fetch(:authentication),
+                       adapter: config[:faraday_adapter],
+                       user_agent: config[:user_agent],
+                       debug_mode: config[:debug_mode],
                        log_asana_change_warnings: config[:log_asana_change_warnings],
-                       default_headers:           config[:default_headers],
+                       default_headers: config[:default_headers],
                        &config[:faraday_configuration])
     end
 
