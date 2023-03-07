@@ -9,7 +9,9 @@ A Ruby client for the 1.0 version of the Asana API.
 
 Supported rubies:
 
-* MRI 2.0.0 up to 2.2.x stable
+* MRI 2.7.x
+* MRI 3.0.x
+* MRI 3.1.x
 
 ## Gem Installation
 Add this line to your application's Gemfile:
