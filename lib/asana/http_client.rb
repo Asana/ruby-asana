@@ -175,7 +175,7 @@ module Asana
     end
 
     def log_request(method, url, body)
-      warn format('[%<klass>s] %<method>s %<url>s (%<bodt>s)',
+      warn format('[%<klass>s] %<method>s %<url>s (%<body>s)',
                   klass: self.class,
                   method: method.to_s.upcase,
                   url: url,
