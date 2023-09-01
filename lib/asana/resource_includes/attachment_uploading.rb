@@ -15,8 +15,8 @@ module Asana
       # options  - [Hash] the request I/O options
       # data     - [Hash] extra attributes to post
       #
-      def attach(filename: required('filename'),
-                 mime: required('mime'),
+      def attach(filename: Asana::CompatibilityHelper.required('filename'),
+                 mime: Asana::CompatibilityHelper.required('mime'),
                  io: nil, options: {}, **data)
 
         upload = if io.nil?

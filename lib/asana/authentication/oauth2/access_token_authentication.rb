@@ -20,9 +20,9 @@ module Asana
         # Returns an [AccessTokenAuthentication] instance with a refreshed
         # access token.
         def self.from_refresh_token(refresh_token,
-                                    client_id: required('client_id'),
-                                    client_secret: required('client_secret'),
-                                    redirect_uri: required('redirect_uri'))
+                                    client_id: Asana::CompatibilityHelper.required('client_id'),
+                                    client_secret: Asana::CompatibilityHelper.required('client_secret'),
+                                    redirect_uri: Asana::CompatibilityHelper.required('redirect_uri'))
           client = Client.new(client_id: client_id,
                               client_secret: client_secret,
                               redirect_uri: redirect_uri)

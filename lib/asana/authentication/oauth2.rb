@@ -28,8 +28,8 @@ module Asana
       #
       # Note: This function reads from STDIN and writes to STDOUT. It is meant
       # to be used only within the context of a CLI application.
-      def offline_flow(client_id: required('client_id'),
-                       client_secret: required('client_secret'))
+      def offline_flow(client_id: Asana::CompatibilityHelper.required('client_id'),
+                       client_secret: Asana::CompatibilityHelper.required('client_secret'))
         client = Client.new(client_id: client_id,
                             client_secret: client_secret,
                             redirect_uri: 'urn:ietf:wg:oauth:2.0:oob')
