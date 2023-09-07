@@ -33,6 +33,14 @@ RSpec.describe Asana::Resources::Events do
 
   include ResourcesHelper
 
+  describe '#initialize' do
+    it 'raises an ArgumentError when required fields are missing' do
+      expect do
+        described_class.new(wait: 0).take(3)
+      end.to raise_error(ArgumentError)
+    end
+  end
+
   it 'is an infinite collection of events on a resource' do
     api.on(:get, '/events', resource: '1') do |response|
       response.body = { sync: 'firstsynctoken',

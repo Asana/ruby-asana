@@ -9,6 +9,12 @@ RSpec.describe Asana::HttpClient do
     described_class.new(authentication: auth, adapter: api.to_proc)
   end
 
+  describe '#initialize' do
+    it "raises an ArgumentError when required fields are missing" do
+      expect { described_class.new }.to raise_error(ArgumentError)
+    end
+  end
+  
   describe '#get' do
     it 'performs a GET request against the Asana API' do
       api.on(:get, '/users/me') do |response|
