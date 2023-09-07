@@ -18,6 +18,16 @@ RSpec.describe Asana::Resources::Collection do
 
   include ResourcesHelper
 
+  describe '#initialize' do
+    context 'no client provided' do
+      it 'raises an ArgumentError' do
+         expect do
+          described_class.new([unicorns.take(5), {}], type: unicorn_class)
+         end.to raise_error(ArgumentError)
+      end
+    end
+  end
+
   describe '#each' do
     context 'if there is more than one page' do
       it 'transparently iterates over all of them' do

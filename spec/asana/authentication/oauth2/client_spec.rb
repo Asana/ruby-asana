@@ -7,6 +7,12 @@ RSpec.describe Asana::Authentication::OAuth2::Client do
                         redirect_uri: 'http://redirect_uri.com')
   end
 
+  describe '#initialize' do
+    it 'raises an ArgumentError when required fields are missing' do
+      expect { described_class.new }.to raise_error(ArgumentError)
+    end
+  end
+
   describe '#authorize_url' do
     it 'returns the OAuth2 authorize url' do
       expect(client.authorize_url)

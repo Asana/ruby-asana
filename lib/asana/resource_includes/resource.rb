@@ -2,6 +2,7 @@
 
 require_relative 'registry'
 require_relative 'response_helper'
+require_relative '../compatibility_helper'
 
 module Asana
   module Resources
@@ -10,6 +11,8 @@ module Asana
     class Resource
       include ResponseHelper
       extend ResponseHelper
+      include CompatibilityHelper
+      extend CompatibilityHelper
 
       def initialize(data, client: required('client'))
         @_client = client

@@ -21,7 +21,7 @@ module Asana
       # client            - [Asana::Client] the client to perform requests.
       def initialize((elements, extra),
                      type: Resource,
-                     client: required('client'))
+                     client: CompatibilityHelper.required('client'))
         @elements       = elements.map { |elem| type.new(elem, client: client) }
         @type           = type
         @next_page_data = extra['next_page']

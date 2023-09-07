@@ -17,9 +17,9 @@ module Asana
         #                 application
         # redirect_uri  - [String] a redirect uri from the registered
         #                 application
-        def initialize(client_id: required('client_id'),
-                       client_secret: required('client_secret'),
-                       redirect_uri: required('redirect_uri'))
+        def initialize(client_id: CompatibilityHelper.required('client_id'),
+                       client_secret: CompatibilityHelper.required('client_secret'),
+                       redirect_uri: CompatibilityHelper.required('redirect_uri'))
           @client = ::OAuth2::Client.new(client_id, client_secret,
                                          site: 'https://app.asana.com',
                                          authorize_url: '/-/oauth_authorize',
