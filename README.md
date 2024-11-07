@@ -139,8 +139,6 @@ get '/auth/:name/callback' do
 end
 ```
 
-See `examples/omniauth_integration.rb` for a working example of this.
-
 ##### Using an OAuth2 offline authentication flow (for CLI applications)
 
 If your application can't receive HTTP requests and thus you can't use
