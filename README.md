@@ -4,6 +4,8 @@
 [![Build Status](https://github.com/Asana/ruby-asana/workflows/Build/badge.svg)](https://github.com/Asana/ruby-asana/actions)
 [![Code Climate](https://codeclimate.com/github/Asana/ruby-asana/badges/gpa.svg)](https://codeclimate.com/github/Asana/ruby-asana)
 
+> [!CAUTION]
+> The Asana Ruby SDK is no longer supported. While it remains available on [RubyGems](https://rubygems.org/gems/asana/versions/0.10.3?locale=en), it will not receive bug fixes or enhancements (including new endpoints or data model changes). We recommend using Ruby's Net::HTTP or similar HTTP libraries to make direct API requests instead.
 
 A Ruby client for the 1.0 version of the Asana API.
 
