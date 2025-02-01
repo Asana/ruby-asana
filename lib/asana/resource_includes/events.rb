@@ -34,8 +34,8 @@ module Asana
       # client   - [Asana::Client] a client to perform the requests.
       # wait     - [Integer] the number of seconds to wait between each poll.
       # options  - [Hash] the request I/O options
-      def initialize(resource: required('resource'),
-                     client: required('client'),
+      def initialize(resource: CompatibilityHelper.required('resource'),
+                     client: CompatibilityHelper.required('client'),
                      wait: 1, options: {})
         @resource  = resource
         @client    = client
